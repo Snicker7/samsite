@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Sam Nichols</title>
+  <meta name="description" content="Web design services for small businesses. Browse design styles and request a custom website.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Sam Nichols</a>
+      <button class="nav-hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links">
+        <li><a href="about.html">About</a></li>
+        <li><a href="projects.html">Projects</a></li>
+        <li><a href="resume.html">Resume</a></li>
+        <li><a href="services.html" class="active">Services</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main class="container section">
+    <h1 class="page-title">Web Design Services</h1>
+    <p class="page-subtitle">Browse design styles, pick what speaks to you, and let's build something great.</p>
+
+    <!-- Style Picker -->
+    <section class="style-picker">
+      <div class="style-cards">
+
+        <button class="style-card" data-style="Modern" aria-pressed="false">
+          <div class="style-card-preview style-preview-modern">
+            <div class="sp-nav">Logo <span>Menu</span></div>
+            <div class="sp-hero"><div class="sp-hero-text"></div><div class="sp-hero-btn"></div></div>
+            <div class="sp-grid"><div></div><div></div><div></div></div>
+          </div>
+          <span class="style-card-label">Modern</span>
+        </button>
+
+        <button class="style-card" data-style="Classic" aria-pressed="false">
+          <div class="style-card-preview style-preview-classic">
+            <div class="sp-nav">Logo <span>Menu</span></div>
+            <div class="sp-hero"><div class="sp-hero-text"></div><div class="sp-hero-btn"></div></div>
+            <div class="sp-cols"><div class="sp-sidebar"></div><div class="sp-main"></div></div>
+          </div>
+          <span class="style-card-label">Classic</span>
+        </button>
+
+        <button class="style-card" data-style="Bold" aria-pressed="false">
+          <div class="style-card-preview style-preview-bold">
+            <div class="sp-nav">Logo <span>Menu</span></div>
+            <div class="sp-hero-full"><div class="sp-hero-text"></div><div class="sp-hero-btn"></div></div>
+            <div class="sp-grid"><div></div><div></div></div>
+          </div>
+          <span class="style-card-label">Bold</span>
+        </button>
+
+        <button class="style-card" data-style="Minimal" aria-pressed="false">
+          <div class="style-card-preview style-preview-minimal">
+            <div class="sp-nav-minimal">Logo</div>
+            <div class="sp-hero-minimal"><div class="sp-hero-text"></div></div>
+            <div class="sp-content-minimal"><div></div><div></div></div>
+          </div>
+          <span class="style-card-label">Minimal</span>
+        </button>
+
+      </div>
+
+      <!-- Expanded Preview -->
+      <div class="style-expanded" id="style-expanded" hidden>
+        <div class="style-expanded-inner">
+          <h3 class="style-expanded-name"></h3>
+          <p class="style-expanded-desc"></p>
+          <div class="style-expanded-preview"></div>
+          <a href="#contact-form" class="btn btn-primary style-expanded-cta">I Want This Style &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Form -->
+    <section class="contact-section" id="contact-form">
+      <h2>Let's Build Your Site</h2>
+      <p class="page-subtitle">Tell me about your project and I'll get back to you within 48 hours.</p>
+
+      <form class="contact-form" id="contact-form-el">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name *</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="business">Business Name *</label>
+            <input type="text" id="business" name="business" required>
+          </div>
+          <div class="form-group">
+            <label for="site-type">Type of Site Needed</label>
+            <select id="site-type" name="site_type">
+              <option value="">Select...</option>
+              <option value="business">Business Website</option>
+              <option value="portfolio">Portfolio</option>
+              <option value="ecommerce">E-commerce</option>
+              <option value="blog">Blog</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="budget">Budget Range</label>
+            <select id="budget" name="budget">
+              <option value="">Select...</option>
+              <option value="under-500">Under $500</option>
+              <option value="500-1000">$500 — $1,000</option>
+              <option value="1000-2500">$1,000 — $2,500</option>
+              <option value="2500-plus">$2,500+</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="timeline">Timeline</label>
+            <select id="timeline" name="timeline">
+              <option value="">Select...</option>
+              <option value="asap">ASAP</option>
+              <option value="1-2-months">1–2 months</option>
+              <option value="3-plus-months">3+ months</option>
+              <option value="flexible">Flexible</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="style-pref">Preferred Design Style</label>
+          <input type="text" id="style-pref" name="style_preference" placeholder="Click a style above, or type your own">
+        </div>
+
+        <div class="form-group">
+          <label for="current-url">Current Website URL (if any)</label>
+          <input type="url" id="current-url" name="current_url" placeholder="https://...">
+        </div>
+
+        <div class="form-group">
+          <label for="message">Message / Additional Details</label>
+          <textarea id="message" name="message" rows="5" placeholder="Tell me about your business and what you're looking for..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary form-submit">Send Request</button>
+      </form>
+
+      <div class="form-success" id="form-success" hidden>
+        <h3>Thanks for reaching out!</h3>
+        <p>I'll review your request and get back to you within 48 hours.</p>
+      </div>
+
+      <div class="form-error" id="form-error" hidden>
+        <p>Something went wrong. Please try again or email me directly at <a href="mailto:sam@samnichols.dev">sam@samnichols.dev</a>.</p>
+        <button class="btn btn-secondary" id="form-retry">Try Again</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-links">
+      <a href="https://github.com/samnichols" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:sam@samnichols.dev">Email</a>
+    </div>
+    <p>&copy; 2026 Sam Nichols</p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
