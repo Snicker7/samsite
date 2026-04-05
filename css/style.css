@@ -388,3 +388,125 @@ img {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== Resume Page ===== */
+.resume-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.resume {
+  max-width: 800px;
+}
+
+.resume-section {
+  margin-bottom: 48px;
+}
+
+.resume-section h2 {
+  font-size: 1.4rem;
+  color: var(--color-mid);
+  margin-bottom: 24px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.timeline {
+  position: relative;
+  padding-left: 28px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--color-border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-marker {
+  position: absolute;
+  left: -28px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-light);
+  border: 2px solid var(--color-surface);
+  box-shadow: 0 0 0 2px var(--color-light);
+}
+
+.timeline-content h3 {
+  font-size: 1.1rem;
+  color: var(--color-dark);
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.timeline-date {
+  font-size: 0.85rem;
+  color: var(--color-mid);
+  white-space: nowrap;
+}
+
+.timeline-company {
+  font-size: 0.9rem;
+  color: var(--color-mid);
+  margin-bottom: 8px;
+}
+
+.timeline-content p:last-child {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.skills-group h3 {
+  font-size: 0.95rem;
+  color: var(--color-dark);
+  margin-bottom: 12px;
+}
+
+.skills-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .timeline-header {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
