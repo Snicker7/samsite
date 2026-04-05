@@ -264,3 +264,38 @@ img {
     font-size: 1rem;
   }
 }
+
+/* ===== About Page ===== */
+.about {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.about-photo-placeholder {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-mid);
+  font-size: 0.9rem;
+}
+
+.about-text h1 {
+  font-size: 2rem;
+  margin-bottom: 16px;
+  color: var(--color-dark);
+}
+
+.about-text p {
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+  color: var(--color-dark);
+  line-height: 1.7;
+}
