@@ -221,3 +221,46 @@ img {
     padding: 40px 0;
   }
 }
+
+/* ===== Hero (Landing Page) ===== */
+.hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+  min-height: calc(100vh - 64px - 73px);
+}
+
+.hero-name {
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin-bottom: 12px;
+}
+
+.hero-tagline {
+  font-size: 1.2rem;
+  color: var(--color-mid);
+  margin-bottom: 36px;
+  max-width: 500px;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .hero-name {
+    font-size: 2.2rem;
+  }
+
+  .hero-tagline {
+    font-size: 1rem;
+  }
+}
