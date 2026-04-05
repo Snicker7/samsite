@@ -100,10 +100,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var formError = document.getElementById('form-error');
   var formRetry = document.getElementById('form-retry');
 
-  // TODO: Replace these with your actual EmailJS IDs
-  var EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
-  var EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-  var EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+  var EMAILJS_PUBLIC_KEY = 'j2yutMmrAE8e4eVZ4';
+  var EMAILJS_SERVICE_ID = 'service_fqgd5je';
+  var EMAILJS_TEMPLATE_ID = 'template_f7uq8yj';
 
   if (typeof emailjs !== 'undefined') {
     emailjs.init(EMAILJS_PUBLIC_KEY);
