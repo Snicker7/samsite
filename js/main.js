@@ -1,3 +1,37 @@
+// ===== Legislink Availability Check =====
+function checkLegislink(e) {
+  var now = new Date();
+  var month = now.getMonth(); // 0-indexed: 0=Jan, 1=Feb, 2=Mar
+  var inSession = month >= 0 && month <= 2; // January through March
+
+  if (inSession) {
+    return true; // let the link open normally
+  }
+
+  e.preventDefault();
+  showToast('Legislink is not currently live. The Utah legislative session runs January through March.');
+  return false;
+}
+
+function showToast(message) {
+  var existing = document.querySelector('.toast');
+  if (existing) existing.remove();
+
+  var toast = document.createElement('div');
+  toast.className = 'toast';
+  toast.textContent = message;
+  document.body.appendChild(toast);
+
+  setTimeout(function () {
+    toast.classList.add('toast-visible');
+  }, 10);
+
+  setTimeout(function () {
+    toast.classList.remove('toast-visible');
+    setTimeout(function () { toast.remove(); }, 300);
+  }, 4000);
+}
+
 // ===== Mobile Nav Toggle =====
 document.addEventListener('DOMContentLoaded', function () {
   var hamburger = document.querySelector('.nav-hamburger');
@@ -8,6 +42,17 @@ document.addEventListener('DOMContentLoaded', function () {
       navLinks.classList.toggle('open');
     });
   }
+
+  // ===== Auto-detect Active Nav =====
+  var currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  var links = document.querySelectorAll('.nav-links a');
+  links.forEach(function (link) {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('active');
+    }
+  });
+
 
   // ===== Style Picker =====
   var styleCards = document.querySelectorAll('.style-card');

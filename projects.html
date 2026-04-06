@@ -17,7 +17,7 @@
       </button>
       <ul class="nav-links">
         <li><a href="about.html">About</a></li>
-        <li><a href="projects.html" class="active">Projects</a></li>
+        <li><a href="projects.html">Projects</a></li>
         <li><a href="resume.html">Resume</a></li>
         <li><a href="services.html">Services</a></li>
       </ul>
@@ -60,12 +60,12 @@
         </div>
       </a>
 
-      <a href="https://legislink.us" class="project-card" target="_blank" rel="noopener">
+      <a href="https://legislink.us" class="project-card" target="_blank" rel="noopener" id="legislink-card" onclick="return checkLegislink(event)">
         <div class="project-thumb">
           <img src="assets/images/legislinkscreenshot.png" alt="Legislink platform">
         </div>
         <div class="project-info">
-          <h3>Legislink <em style="font-size:0.8rem;font-weight:normal;color:var(--color-mid);">— available at legislink.us during the Utah legislative session</em></h3>
+          <h3>Legislink <em class="project-note">— available at legislink.us during the Utah legislative session</em></h3>
           <p>Civic tech platform enabling interest groups to share their positions with local legislators.</p>
           <div class="project-tags">
             <span class="pill">Python</span>
