@@ -99,6 +99,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var formSuccess = document.getElementById('form-success');
   var formError = document.getElementById('form-error');
   var formRetry = document.getElementById('form-retry');
+  var formHeading = document.getElementById('form-heading');
+  var formSubtitle = document.getElementById('form-subtitle');
 
   var EMAILJS_PUBLIC_KEY = 'j2yutMmrAE8e4eVZ4';
   var EMAILJS_SERVICE_ID = 'service_fqgd5je';
@@ -127,10 +129,14 @@ document.addEventListener('DOMContentLoaded', function () {
       emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
         .then(function () {
           form.hidden = true;
+          formHeading.hidden = true;
+          formSubtitle.hidden = true;
           formSuccess.hidden = false;
         })
         .catch(function () {
           form.hidden = true;
+          formHeading.hidden = true;
+          formSubtitle.hidden = true;
           formError.hidden = false;
         });
     });
@@ -139,6 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
   if (formRetry) {
     formRetry.addEventListener('click', function () {
       formError.hidden = true;
+      formHeading.hidden = false;
+      formSubtitle.hidden = false;
       form.hidden = false;
       var submitBtn = form.querySelector('.form-submit');
       submitBtn.disabled = false;

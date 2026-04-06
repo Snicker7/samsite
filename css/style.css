@@ -232,6 +232,8 @@ img {
   text-align: center;
   padding: 40px 24px;
   min-height: calc(100vh - 64px - 73px);
+  position: relative;
+  overflow: hidden;
 }
 
 .hero-name {
@@ -255,6 +257,15 @@ img {
   justify-content: center;
 }
 
+.hero-wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  pointer-events: none;
+}
+
 @media (max-width: 768px) {
   .hero-name {
     font-size: 2.2rem;
@@ -275,16 +286,11 @@ img {
   gap: 32px;
 }
 
-.about-photo-placeholder {
+.about-photo-img {
   width: 180px;
   height: 180px;
   border-radius: 50%;
-  background: var(--color-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-mid);
-  font-size: 0.9rem;
+  object-fit: cover;
 }
 
 .about-text h1 {
@@ -344,6 +350,13 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.project-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: var(--color-bg);
 }
 
 .project-thumb-placeholder {
@@ -482,9 +495,19 @@ img {
   line-height: 1.6;
 }
 
+.timeline-bullets {
+  margin: 4px 0 0 18px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.timeline-bullets li {
+  margin-bottom: 4px;
+}
+
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
@@ -513,15 +536,14 @@ img {
 
 /* ===== Services — Style Picker ===== */
 .style-cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 8px;
   margin-bottom: 24px;
 }
 
 .style-card {
-  flex: 0 0 180px;
+  width: 100%;
   background: var(--color-surface);
   border: 2px solid var(--color-border);
   border-radius: var(--radius);
@@ -884,11 +906,8 @@ img {
   }
 
   .style-cards {
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-  }
-
-  .style-card {
-    flex: 0 0 150px;
   }
 
   .style-expanded {
