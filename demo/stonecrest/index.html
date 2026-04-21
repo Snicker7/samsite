@@ -78,6 +78,31 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   letter-spacing: -0.005em;
 }
 .intro p.lead::first-letter { color: #c96f4a; }
+
+.intro .placeholder-note {
+  max-width: 820px;
+  margin: -24px 0 48px;
+  padding: 18px 22px;
+  background: rgba(201,111,74,0.07);
+  border-left: 2px solid #c96f4a;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6b5a42;
+  letter-spacing: 0.01em;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.intro .placeholder-note .note-label {
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c96f4a;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.intro .placeholder-note .note-body { color: #4a4a42; }
 .option-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -444,6 +469,10 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 <section id="intro" class="intro">
   <div class="intro-inner">
     <p class="lead">Let me know which one of these speaks to you the most! Or if you have another direction you'd like to go. Options 1 &amp; 2 are based on the reference sites you sent me. The other three are different directions we could go that I included just to give you more options.</p>
+    <div class="placeholder-note">
+      <span class="note-label">Heads up</span>
+      <span class="note-body">All photos here are stock placeholders (not your actual properties) and all the blurbs were AI-generated to fill the layouts. Don't fixate on the wording or imagery — focus on the overall look, feel, and layout. We'll swap in real photos and final copy once you've picked a direction.</span>
+    </div>
     <div class="option-cards option-cards-5">
       <a href="#landscape" class="option-card">
         <div class="card-num">01 — Landscape</div>
@@ -1096,8 +1125,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="hero-img"></div>
     <div class="hero-content">
       <div class="hero-eyebrow">Orem &amp; Provo · Utah Valley</div>
-      <h1>Home, the way <em>home should feel.</em></h1>
-      <p>Four thoughtfully-designed communities at the foot of Mount Timpanogos — where refined apartment living meets the best of Utah's outdoors. Come settle into the next chapter of your story.</p>
+      <h1>Close to class. <em>Close to everything else.</em></h1>
+      <p>Four apartment communities in Orem and Provo, conveniently located near UVU and BYU. Whether you're a single student or just married, Stonecrest is built around a quick commute, a great value, and a place that actually feels like home.</p>
       <div class="hero-ctas">
         <a href="#" class="btn-bronze">Schedule a tour</a>
         <a href="#" class="btn-transparent">Explore floor plans</a>
@@ -1108,9 +1137,9 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   <section class="welcome">
     <div class="welcome-text">
       <div class="eyebrow">Welcome Home</div>
-      <h2>A <em>relaxed &amp; sophisticated</em> place to land in Utah Valley.</h2>
-      <p>Whether you're finishing a degree, starting married life, or simply looking for a community that feels grown-up and unhurried, Stonecrest offers four distinct addresses in Orem and Provo — each minutes from UVU or BYU, each built around comfort, space, and the quiet pleasure of coming home.</p>
-      <p>Our residents enjoy resort-inspired amenities, modern interiors with quartz finishes and private patios, and a team that genuinely cares whether your day went well.</p>
+      <h2>A <em>convenient &amp; comfortable</em> place to call home in Utah Valley.</h2>
+      <p>Whether you're finishing a degree, just married, or simply looking for a place close to class, Stonecrest offers four addresses in Orem and Provo — each minutes from UVU or BYU, each built around comfort, convenience, and a genuine value.</p>
+      <p>Our residents enjoy amenity-rich communities, private patios, and a team that genuinely cares whether your day went well.</p>
       <div class="signature">— The Stonecrest team</div>
     </div>
     <div class="welcome-gallery">
@@ -1134,7 +1163,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
         <div class="property-body">
           <h3>University <em>Village</em></h3>
           <div class="prop-addr">1270 Sandhill Road · Orem, UT</div>
-          <p>Our flagship Orem community, a five-minute walk from Utah Valley University and surrounded by walkable essentials.</p>
+          <p>Our flagship Orem community, a five-minute walk from Utah Valley University. Convenient, amenity-rich, and a great value — with a short walk or bike ride to Walmart and everyday essentials.</p>
           <div class="prop-specs">
             <div><strong>1–3</strong>Bedrooms</div>
             <div><strong>5 min</strong>Walk to UVU</div>
@@ -1150,7 +1179,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
         <div class="property-body">
           <h3>Orem <em>City Center</em></h3>
           <div class="prop-addr">15 E 200 N · Orem, UT</div>
-          <p>Refined downtown living with local shops, cafes, and restaurants steps from your door. A quieter pace in the heart of Orem.</p>
+          <p>Convenient downtown living with local shops, restaurants, and everyday essentials just steps from your door. A quieter pace in the heart of Orem.</p>
           <div class="prop-specs">
             <div><strong>1–2</strong>Bedrooms</div>
             <div><strong>Downtown</strong>Living</div>
@@ -1197,16 +1226,16 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   <section class="amenities">
     <div class="amenities-head">
       <div>
-        <div class="eyebrow">Resort-style Living</div>
-        <h2>Amenities that <em>elevate</em> every day.</h2>
+        <div class="eyebrow">Everyday Comforts</div>
+        <h2>Amenities that make <em>every day easier.</em></h2>
       </div>
-      <p>From swimming pools and fitness studios to pet parks and community lounges, every Stonecrest property is built around the small comforts that make a place feel like home.</p>
+      <p>From swimming pools and fitness centers to pet parks and community lounges, every Stonecrest property is built around the small comforts that make a place feel like home.</p>
     </div>
     <div class="amenity-grid">
       <div class="amenity-tile">
         <div class="amenity-icon">◎</div>
-        <h4>Resort-Style Pool</h4>
-        <p>Heated pools &amp; spas at select properties.</p>
+        <h4>Swimming Pool</h4>
+        <p>Community pool available at select properties.</p>
       </div>
       <div class="amenity-tile">
         <div class="amenity-icon">⌂</div>
@@ -1225,8 +1254,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
       </div>
       <div class="amenity-tile">
         <div class="amenity-icon">✦</div>
-        <h4>Smart Home</h4>
-        <p>Smart thermostats &amp; keyless entry.</p>
+        <h4>Walk to Campus</h4>
+        <p>5 min to UVU, minutes to BYU from most properties.</p>
       </div>
       <div class="amenity-tile">
         <div class="amenity-icon">❋</div>
@@ -1249,8 +1278,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
   <section class="find-home">
     <div class="inner">
       <div class="eyebrow">Let's find your home</div>
-      <h2>Your next chapter <em>begins here.</em></h2>
-      <p>Schedule a tour at any of our four Utah Valley communities — or give us a ring and one of our leasing team will walk you through your options.</p>
+      <h2>Come <em>see it</em> for yourself.</h2>
+      <p>Schedule a tour at any of our four Utah Valley communities — or give us a ring and we'll walk you through your options.</p>
       <div class="cta-row">
         <a href="#" class="btn-bronze">Schedule a tour</a>
         <a href="#" class="btn-transparent">Browse floor plans</a>
@@ -1966,8 +1995,8 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="hero-bg"></div>
     <div class="hero-frame">
       <div class="hero-eyebrow">Orem &amp; Provo · Utah Valley</div>
-      <h1>Discover modern <em>luxury</em> at the base of Mount Timpanogos.</h1>
-      <p>Four distinguished apartment communities offering thoughtfully-designed floor plans, upscale amenities, and the comforts of a well-appointed home — all minutes from UVU and BYU.</p>
+      <h1>Close to campus. <em>Close to home.</em></h1>
+      <p>Four apartment communities in Orem and Provo with thoughtful floor plans, everyday comforts, and a quick commute to UVU or BYU. Whether you're a student or just married, you'll find a place that fits.</p>
       <div class="cta-group">
         <a href="#" class="btn-gold">Schedule a tour</a>
         <a href="#" class="btn-navy-outline">View floor plans</a>
@@ -1976,15 +2005,15 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="hero-feature-card">
       <div class="feature-num">4</div>
       <h4>Utah Valley Communities</h4>
-      <p>"One signature of quality across every address."</p>
+      <p>"One standard of comfort across every address."</p>
     </div>
   </section>
 
   <section class="intro-strip">
     <div class="eyebrow">An Invitation</div>
     <div class="ornament"><span class="ornament-symbol">❦</span></div>
-    <h2>Comfort &amp; <em>relaxation</em> are yours at Stonecrest.</h2>
-    <p>Discover elevated apartment living in Utah Valley's most convenient addresses. This thoughtfully-designed portfolio of communities offers an array of upscale amenities and finely-curated features — everything you'd expect from a residence that takes your time, your comfort, and your future seriously.</p>
+    <h2>Comfort &amp; <em>convenience</em> are yours at Stonecrest.</h2>
+    <p>Whether you're finishing a degree or just married, Stonecrest offers apartment living in Utah Valley's most convenient addresses. Our four communities offer amenity-rich living, a short commute to class, and a genuine value — all minutes from UVU or BYU.</p>
   </section>
 
   <section class="properties-section">
@@ -2010,12 +2039,12 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
           <div class="prop-badge">Property 01 of 04</div>
           <h3>University <em>Village</em></h3>
           <div class="addr">1270 SANDHILL ROAD · OREM, UT 84058</div>
-          <p class="description">Our flagship Orem residence, just five minutes on foot to Utah Valley University. Spacious one-, two-, and three-bedroom apartments with quartz countertops, private patios, and resort-style amenities.</p>
+          <p class="description">Our flagship Orem community, a five-minute walk to Utah Valley University. Spacious one-, two-, and three-bedroom apartments with private patios, full-size washers and dryers, and a short walk or bike ride to Walmart and everyday essentials.</p>
           <ul class="feature-list">
-            <li>Quartz kitchens</li>
+            <li>Full kitchens</li>
             <li>In-unit W/D</li>
             <li>Private patios</li>
-            <li>Pool &amp; spa</li>
+            <li>Community pool</li>
             <li>Fitness center</li>
             <li>Pet-friendly</li>
           </ul>
@@ -2027,32 +2056,32 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
 
   <section class="amenities">
     <div class="amenities-header">
-      <div class="eyebrow">World-Class Features</div>
-      <h2>Amenities designed to <em>elevate</em> your everyday.</h2>
+      <div class="eyebrow">Community Features</div>
+      <h2>Amenities designed to <em>make life easier.</em></h2>
     </div>
     <div class="amenity-columns">
       <div class="amenity-column">
         <div class="amenity-icon-box">I</div>
         <h3>Inside Your Home</h3>
         <ul>
-          <li>Quartz countertops</li>
-          <li>Designer cabinetry</li>
-          <li>Stainless appliances</li>
+          <li>Full kitchens</li>
+          <li>Full appliance package</li>
           <li>Full-size W/D</li>
           <li>Private patio</li>
-          <li>9' ceilings</li>
+          <li>Open layouts</li>
+          <li>Plenty of storage</li>
         </ul>
       </div>
       <div class="amenity-column">
         <div class="amenity-icon-box">II</div>
         <h3>Community Spaces</h3>
         <ul>
-          <li>Resort-style pool</li>
-          <li>Heated spa</li>
-          <li>24-hour fitness center</li>
+          <li>Community pool</li>
+          <li>Fitness center</li>
           <li>Resident clubhouse</li>
           <li>BBQ &amp; picnic area</li>
-          <li>Pet park</li>
+          <li>Pet-friendly grounds</li>
+          <li>Covered parking</li>
         </ul>
       </div>
       <div class="amenity-column">
@@ -2075,7 +2104,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
       <div class="neighborhood-left">
         <div class="eyebrow">The Neighborhood</div>
         <h2>Scenically located at the <em>base of the Wasatch.</em></h2>
-        <p>Stonecrest's communities sit in the most walkable corners of Orem and Provo — with campus, shopping, dining, and the mountains all within reach. It's the kind of location most apartment ads claim, but few actually deliver.</p>
+        <p>Stonecrest's communities sit in the most walkable corners of Orem and Provo — with campus, Walmart, restaurants, and the mountains all within reach. From your door, most of the day's errands are a short walk or bike ride away.</p>
         <a href="#" class="btn-gold">Explore the area</a>
       </div>
       <div class="neighborhood-right">
@@ -2153,7 +2182,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="hero-copy">
       <div class="hero-eyebrow">Four properties · Orem &amp; Provo</div>
       <h1>A place to <em>settle in,</em> close to where you're headed.</h1>
-      <p>Minutes from UVU and BYU. Apartments and townhomes built for students, young couples, and everyone learning what "home" means for the first time.</p>
+      <p>Four apartment communities in Orem and Provo, minutes from UVU and BYU. Whether you're a single student or just married, we have a place that fits your commute and your budget.</p>
       <div class="hero-cta-row">
         <a href="#" class="btn-primary">Find your apartment</a>
         <a href="#" class="btn-ghost">Call 801-224-4411</a>
@@ -2209,7 +2238,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="close-to-inner">
       <div>
         <h2>Close to <em>where you want to be.</em></h2>
-        <p>Our locations were picked for one reason: the commute. From class to coffee to groceries, most of life happens within walking distance.</p>
+        <p>Our locations were picked for one reason: the commute. From class to Walmart to everything in between, most of life happens within walking distance.</p>
       </div>
       <div class="distance-list">
         <div class="distance-row">
@@ -2635,7 +2664,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     <div class="hero-inner">
       <div class="hero-badge">Now leasing · Fall 2026</div>
       <h1>Live close to class.<br/><span class="underline">Actually</span> close.</h1>
-      <p>Four properties in Orem and Provo, built for students and young couples who'd rather walk to class than fight for parking. You in?</p>
+      <p>Four apartment communities in Orem and Provo, built for single students and just-married couples who'd rather walk to class than fight for parking. Convenient, amenity-rich, and a great value. You in?</p>
       <div class="hero-cta-row">
         <a href="#" class="btn-solid">Find your place</a>
         <a href="#" class="btn-outline">Take a virtual tour</a>
@@ -3264,7 +3293,7 @@ button { font: inherit; cursor: pointer; border: none; background: none; }
     </div>
     <h1>Close<span class="slash">/</span>to<br/><span class="outlined">Campus.</span><br/>That's it.</h1>
     <div class="hero-bottom">
-      <p>Four student-housing properties minutes from <strong>UVU</strong> and <strong>BYU</strong>. No-fluff specs, real commute times, and a residents portal that actually works on a phone. Find your place in thirty seconds.</p>
+      <p>Four apartment communities minutes from <strong>UVU</strong> and <strong>BYU</strong>. Convenient locations, real commute times, and a residents portal that actually works on a phone. Built for single students and just-married couples who want a great value and a short walk to class.</p>
       <div class="cta-stack">
         <a href="#" class="btn-accent">Browse properties →</a>
         <a href="#" class="btn-bordered">Schedule tour</a>
