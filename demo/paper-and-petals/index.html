@@ -1,0 +1,3000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paper &amp; Petals — Four Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Gloock&family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@300..800&family=DM+Sans:opsz,wght@9..40,300..700&family=Archivo:wght@400..900&family=JetBrains+Mono:wght@300..700&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet" />
+<style>
+  /* ============ GLOBAL RESET ============ */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', system-ui, sans-serif; color: #1a1a1a; background: #ffffff; line-height: 1.5; overflow-x: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+
+  /* ============ PROPOSAL NAV ============ */
+  .proposal-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #12080a;
+    color: #f4ede1;
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .proposal-nav .brand { font-weight: 600; }
+  .proposal-nav .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .proposal-nav .nav-links a { opacity: 0.6; transition: opacity 0.2s; }
+  .proposal-nav .nav-links a:hover { opacity: 1; }
+  .proposal-nav .nav-links a span.num { color: #d8a87a; margin-right: 4px; }
+
+  /* ============ INTRO ============ */
+  .intro {
+    min-height: 50vh;
+    background: #f6f1e8;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 30%, rgba(90, 30, 42, 0.06) 0%, transparent 45%),
+      radial-gradient(circle at 85% 70%, rgba(168, 184, 150, 0.08) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .intro-inner { max-width: 1100px; position: relative; z-index: 1; width: 100%; }
+  .intro .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #8a5a5e; margin-bottom: 24px;
+  }
+  .intro h1 {
+    font-family: 'Bodoni Moda', serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: #1a0f12;
+    margin-bottom: 28px;
+  }
+  .intro h1 em { font-style: italic; font-weight: 400; color: #5a1e2a; }
+  .intro p.lead {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px; line-height: 1.55;
+    color: #2a1f21;
+    font-weight: 400;
+    max-width: 820px;
+    margin-bottom: 40px;
+  }
+  .intro p.lead::first-letter { color: #5a1e2a; font-style: italic; }
+
+  .intro .placeholder-note {
+    max-width: 820px;
+    margin: 0 0 48px;
+    padding: 18px 22px;
+    background: rgba(90, 30, 42, 0.05);
+    border-left: 2px solid #5a1e2a;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #6b4a4e;
+    letter-spacing: 0.01em;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro .placeholder-note .note-label {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5a1e2a;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .intro .placeholder-note .note-body { color: #3a2b2e; }
+
+  .option-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1100px) {
+    .option-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  .option-card {
+    background: #fff;
+    border: 1px solid #e8dfce;
+    padding: 30px 26px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .option-card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -24px rgba(40,20,24,0.25); border-color: #d5c2a4; }
+  .option-card .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8a5a5e;
+  }
+  .option-card h3 {
+    font-family: 'Bodoni Moda', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #1a0f12;
+  }
+  .option-card .swatch-row {
+    display: flex;
+    gap: 0;
+    height: 28px;
+    margin: 6px 0 4px;
+  }
+  .option-card .swatch { flex: 1; }
+  .option-card p {
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #3a2b2e;
+  }
+  .option-card .view-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5a1e2a;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .proposal-nav { flex-direction: column; gap: 10px; padding: 14px 20px; }
+    .proposal-nav .nav-links { gap: 14px; font-size: 10.5px; }
+    .intro { padding: 60px 20px; }
+    .option-cards { grid-template-columns: 1fr; }
+  }
+
+  /* ============ DIRECTION DIVIDER ============ */
+  .direction-divider {
+    background: #12080a;
+    color: #f4ede1;
+    padding: 70px 40px;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    border-top: 1px solid #d8a87a;
+    border-bottom: 4px solid #d8a87a;
+  }
+  .direction-divider::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: rgba(216, 168, 122, 0.25);
+  }
+  .dd-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+  }
+  .dd-progress {
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    color: #d8a87a;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .dd-name {
+    font-family: 'Bodoni Moda', serif;
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    color: #f4ede1;
+  }
+  .dd-name em {
+    font-style: italic;
+    color: #d8a87a;
+    font-weight: 300;
+  }
+  .dd-sub {
+    font-family: 'Bodoni Moda', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.6vw, 19px);
+    color: rgba(244, 237, 225, 0.62);
+    max-width: 380px;
+    text-align: right;
+    line-height: 1.45;
+    font-weight: 300;
+    padding-bottom: 12px;
+  }
+  @media (max-width: 900px) {
+    .direction-divider { padding: 44px 20px; border-bottom-width: 3px; }
+    .direction-divider::before { left: 20px; right: 20px; }
+    .dd-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    .dd-sub { text-align: left; max-width: none; padding-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="proposal-nav">
+  <div class="brand">PAPER &amp; PETALS // DESIGN PROPOSALS</div>
+  <div class="nav-links">
+    <a href="#intro"><span class="num">00</span>INTRO</a>
+    <a href="#familiar"><span class="num">01</span>FAMILIAR</a>
+    <a href="#trustworthy"><span class="num">02</span>TRUSTWORTHY</a>
+    <a href="#friendly"><span class="num">03</span>FRIENDLY</a>
+    <a href="#luxury"><span class="num">04</span>LUXURY</a>
+  </div>
+</nav>
+
+<section id="intro" class="intro">
+  <div class="intro-inner">
+    <p class="eyebrow">Four directions — one brand</p>
+    <h1>Paper &amp; Petals, <em>three ways.</em></h1>
+    <p class="lead">Four different feels for the same site. Same sections, same content — but each one carries a different mood. Scroll through all four, then tell me which one feels most like <em>you</em>. We can also mix elements from different directions if something catches your eye.</p>
+    <div class="placeholder-note">
+      <span class="note-label">Heads up</span>
+      <span class="note-body">Photos are pulled straight from your current site, but you'll notice the same four images cycling through every section — your Showit site only exposes a handful publicly. They're also not necessarily in the right slots (a bouquet might show up where a tablescape would live). Focus on the overall feel, color, and pacing, not specific photo placement. Once you've picked a direction, we'll swap in the full-res originals and sort each one into the right spot.</span>
+    </div>
+    <div class="option-cards">
+      <a href="#familiar" class="option-card">
+        <div class="card-num">01 — Familiar</div>
+        <h3>Close to current</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#ffffff;border:1px solid #e6e3dc"></div>
+          <div class="swatch" style="background:#f4f2ed"></div>
+          <div class="swatch" style="background:#c29b8e"></div>
+          <div class="swatch" style="background:#2a2826"></div>
+        </div>
+        <p>White, bone, soft blush. Centered sans-serif layout, lots of air. Reads as the current site — just rebuilt off Wix/Showit.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#trustworthy" class="option-card">
+        <div class="card-num">02 — Trustworthy</div>
+        <h3>Classic &amp; grounded</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#f4ede1"></div>
+          <div class="swatch" style="background:#8a9a84"></div>
+          <div class="swatch" style="background:#c4b39a"></div>
+          <div class="swatch" style="background:#2b2927"></div>
+        </div>
+        <p>Linen, sage, warm beige. Centered, balanced layouts, Garamond pairings. Reads as established, professional, and safe to book.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#friendly" class="option-card">
+        <div class="card-num">03 — Friendly</div>
+        <h3>Warm &amp; personal</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fbf2eb"></div>
+          <div class="swatch" style="background:#e8a282"></div>
+          <div class="swatch" style="background:#a8b896"></div>
+          <div class="swatch" style="background:#3c3530"></div>
+        </div>
+        <p>Blush, peach, dusty sage. Loose scrapbook layouts, Gloock display, soft hand-drawn accents. Reads as approachable and warm.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#luxury" class="option-card">
+        <div class="card-num">04 — Luxury</div>
+        <h3>Editorial &amp; refined</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#f6f1e8"></div>
+          <div class="swatch" style="background:#5a1e2a"></div>
+          <div class="swatch" style="background:#b89759"></div>
+          <div class="swatch" style="background:#12080a"></div>
+        </div>
+        <p>Ivory, oxblood, antique gold. Magazine-style layouts, Bodoni display, dramatic pairings. Reads as high-end and aspirational.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 01 — of 04</div>
+      <h2 class="dd-name">Familiar<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Close to her current site — for if she likes the look she has, just needs it rebuilt off Wix/Showit.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 01 — FAMILIAR ==============================
+     ========================================================= -->
+<style>
+.fam {
+  --white: #ffffff;
+  --bone: #fafaf7;
+  --paper: #f4f2ed;
+  --rule: #e6e3dc;
+  --ink: #2a2826;
+  --ink-soft: #5a5651;
+  --muted: #8e8880;
+  --accent: #c29b8e;
+  --accent-deep: #a47d70;
+
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  letter-spacing: 0.005em;
+}
+.fam a { color: inherit; }
+
+.fam .site-nav {
+  padding: 36px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  background: var(--white);
+}
+.fam .site-nav .wordmark {
+  grid-column: 2;
+  font-weight: 300;
+  font-size: 22px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink);
+  text-align: center;
+}
+.fam .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.fam .site-nav .left-links { grid-column: 1; }
+.fam .site-nav .right-links { grid-column: 3; justify-self: end; }
+.fam .site-nav a { transition: color 0.25s; padding: 4px 0; }
+.fam .site-nav a:hover { color: var(--accent-deep); }
+
+.fam .hero {
+  padding: 120px 40px 40px;
+  text-align: center;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.fam .hero .tagline {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 36px;
+  font-weight: 400;
+}
+.fam .hero h1 {
+  font-weight: 200;
+  font-size: clamp(42px, 6.4vw, 90px);
+  line-height: 1.1;
+  letter-spacing: 0.015em;
+  color: var(--ink);
+  margin-bottom: 36px;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .hero .sub {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 540px;
+  margin: 0 auto 80px;
+  font-weight: 300;
+}
+.fam .hero-img {
+  aspect-ratio: 21/9;
+  background-image: url('https://static.wixstatic.com/media/62f364_ccd4f25c763d4b9b974ef0a6308c4ff1~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.fam .scroll-indicator {
+  margin: 50px auto 20px;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 400;
+}
+.fam .scroll-indicator::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 44px;
+  background: var(--muted);
+  margin: 18px auto 0;
+  opacity: 0.5;
+}
+
+.fam .about {
+  padding: 130px 40px 60px;
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto;
+}
+.fam .about .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.fam .about h2 {
+  font-weight: 300;
+  font-size: clamp(28px, 3.4vw, 46px);
+  line-height: 1.25;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin-bottom: 34px;
+}
+.fam .about p {
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+  font-weight: 300;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.fam .portfolio {
+  padding: 80px 40px 140px;
+}
+.fam .portfolio-head { text-align: center; margin-bottom: 70px; }
+.fam .portfolio-head .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+.fam .portfolio-head h2 {
+  font-weight: 300;
+  font-size: clamp(26px, 3vw, 40px);
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.fam .portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.fam .pf-item {
+  aspect-ratio: 4/5;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s ease;
+  cursor: pointer;
+}
+.fam .pf-item:hover { transform: translateY(-4px); }
+.fam .pf-all { text-align: center; margin-top: 50px; }
+.fam .pf-all a {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 4px;
+  font-weight: 500;
+  transition: color 0.25s, border-color 0.25s;
+}
+.fam .pf-all a:hover { color: var(--accent-deep); border-color: var(--accent-deep); }
+
+.fam .testimonial {
+  padding: 130px 40px;
+  background: var(--bone);
+  text-align: center;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.fam .testimonial .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+.fam .testimonial q {
+  display: block;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(22px, 2.4vw, 32px);
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 780px;
+  margin: 0 auto 40px;
+  quotes: '"' '"';
+  letter-spacing: 0.005em;
+}
+.fam .testimonial .attribution {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.fam .testimonial .attribution strong { color: var(--ink); font-weight: 500; }
+
+.fam .cta {
+  padding: 140px 40px;
+  text-align: center;
+}
+.fam .cta h2 {
+  font-weight: 300;
+  font-size: clamp(32px, 4.2vw, 60px);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .cta p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 46px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 300;
+}
+.fam .cta .btn {
+  display: inline-block;
+  padding: 20px 52px;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  background: var(--ink);
+  color: var(--white);
+  transition: all 0.3s;
+  font-weight: 500;
+}
+.fam .cta .btn:hover { background: var(--accent-deep); transform: translateY(-2px); }
+
+.fam .site-footer {
+  padding: 70px 40px 36px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  background: var(--white);
+}
+.fam .footer-mark {
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 18px;
+}
+.fam .footer-tag {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 44px;
+  font-weight: 400;
+}
+.fam .footer-contact {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.fam .footer-contact a { transition: color 0.25s; }
+.fam .footer-contact a:hover { color: var(--accent-deep); }
+.fam .footer-social {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 50px;
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 400;
+}
+.fam .footer-social a { transition: color 0.25s; }
+.fam .footer-social a:hover { color: var(--ink); }
+.fam .footer-bottom {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+  font-weight: 400;
+}
+
+@media (max-width: 900px) {
+  .fam .site-nav { padding: 20px; grid-template-columns: 1fr; gap: 14px; }
+  .fam .site-nav .wordmark, .fam .site-nav .left-links, .fam .site-nav .right-links { grid-column: 1; justify-self: center; }
+  .fam .site-nav ul { gap: 18px; font-size: 10px; }
+  .fam .hero { padding: 70px 20px 30px; }
+  .fam .about { padding: 80px 20px 40px; }
+  .fam .portfolio { padding: 60px 20px 90px; }
+  .fam .portfolio-grid { grid-template-columns: 1fr; gap: 14px; }
+  .fam .testimonial { padding: 80px 24px; }
+  .fam .cta { padding: 90px 24px; }
+  .fam .site-footer { padding: 50px 24px 30px; }
+  .fam .footer-contact { flex-direction: column; gap: 10px; }
+}
+</style>
+
+<section id="familiar" class="fam">
+  <nav class="site-nav">
+    <ul class="left-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Portfolio</a></li>
+    </ul>
+    <div class="wordmark">Paper &amp; Petals</div>
+    <ul class="right-links">
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Inquire</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <p class="tagline">Floral Design · Utah</p>
+    <h1>Elevated. Timeless. Romantic.</h1>
+    <p class="sub">Art-driven florals designed to bring intentional beauty to life's most celebrated moments.</p>
+    <div class="hero-img"></div>
+    <div class="scroll-indicator">Explore</div>
+  </section>
+
+  <section class="about">
+    <p class="kicker">About</p>
+    <h2>Flowers are more than décor.<br>They set the tone for a whole space.</h2>
+    <p>Founded by TaLeah, Paper &amp; Petals brings together two lifelong passions — fine art and floral design — to create arrangements that feel both considered and effortless.</p>
+    <p>We work with couples and planners who want florals that tell a story, and stay with them long after the day is over.</p>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <p class="kicker">Portfolio</p>
+      <h2>A few recent celebrations</h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="pf-item" style="background-image:url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg');"></div>
+    </div>
+    <div class="pf-all"><a href="#">View Full Gallery</a></div>
+  </section>
+
+  <section class="testimonial">
+    <p class="kicker">Kind Words</p>
+    <q>TaLeah did a fabulous job on the florals for my wedding. I was blown away with what she had curated.</q>
+    <p class="attribution"><strong>Ashlie S.</strong></p>
+  </section>
+
+  <section class="cta">
+    <h2>Let's create something beautiful together.</h2>
+    <p>Share your date and your vision. We'll be in touch within two business days.</p>
+    <a href="#" class="btn">Inquire Now</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-mark">Paper &amp; Petals</div>
+    <p class="footer-tag">Elevated · Timeless · Romantic</p>
+    <div class="footer-contact">
+      <a href="tel:4353400117">435.340.0117</a>
+      <a href="mailto:paperandpetalsllc@gmail.com">paperandpetalsllc@gmail.com</a>
+    </div>
+    <div class="footer-social">
+      <a href="#">Instagram</a>
+      <a href="#">Pinterest</a>
+    </div>
+    <div class="footer-bottom">© 2026 Paper &amp; Petals, LLC</div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 02 — of 04</div>
+      <h2 class="dd-name">Trustworthy<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Classic &amp; grounded — linen, sage, warm beige. Reads as established and safe to book.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 03 — TRUSTWORTHY ===========================
+     ========================================================= -->
+<style>
+.trust {
+  --linen: #ffffff;
+  --linen-deep: #f7f6f3;
+  --sage: #8a9a84;
+  --sage-deep: #5f6e5b;
+  --beige: #c4b39a;
+  --beige-deep: #9f8c70;
+  --charcoal: #2b2927;
+  --charcoal-soft: #4a4642;
+  --rule: #d9ceba;
+
+  background: var(--linen);
+  color: var(--charcoal);
+  font-family: 'Manrope', sans-serif;
+}
+.trust a { color: inherit; }
+
+/* nav */
+.trust .site-nav {
+  padding: 26px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+  background: var(--linen);
+}
+.trust .site-nav .wordmark {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  color: var(--charcoal);
+  grid-column: 2;
+  text-align: center;
+}
+.trust .site-nav .wordmark em { font-style: italic; color: var(--sage-deep); font-weight: 400; }
+.trust .site-nav .left-links,
+.trust .site-nav .right-links {
+  display: flex;
+  gap: 28px;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--charcoal-soft);
+  list-style: none;
+}
+.trust .site-nav .left-links { grid-column: 1; }
+.trust .site-nav .right-links { grid-column: 3; justify-self: end; }
+.trust .site-nav a { transition: color 0.25s; font-weight: 500; }
+.trust .site-nav a:hover { color: var(--sage-deep); }
+
+/* hero */
+.trust .hero {
+  padding: 110px 56px 90px;
+  text-align: center;
+  position: relative;
+}
+.trust .hero::before {
+  content: '';
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 1px;
+  background: var(--beige-deep);
+}
+.trust .hero-inner { max-width: 1100px; margin: 0 auto; }
+.trust .hero .eyebrow {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.trust .hero h1 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(48px, 6.5vw, 96px);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+  margin-bottom: 32px;
+}
+.trust .hero h1 em { font-style: italic; font-weight: 400; color: var(--sage-deep); }
+.trust .hero .sub {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--charcoal-soft);
+  max-width: 640px;
+  margin: 0 auto 46px;
+  line-height: 1.5;
+}
+.trust .hero-img {
+  aspect-ratio: 21/9;
+  background-image: url('https://static.wixstatic.com/media/62f364_ccd4f25c763d4b9b974ef0a6308c4ff1~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+}
+.trust .hero-img::after {
+  content: '';
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(244, 237, 225, 0.4);
+  pointer-events: none;
+}
+
+/* trust row */
+.trust .trust-row {
+  padding: 50px 56px;
+  background: var(--linen-deep);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.trust .trust-row .item {
+  text-align: center;
+  max-width: 220px;
+}
+.trust .trust-row .num {
+  font-family: 'EB Garamond', serif;
+  font-size: 36px;
+  font-weight: 500;
+  color: var(--sage-deep);
+  margin-bottom: 4px;
+  font-style: italic;
+}
+.trust .trust-row .label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--charcoal-soft);
+  font-weight: 500;
+}
+.trust .trust-row .divider {
+  width: 1px;
+  height: 44px;
+  background: var(--beige);
+  opacity: 0.7;
+}
+
+/* about */
+.trust .about {
+  padding: 130px 56px 110px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.trust .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+}
+.trust .about-text h2 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(36px, 4vw, 56px);
+  line-height: 1.05;
+  color: var(--charcoal);
+  margin-bottom: 28px;
+}
+.trust .about-text h2 em { font-style: italic; color: var(--sage-deep); font-weight: 400; }
+.trust .about-text .kicker {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.trust .about-text p {
+  font-family: 'EB Garamond', serif;
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--charcoal-soft);
+  margin-bottom: 18px;
+}
+.trust .about-text .sig {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--charcoal-soft);
+}
+.trust .about-text .sig em {
+  font-family: 'EB Garamond', serif;
+  font-size: 22px;
+  font-style: italic;
+  color: var(--sage-deep);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
+
+/* services */
+.trust .services {
+  padding: 100px 56px;
+  background: var(--linen-deep);
+  text-align: center;
+}
+.trust .services h2 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(36px, 4.4vw, 56px);
+  line-height: 1.1;
+  color: var(--charcoal);
+  margin-bottom: 12px;
+}
+.trust .services h2 em { font-style: italic; color: var(--sage-deep); }
+.trust .services .sub {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: var(--charcoal-soft);
+  margin-bottom: 60px;
+}
+.trust .services-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.trust .service-card {
+  background: var(--linen);
+  padding: 44px 36px;
+  text-align: left;
+  border: 1px solid var(--rule);
+  transition: border-color 0.25s, transform 0.25s;
+}
+.trust .service-card:hover { border-color: var(--sage); transform: translateY(-3px); }
+.trust .service-card .num {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--sage-deep);
+  margin-bottom: 14px;
+}
+.trust .service-card h3 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 1.15;
+  color: var(--charcoal);
+  margin-bottom: 14px;
+}
+.trust .service-card p {
+  font-family: 'Manrope', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--charcoal-soft);
+}
+
+/* portfolio */
+.trust .portfolio {
+  padding: 110px 56px;
+}
+.trust .portfolio-head {
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.trust .portfolio-head .kicker {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.trust .portfolio-head h2 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(36px, 4.4vw, 56px);
+  line-height: 1.05;
+  color: var(--charcoal);
+  margin-bottom: 14px;
+}
+.trust .portfolio-head h2 em { font-style: italic; color: var(--sage-deep); }
+.trust .portfolio-head p {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--charcoal-soft);
+}
+.trust .portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.trust .pf-item {
+  aspect-ratio: 4/5;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+.trust .pf-item::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(244, 237, 225, 0.3);
+  z-index: 1;
+  pointer-events: none;
+  transition: inset 0.4s;
+}
+.trust .pf-item:hover::before { inset: 16px; }
+.trust .pf-item-1 { background-image: url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg'); }
+.trust .pf-item-2 { background-image: url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg'); }
+.trust .pf-item-3 { background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg'); }
+.trust .pf-all {
+  margin-top: 50px;
+  text-align: center;
+}
+.trust .pf-all a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--charcoal);
+  padding-bottom: 4px;
+  font-weight: 600;
+  transition: color 0.25s, border-color 0.25s;
+}
+.trust .pf-all a:hover { color: var(--sage-deep); border-color: var(--sage-deep); }
+
+/* testimonial */
+.trust .testimonial {
+  padding: 120px 56px;
+  background: var(--linen-deep);
+  text-align: center;
+  position: relative;
+}
+.trust .testimonial::before,
+.trust .testimonial::after {
+  content: '';
+  width: 120px;
+  height: 1px;
+  background: var(--beige-deep);
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.trust .testimonial::before { top: 60px; }
+.trust .testimonial::after { bottom: 60px; }
+.trust .testimonial-inner { max-width: 820px; margin: 0 auto; }
+.trust .testimonial .label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+.trust .testimonial q {
+  display: block;
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(24px, 2.8vw, 36px);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--charcoal);
+  quotes: '"' '"';
+  margin-bottom: 36px;
+}
+.trust .testimonial .attribution {
+  font-family: 'EB Garamond', serif;
+  font-size: 17px;
+  color: var(--charcoal-soft);
+}
+.trust .testimonial .attribution strong { font-weight: 600; color: var(--charcoal); }
+
+/* cta */
+.trust .cta {
+  padding: 120px 56px;
+  text-align: center;
+}
+.trust .cta-inner { max-width: 680px; margin: 0 auto; }
+.trust .cta .kicker {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--sage-deep);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.trust .cta h2 {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+}
+.trust .cta h2 em { font-style: italic; color: var(--sage-deep); }
+.trust .cta p {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--charcoal-soft);
+  margin-bottom: 40px;
+}
+.trust .cta .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.trust .cta .btn {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  padding: 18px 38px;
+  font-weight: 600;
+  transition: all 0.25s;
+}
+.trust .cta .btn-primary { background: var(--sage-deep); color: var(--linen); }
+.trust .cta .btn-primary:hover { background: var(--charcoal); }
+.trust .cta .btn-ghost { color: var(--charcoal); border: 1px solid var(--charcoal); }
+.trust .cta .btn-ghost:hover { background: var(--charcoal); color: var(--linen); }
+
+/* footer */
+.trust .site-footer {
+  background: var(--charcoal);
+  color: var(--linen);
+  padding: 60px 56px 30px;
+  font-family: 'Manrope', sans-serif;
+}
+.trust .footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 34px;
+  border-bottom: 1px solid rgba(244, 237, 225, 0.1);
+}
+.trust .footer-mark {
+  font-family: 'EB Garamond', serif;
+  font-weight: 500;
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+.trust .footer-mark em { font-style: italic; color: var(--sage); font-weight: 400; }
+.trust .footer-tag {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: rgba(244, 237, 225, 0.75);
+}
+.trust .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--sage);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.trust .footer-inner a,
+.trust .footer-inner p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(244, 237, 225, 0.8);
+}
+.trust .footer-inner a:hover { color: var(--linen); }
+.trust .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(244, 237, 225, 0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 900px) {
+  .trust .site-nav { grid-template-columns: 1fr; text-align: center; gap: 12px; padding: 20px; }
+  .trust .site-nav .wordmark, .trust .site-nav .left-links, .trust .site-nav .right-links { grid-column: 1; justify-self: center; }
+  .trust .site-nav .left-links, .trust .site-nav .right-links { gap: 16px; font-size: 10px; }
+  .trust .hero { padding: 70px 24px; }
+  .trust .trust-row { padding: 34px 24px; gap: 18px; }
+  .trust .trust-row .divider { display: none; }
+  .trust .about { padding: 70px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .trust .services { padding: 70px 24px; }
+  .trust .services-grid { grid-template-columns: 1fr; gap: 18px; }
+  .trust .portfolio { padding: 70px 24px; }
+  .trust .portfolio-grid { grid-template-columns: 1fr; gap: 16px; }
+  .trust .testimonial { padding: 80px 24px; }
+  .trust .cta { padding: 70px 24px; }
+  .trust .site-footer { padding: 40px 24px; }
+  .trust .footer-inner { grid-template-columns: 1fr; gap: 26px; }
+}
+</style>
+
+<section id="trustworthy" class="trust">
+  <nav class="site-nav">
+    <ul class="left-links">
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Services</a></li>
+    </ul>
+    <div class="wordmark">Paper <em>&amp;</em> Petals</div>
+    <ul class="right-links">
+      <li><a href="#">Journal</a></li>
+      <li><a href="#">Contact</a></li>
+      <li><a href="#">Inquire</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">Floral Design · Utah</div>
+      <h1>Elevated, timeless,<br><em>romantic florals.</em></h1>
+      <p class="sub">Weddings and events designed with intention — arrangements that feel unhurried, considered, and built to last in the memory.</p>
+    </div>
+    <div class="hero-img"></div>
+  </section>
+
+  <section class="trust-row">
+    <div class="item">
+      <div class="num">vii.</div>
+      <div class="label">Years Designing</div>
+    </div>
+    <div class="divider"></div>
+    <div class="item">
+      <div class="num">120+</div>
+      <div class="label">Celebrations</div>
+    </div>
+    <div class="divider"></div>
+    <div class="item">
+      <div class="num">2026</div>
+      <div class="label">Now Booking</div>
+    </div>
+    <div class="divider"></div>
+    <div class="item">
+      <div class="num">UVB</div>
+      <div class="label">Utah Valley Bride</div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="about-img"></div>
+    <div class="about-text">
+      <div class="kicker">Meet the Studio</div>
+      <h2>An artist who happens to <em>arrange flowers.</em></h2>
+      <p>Paper &amp; Petals was founded by TaLeah — an artist and floral designer bringing together two lifelong passions: a background in fine art and an eye for the composition of a room.</p>
+      <p>Every arrangement begins with the shape of the day itself — the venue, the light, the way people will move through the space. The florals are what tie it all together.</p>
+      <div class="sig">
+        <span>Founder &amp; Designer</span>
+        <em>TaLeah</em>
+      </div>
+    </div>
+  </section>
+
+  <section class="services">
+    <h2>What we <em>do.</em></h2>
+    <p class="sub">Three ways we work with couples and planners.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="num">i.</div>
+        <h3>Wedding Florals</h3>
+        <p>Bouquets, ceremony pieces, reception tablescapes, and installations — designed as a coherent visual story from start to finish.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">ii.</div>
+        <h3>Private Events</h3>
+        <p>Showers, engagements, anniversaries, and intimate dinners. Thoughtful florals for gatherings that don't need to feel like a production.</p>
+      </div>
+      <div class="service-card">
+        <div class="num">iii.</div>
+        <h3>Custom Arrangements</h3>
+        <p>A la carte pieces for milestones, gifts, photo shoots, and styled details. We'll work from your inspiration — not a preset menu.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">Recent Work</div>
+      <h2>A look at <em>what we've made.</em></h2>
+      <p>A small selection from the last season — full galleries available on request.</p>
+    </div>
+    <div class="portfolio-grid">
+      <div class="pf-item pf-item-1"></div>
+      <div class="pf-item pf-item-2"></div>
+      <div class="pf-item pf-item-3"></div>
+    </div>
+    <div class="pf-all"><a href="#">View the full portfolio →</a></div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="label">From a Bride</div>
+      <q>TaLeah did a fabulous job on the florals for my wedding. I was blown away with what she had curated.</q>
+      <p class="attribution"><strong>Ashlie S.</strong> — Wedding, 2024</p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Now booking 2026</div>
+      <h2>Let's talk about <em>your day.</em></h2>
+      <p>Share your date, venue, and vision — we'll follow up within two business days with availability, a starting estimate, and next steps.</p>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary">Start an Inquiry</a>
+        <a href="#" class="btn btn-ghost">Read FAQs</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Paper <em>&amp;</em> Petals</div>
+        <p class="footer-tag">Elevated, timeless, romantic florals — designed in Utah, for celebrations everywhere.</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Utah</p>
+        <p>By appointment</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:4353400117">435.340.0117</a></p>
+        <p><a href="mailto:paperandpetalsllc@gmail.com">paperandpetalsllc@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="col-label">Social</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Paper &amp; Petals, LLC</span>
+      <span>Featured · Utah Valley Bride</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 03 — of 04</div>
+      <h2 class="dd-name">Friendly<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Warm &amp; personal — blush, peach, dusty sage. Reads as approachable and real.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 04 — FRIENDLY ==============================
+     ========================================================= -->
+<style>
+.friend {
+  --cream: #ffffff;
+  --cream-deep: #f8f6f3;
+  --blush: #fbf5f1;
+  --peach: #e8a282;
+  --peach-deep: #d08664;
+  --sage: #a8b896;
+  --sage-deep: #7f9071;
+  --butter: #f5d9a8;
+  --ink: #3c3530;
+  --ink-soft: #5e534c;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.friend a { color: inherit; }
+
+/* decorative SVG layer */
+.friend .sprig {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  color: var(--sage-deep);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* nav */
+.friend .site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 48px;
+  position: relative;
+  z-index: 2;
+}
+.friend .site-nav .wordmark {
+  font-family: 'Gloock', serif;
+  font-size: 28px;
+  letter-spacing: 0.005em;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.friend .site-nav .wordmark .amp {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  color: var(--peach-deep);
+  font-size: 32px;
+}
+.friend .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.friend .site-nav ul a {
+  position: relative;
+  padding-bottom: 3px;
+  transition: color 0.25s;
+}
+.friend .site-nav ul a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
+  background: var(--peach-deep);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.friend .site-nav ul a:hover::after { transform: scaleX(1); }
+.friend .site-nav .chat-btn {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.25s, transform 0.25s;
+}
+.friend .site-nav .chat-btn:hover { background: var(--peach-deep); transform: translateY(-2px); }
+
+/* hero */
+.friend .hero {
+  padding: 70px 48px 80px;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 60px;
+  align-items: center;
+  position: relative;
+}
+.friend .hero .sprig-1 {
+  top: 40px; right: 46%;
+  width: 70px; height: 70px;
+  transform: rotate(-18deg);
+}
+.friend .hero .sprig-2 {
+  bottom: 50px; left: 42%;
+  width: 90px; height: 90px;
+  transform: rotate(32deg);
+  color: var(--peach-deep);
+}
+.friend .hero-text { position: relative; z-index: 1; }
+.friend .hero-text .hi {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-size: 28px;
+  color: var(--peach-deep);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.friend .hero-text .hi::before {
+  content: '';
+  width: 36px;
+  height: 2px;
+  background: var(--peach-deep);
+  border-radius: 2px;
+}
+.friend .hero-text h1 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(44px, 6vw, 90px);
+  line-height: 1.02;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.friend .hero-text h1 em {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  color: var(--peach-deep);
+  font-size: 0.93em;
+  padding-right: 4px;
+}
+.friend .hero-text h1 .underline-swoosh {
+  position: relative;
+  display: inline-block;
+}
+.friend .hero-text h1 .underline-swoosh::after {
+  content: '';
+  position: absolute;
+  left: -2%; right: -2%;
+  bottom: 2px;
+  height: 10px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' fill='none'><path d='M2 8 Q 50 0 100 6 T 198 7' stroke='%23e8a282' stroke-width='3' stroke-linecap='round' fill='none'/></svg>") no-repeat center/100% 100%;
+  z-index: -1;
+}
+.friend .hero-text .sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin-bottom: 36px;
+}
+.friend .hero-text .btn-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.friend .hero-text .btn {
+  padding: 16px 30px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.friend .hero-text .btn-primary {
+  background: var(--peach-deep);
+  color: var(--cream);
+}
+.friend .hero-text .btn-primary:hover { background: var(--ink); transform: translateY(-2px); }
+.friend .hero-text .btn-ghost {
+  color: var(--ink);
+  border: 1.5px solid var(--ink);
+}
+.friend .hero-text .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+.friend .hero-text .little-note {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink-soft);
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.friend .hero-img-stack {
+  position: relative;
+  height: 560px;
+}
+.friend .hero-img-stack .img {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px -20px rgba(60, 53, 48, 0.35);
+}
+.friend .hero-img-stack .img-1 {
+  width: 62%; height: 72%;
+  top: 0; right: 14%;
+  background-image: url('https://static.wixstatic.com/media/62f364_ccd4f25c763d4b9b974ef0a6308c4ff1~mv2.jpg');
+  transform: rotate(-4deg);
+}
+.friend .hero-img-stack .img-2 {
+  width: 44%; height: 46%;
+  bottom: 5%; right: 0;
+  background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');
+  transform: rotate(6deg);
+  z-index: 2;
+}
+.friend .hero-img-stack .img-3 {
+  width: 38%; height: 40%;
+  bottom: 12%; left: 0;
+  background-image: url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg');
+  transform: rotate(-7deg);
+}
+.friend .hero-img-stack .tape {
+  position: absolute;
+  width: 80px; height: 22px;
+  background: var(--butter);
+  opacity: 0.75;
+  top: -8px; left: 50%;
+  transform: translateX(-50%) rotate(-4deg);
+}
+.friend .hero-img-stack .img-1 .tape { left: 40%; }
+
+/* marquee / ticker */
+.friend .marquee {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 20px 0;
+  overflow: hidden;
+  position: relative;
+  border-top: 2px solid var(--peach);
+  border-bottom: 2px solid var(--peach);
+}
+.friend .marquee-track {
+  display: flex;
+  gap: 50px;
+  white-space: nowrap;
+  animation: mq 28s linear infinite;
+  width: max-content;
+}
+.friend .marquee span {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 26px;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.friend .marquee span::after {
+  content: '✿';
+  color: var(--peach);
+  font-style: normal;
+  font-size: 20px;
+}
+@keyframes mq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* about */
+.friend .about {
+  padding: 110px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.friend .about-img-wrap {
+  position: relative;
+}
+.friend .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -20px rgba(60, 53, 48, 0.3);
+  transform: rotate(-2deg);
+}
+.friend .about-img-wrap::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: 14px; right: -14px; bottom: -14px;
+  background: var(--peach);
+  border-radius: 14px;
+  z-index: -1;
+  transform: rotate(2deg);
+  opacity: 0.35;
+}
+.friend .about-text .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--peach-deep);
+  margin-bottom: 16px;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .about-text h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.friend .about-text h2 em {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--sage-deep);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-weight: 400;
+}
+.friend .about-text p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.friend .about-text .sig {
+  margin-top: 24px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--peach-deep);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-weight: 400;
+}
+.friend .about-text .sig::before {
+  content: '— ';
+}
+
+/* what we do (list) */
+.friend .do-list {
+  padding: 100px 48px;
+  background: var(--cream-deep);
+  position: relative;
+}
+.friend .do-list .sprig-3 { top: 40px; right: 8%; width: 120px; height: 120px; transform: rotate(24deg); opacity: 0.5; }
+.friend .do-list-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 60px;
+}
+.friend .do-list-head .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--peach-deep);
+  margin-bottom: 12px;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .do-list-head h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1.05;
+  color: var(--ink);
+}
+.friend .do-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.friend .do-card {
+  background: var(--cream);
+  padding: 36px 32px 32px;
+  border-radius: 18px;
+  position: relative;
+  transition: transform 0.25s, box-shadow 0.25s;
+  border: 1.5px solid transparent;
+}
+.friend .do-card:hover {
+  transform: translateY(-4px) rotate(0.5deg);
+  box-shadow: 0 20px 36px -22px rgba(60, 53, 48, 0.3);
+  border-color: var(--peach);
+}
+.friend .do-card .icon {
+  width: 48px;
+  height: 48px;
+  background: var(--blush);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--peach-deep);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .do-card h3 {
+  font-family: 'Gloock', serif;
+  font-size: 24px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.friend .do-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+/* scrapbook portfolio */
+.friend .scrap {
+  padding: 110px 48px 120px;
+  position: relative;
+}
+.friend .scrap-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 60px;
+}
+.friend .scrap-head .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--peach-deep);
+  margin-bottom: 12px;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .scrap-head h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(36px, 4.4vw, 60px);
+  line-height: 1.05;
+  color: var(--ink);
+}
+.friend .scrap-head p {
+  margin-top: 14px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ink-soft);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .scrap-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.friend .scrap-item {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 14px 28px -18px rgba(60, 53, 48, 0.3);
+  transition: transform 0.3s;
+}
+.friend .scrap-item:hover { transform: translateY(-4px) rotate(0deg) !important; }
+.friend .scrap-item .caption {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  background: rgba(251, 242, 235, 0.92);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--ink);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .scrap-1 {
+  grid-column: 1 / span 5;
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');
+  transform: rotate(-2deg);
+}
+.friend .scrap-2 {
+  grid-column: 6 / span 7;
+  aspect-ratio: 16/11;
+  background-image: url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg');
+  transform: rotate(1deg);
+}
+.friend .scrap-3 {
+  grid-column: 1 / span 4;
+  aspect-ratio: 1/1;
+  background-image: url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg');
+  transform: rotate(3deg);
+}
+.friend .scrap-4 {
+  grid-column: 5 / span 4;
+  aspect-ratio: 1/1;
+  background-image: url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg');
+  transform: rotate(-3deg);
+}
+.friend .scrap-5 {
+  grid-column: 9 / span 4;
+  aspect-ratio: 1/1;
+  background-image: url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg');
+  transform: rotate(2deg);
+}
+
+/* testimonial */
+.friend .testimonial {
+  padding: 110px 48px;
+  background: var(--blush);
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+.friend .testimonial .sprig-4 { top: 30px; left: 8%; width: 80px; height: 80px; transform: rotate(-20deg); color: var(--sage-deep); }
+.friend .testimonial .sprig-5 { bottom: 30px; right: 10%; width: 90px; height: 90px; transform: rotate(40deg); color: var(--peach-deep); }
+.friend .testimonial-inner {
+  max-width: 800px;
+  margin: 0 auto;
+  background: var(--cream);
+  padding: 60px 50px;
+  border-radius: 24px;
+  position: relative;
+  box-shadow: 0 30px 60px -30px rgba(60, 53, 48, 0.25);
+}
+.friend .testimonial-inner::before {
+  content: '"';
+  position: absolute;
+  top: -20px;
+  left: 36px;
+  font-family: 'Gloock', serif;
+  font-size: 160px;
+  color: var(--peach);
+  line-height: 1;
+}
+.friend .testimonial .label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--peach-deep);
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+.friend .testimonial q {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height: 1.4;
+  color: var(--ink);
+  quotes: none;
+  margin-bottom: 30px;
+}
+.friend .testimonial q::before, .friend .testimonial q::after { content: ''; }
+.friend .testimonial .attribution {
+  font-size: 15px;
+  color: var(--ink-soft);
+  font-family: 'DM Sans', sans-serif;
+}
+.friend .testimonial .attribution strong { color: var(--ink); font-weight: 600; }
+
+/* cta */
+.friend .cta {
+  padding: 120px 48px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+}
+.friend .cta .sprig-6 { top: 30%; left: 10%; width: 90px; height: 90px; transform: rotate(40deg); }
+.friend .cta .sprig-7 { bottom: 25%; right: 10%; width: 100px; height: 100px; transform: rotate(-26deg); color: var(--peach-deep); }
+.friend .cta-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+.friend .cta .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 24px;
+  color: var(--peach-deep);
+  margin-bottom: 16px;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .cta h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(40px, 5.4vw, 72px);
+  line-height: 1.02;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.friend .cta h2 em {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--peach-deep);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-weight: 400;
+}
+.friend .cta p {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 40px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.friend .cta .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.friend .cta .btn {
+  padding: 18px 34px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.3s;
+}
+.friend .cta .btn-primary { background: var(--peach-deep); color: var(--cream); }
+.friend .cta .btn-primary:hover { background: var(--ink); transform: translateY(-3px); }
+.friend .cta .btn-ghost { color: var(--ink); border: 1.5px solid var(--ink); }
+.friend .cta .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+
+/* footer */
+.friend .site-footer {
+  padding: 70px 48px 40px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+}
+.friend .footer-mark-row {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.friend .footer-mark {
+  font-family: 'Gloock', serif;
+  font-size: 48px;
+  margin-bottom: 6px;
+  color: var(--cream);
+}
+.friend .footer-mark .amp {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--peach);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+  font-weight: 400;
+}
+.friend .footer-tag {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(251, 242, 235, 0.8);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+.friend .footer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(251, 242, 235, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+}
+.friend .footer-cols .col-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--peach);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.friend .footer-cols a,
+.friend .footer-cols p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(251, 242, 235, 0.85);
+}
+.friend .footer-cols a:hover { color: var(--peach); }
+.friend .footer-bottom {
+  padding-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: rgba(251, 242, 235, 0.5);
+}
+.friend .footer-bottom em {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--peach);
+  font-variation-settings: "opsz" 144, "SOFT" 100;
+}
+
+@media (max-width: 900px) {
+  .friend .site-nav { flex-direction: column; padding: 18px 20px; gap: 14px; }
+  .friend .site-nav ul { gap: 18px; font-size: 14px; }
+  .friend .hero { padding: 40px 20px 60px; grid-template-columns: 1fr; gap: 40px; }
+  .friend .hero-img-stack { height: 360px; }
+  .friend .hero .sprig-1, .friend .hero .sprig-2 { display: none; }
+  .friend .marquee span { font-size: 20px; }
+  .friend .about { padding: 70px 20px; grid-template-columns: 1fr; gap: 60px; }
+  .friend .do-list { padding: 70px 20px; }
+  .friend .do-grid { grid-template-columns: 1fr; gap: 16px; }
+  .friend .scrap { padding: 70px 20px; }
+  .friend .scrap-grid { grid-template-columns: 1fr; }
+  .friend .scrap-item { grid-column: auto !important; aspect-ratio: 4/3 !important; transform: rotate(0) !important; }
+  .friend .testimonial { padding: 70px 20px; }
+  .friend .testimonial-inner { padding: 40px 28px; }
+  .friend .cta { padding: 70px 20px; }
+  .friend .cta .sprig-6, .friend .cta .sprig-7 { display: none; }
+  .friend .site-footer { padding: 50px 20px 30px; }
+  .friend .footer-cols { grid-template-columns: 1fr; gap: 24px; text-align: center; }
+}
+</style>
+
+<!-- reusable SVG sprig symbol -->
+<svg width="0" height="0" style="position:absolute;" aria-hidden="true">
+  <symbol id="sprig" viewBox="0 0 100 100">
+    <path d="M50 95 Q 50 60 50 20 M50 70 Q 35 60 25 48 M50 70 Q 65 60 75 48 M50 50 Q 36 40 30 30 M50 50 Q 64 40 70 30 M50 30 Q 40 22 36 14 M50 30 Q 60 22 64 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+    <circle cx="25" cy="48" r="3" fill="currentColor"/>
+    <circle cx="75" cy="48" r="3" fill="currentColor"/>
+    <circle cx="30" cy="30" r="2.5" fill="currentColor"/>
+    <circle cx="70" cy="30" r="2.5" fill="currentColor"/>
+    <circle cx="50" cy="18" r="4" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<section id="friendly" class="friend">
+  <nav class="site-nav">
+    <div class="wordmark">Paper<span class="amp">&amp;</span>Petals</div>
+    <ul>
+      <li><a href="#">home</a></li>
+      <li><a href="#">about</a></li>
+      <li><a href="#">work</a></li>
+      <li><a href="#">journal</a></li>
+    </ul>
+    <a href="#" class="chat-btn">Say hi →</a>
+  </nav>
+
+  <section class="hero">
+    <svg class="sprig sprig-1"><use href="#sprig"/></svg>
+    <svg class="sprig sprig-2"><use href="#sprig"/></svg>
+    <div class="hero-text">
+      <div class="hi">hi, I'm TaLeah —</div>
+      <h1>and I make <span class="underline-swoosh"><em>pretty flowers</em></span> for pretty days.</h1>
+      <p class="sub">I'm a florist and artist in Utah, designing romantic, intentional florals for weddings and celebrations of every size. Let's make your day feel like <em>you</em>.</p>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary">Let's chat →</a>
+        <a href="#" class="btn btn-ghost">See my work</a>
+        <span class="little-note">usually reply in a day ✿</span>
+      </div>
+    </div>
+    <div class="hero-img-stack">
+      <div class="img img-1"><div class="tape"></div></div>
+      <div class="img img-2"></div>
+      <div class="img img-3"></div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>elevated</span>
+      <span>timeless</span>
+      <span>romantic</span>
+      <span>handcrafted in Utah</span>
+      <span>elevated</span>
+      <span>timeless</span>
+      <span>romantic</span>
+      <span>handcrafted in Utah</span>
+    </div>
+  </div>
+
+  <section class="about">
+    <div class="about-img-wrap">
+      <div class="about-img"></div>
+    </div>
+    <div class="about-text">
+      <div class="kicker">the story</div>
+      <h2>Two passions —<br><em>one little studio.</em></h2>
+      <p>I started Paper &amp; Petals because I couldn't pick between painting and arranging flowers — so I stopped trying. Every piece I design starts the way a painting does: with color, composition, and a little bit of feeling.</p>
+      <p>If you love flowers that feel lived-in, romantic, and just a little bit unexpected, we're probably going to get along great.</p>
+      <div class="sig">TaLeah</div>
+    </div>
+  </section>
+
+  <section class="do-list">
+    <svg class="sprig sprig-3"><use href="#sprig"/></svg>
+    <div class="do-list-head">
+      <div class="kicker">the menu</div>
+      <h2>Here's what I can do.</h2>
+    </div>
+    <div class="do-grid">
+      <div class="do-card">
+        <div class="icon">i</div>
+        <h3>Wedding florals</h3>
+        <p>Bouquets, ceremony pieces, tablescapes, arches — the full story of your day, told in flowers.</p>
+      </div>
+      <div class="do-card">
+        <div class="icon">ii</div>
+        <h3>Events &amp; parties</h3>
+        <p>Showers, engagements, dinners. Florals that feel like a gift to everyone in the room.</p>
+      </div>
+      <div class="do-card">
+        <div class="icon">iii</div>
+        <h3>Anything else</h3>
+        <p>Gifts, photo shoots, styled details. If you can dream it up, let's chat about it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scrap">
+    <div class="scrap-head">
+      <div class="kicker">recent work</div>
+      <h2>Little bits from this year.</h2>
+      <p>a small scrapbook · swipe through for the full gallery</p>
+    </div>
+    <div class="scrap-grid">
+      <div class="scrap-item scrap-1"><div class="caption">Highland bridal, spring</div></div>
+      <div class="scrap-item scrap-2"><div class="caption">Reception tablescape, The Ranches</div></div>
+      <div class="scrap-item scrap-3"><div class="caption">Bouquet detail</div></div>
+      <div class="scrap-item scrap-4"><div class="caption">Summer arrangement</div></div>
+      <div class="scrap-item scrap-5"><div class="caption">Single-stem study</div></div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <svg class="sprig sprig-4"><use href="#sprig"/></svg>
+    <svg class="sprig sprig-5"><use href="#sprig"/></svg>
+    <div class="testimonial-inner">
+      <div class="label">A kind note</div>
+      <q>TaLeah did a fabulous job on the florals for my wedding. I was blown away with what she had curated.</q>
+      <p class="attribution"><strong>Ashlie S.</strong> · bride</p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <svg class="sprig sprig-6"><use href="#sprig"/></svg>
+    <svg class="sprig sprig-7"><use href="#sprig"/></svg>
+    <div class="cta-inner">
+      <div class="kicker">let's chat</div>
+      <h2>Want to put <em>flowers on the day?</em></h2>
+      <p>Send me a note about your date and what you're imagining — even if it's just a Pinterest board and a vibe. I'll get back to you within a day or so.</p>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary">Start an inquiry →</a>
+        <a href="#" class="btn btn-ghost">FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-mark-row">
+      <div class="footer-mark">Paper<span class="amp">&amp;</span>Petals</div>
+      <p class="footer-tag">elevated, timeless, romantic — made with love in Utah</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="col-label">Reach out</div>
+        <p><a href="tel:4353400117">435.340.0117</a></p>
+        <p><a href="mailto:paperandpetalsllc@gmail.com">paperandpetalsllc@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="col-label">Find me</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Utah</p>
+        <p>by appointment</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Paper &amp; Petals, LLC · made with <em>a lot of love</em>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 04 — of 04</div>
+      <h2 class="dd-name">Luxury<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Editorial &amp; refined — oxblood, antique gold, ivory. Reads as high-end and aspirational.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 02 — LUXURY ================================
+     ========================================================= -->
+<style>
+.lux {
+  --ivory: #ffffff;
+  --ivory-warm: #f7f6f3;
+  --oxblood: #5a1e2a;
+  --oxblood-deep: #3a1016;
+  --gold: #b89759;
+  --gold-light: #d8c08f;
+  --ink: #12080a;
+  --ink-soft: #2a1f21;
+  --muted: #8a7268;
+
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  position: relative;
+}
+.lux a { color: inherit; }
+
+/* nav */
+.lux .site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 26px 56px;
+  background: var(--ivory);
+  border-bottom: 1px solid rgba(90, 30, 42, 0.15);
+  position: relative;
+}
+.lux .site-nav .nav-wordmark {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+.lux .site-nav .nav-wordmark .amp {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--oxblood);
+  padding: 0 2px;
+}
+.lux .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 38px;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.lux .site-nav ul a { transition: color 0.25s; }
+.lux .site-nav ul a:hover { color: var(--oxblood); }
+
+/* hero */
+.lux .hero {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  min-height: 88vh;
+  position: relative;
+}
+.lux .hero-left {
+  padding: 80px 72px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.lux .hero-left::before {
+  content: 'VOL. I — 2026';
+  position: absolute;
+  top: 60px;
+  left: 72px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--gold);
+  font-weight: 600;
+}
+.lux .hero-left::after {
+  content: '';
+  position: absolute;
+  bottom: 60px;
+  left: 72px;
+  width: 42px;
+  height: 1px;
+  background: var(--gold);
+}
+.lux .hero-eyebrow {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--oxblood);
+  margin-bottom: 18px;
+  letter-spacing: 0.04em;
+}
+.lux .hero h1 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(56px, 7vw, 112px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: 36px;
+}
+.lux .hero h1 .serif-em { font-style: italic; font-weight: 300; color: var(--oxblood); }
+.lux .hero-sub {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-soft);
+  max-width: 440px;
+  margin-bottom: 40px;
+  line-height: 1.45;
+}
+.lux .hero-cta-row { display: flex; align-items: center; gap: 28px; }
+.lux .hero-cta {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  background: var(--oxblood);
+  padding: 18px 34px;
+  display: inline-block;
+  transition: background 0.3s, transform 0.3s;
+}
+.lux .hero-cta:hover { background: var(--oxblood-deep); transform: translateY(-2px); }
+.lux .hero-meta {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.lux .hero-meta::before { content: '·'; color: var(--gold); }
+.lux .hero-right {
+  background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.lux .hero-right::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(225deg, transparent 60%, rgba(18, 8, 10, 0.25) 100%);
+}
+.lux .hero-caption {
+  position: absolute;
+  bottom: 32px;
+  right: 40px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ivory);
+  z-index: 2;
+  text-align: right;
+  line-height: 1.7;
+}
+.lux .hero-caption em { color: var(--gold-light); font-style: italic; }
+
+/* tag strip */
+.lux .tag-strip {
+  background: var(--ink);
+  color: var(--ivory);
+  padding: 18px 56px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 40px;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 18px;
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+  flex-wrap: wrap;
+}
+.lux .tag-strip span { display: flex; align-items: center; gap: 16px; }
+.lux .tag-strip span::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+}
+
+/* about */
+.lux .about {
+  padding: 140px 56px 120px;
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 100px;
+  align-items: center;
+  position: relative;
+}
+.lux .about-img {
+  background-image: url('https://static.wixstatic.com/media/62f364_11f86320a35141bfb6b37e75cd36748e~mv2.jpg');
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 3/4;
+  position: relative;
+}
+.lux .about-img::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  right: 14px;
+  bottom: 14px;
+  border: 1px solid var(--gold);
+  z-index: -1;
+}
+.lux .about-label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.lux .about-label::before {
+  content: '§ 01';
+  color: var(--oxblood);
+  font-style: italic;
+  font-family: 'Bodoni Moda', serif;
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+.lux .about h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(36px, 4vw, 60px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.lux .about h2 em { font-style: italic; color: var(--oxblood); font-weight: 300; }
+.lux .about p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+.lux .about p:first-letter { color: var(--oxblood); font-style: italic; font-size: 1.2em; }
+.lux .about .signature {
+  margin-top: 32px;
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--oxblood);
+  font-weight: 400;
+}
+
+/* portfolio */
+.lux .portfolio {
+  padding: 120px 56px;
+  background: var(--ivory-warm);
+  position: relative;
+}
+.lux .portfolio-head {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+}
+.lux .portfolio-head .kicker {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--oxblood);
+  margin-bottom: 12px;
+}
+.lux .portfolio-head h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(40px, 5vw, 72px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.lux .portfolio-head h2 em { font-style: italic; color: var(--oxblood); }
+.lux .portfolio-head::after {
+  content: '';
+  display: block;
+  width: 42px;
+  height: 1px;
+  background: var(--gold);
+  margin: 30px auto 0;
+}
+.lux .portfolio-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 30px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.lux .pf-item { position: relative; overflow: hidden; }
+.lux .pf-img {
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.8s ease;
+}
+.lux .pf-item:hover .pf-img { transform: scale(1.04); }
+.lux .pf-item-1 { grid-row: 1 / 3; }
+.lux .pf-item-1 .pf-img {
+  aspect-ratio: 3/4;
+  background-image: url('https://static.wixstatic.com/media/62f364_a5e94e1c37ae4b51847ce65fb043ab84~mv2.jpg');
+}
+.lux .pf-item-2 .pf-img {
+  aspect-ratio: 4/3;
+  background-image: url('https://static.wixstatic.com/media/62f364_ccd4f25c763d4b9b974ef0a6308c4ff1~mv2.jpg');
+}
+.lux .pf-item-3 .pf-img {
+  aspect-ratio: 4/3;
+  background-image: url('https://static.wixstatic.com/media/62f364_a33a09e95fb34a63b6cf4d437cfd3445~mv2.jpg');
+}
+.lux .pf-caption {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 14px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.lux .pf-caption .pf-title {
+  color: var(--ink);
+  font-weight: 600;
+}
+.lux .pf-caption em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--oxblood);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* testimonial */
+.lux .testimonial {
+  padding: 140px 56px 160px;
+  background: var(--ink);
+  color: var(--ivory);
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+.lux .testimonial::before {
+  content: '"';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bodoni Moda', serif;
+  font-size: 360px;
+  color: var(--oxblood);
+  opacity: 0.25;
+  line-height: 1;
+  pointer-events: none;
+}
+.lux .testimonial-inner { max-width: 900px; margin: 0 auto; position: relative; z-index: 1; }
+.lux .testimonial .label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 32px;
+}
+.lux .testimonial q {
+  display: block;
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(28px, 3.2vw, 44px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.3;
+  color: var(--ivory);
+  quotes: none;
+  margin-bottom: 44px;
+}
+.lux .testimonial q::before, .lux .testimonial q::after { content: ''; }
+.lux .testimonial .attribution {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+}
+.lux .testimonial .attribution em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--ivory);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  display: block;
+  margin-top: 6px;
+}
+
+/* cta */
+.lux .cta {
+  padding: 140px 56px 120px;
+  text-align: center;
+  background: var(--ivory);
+  position: relative;
+}
+.lux .cta-inner { max-width: 760px; margin: 0 auto; }
+.lux .cta .kicker {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  color: var(--oxblood);
+  font-size: 20px;
+  margin-bottom: 14px;
+}
+.lux .cta h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(40px, 5.4vw, 76px);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.lux .cta h2 em { font-style: italic; color: var(--oxblood); font-weight: 300; }
+.lux .cta p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 540px;
+  margin: 0 auto 40px;
+}
+.lux .cta .btn-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.lux .cta .btn-primary {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 20px 42px;
+  background: var(--oxblood);
+  color: var(--ivory);
+  transition: background 0.3s, transform 0.3s;
+}
+.lux .cta .btn-primary:hover { background: var(--oxblood-deep); transform: translateY(-2px); }
+.lux .cta .btn-ghost {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 20px 42px;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  transition: background 0.3s, color 0.3s;
+}
+.lux .cta .btn-ghost:hover { background: var(--ink); color: var(--ivory); }
+
+/* footer */
+.lux .site-footer {
+  padding: 60px 56px 40px;
+  background: var(--ink);
+  color: var(--ivory);
+  font-family: 'Archivo', sans-serif;
+}
+.lux .footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(244, 237, 225, 0.1);
+}
+.lux .footer-mark {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 14px;
+}
+.lux .footer-mark .amp { color: var(--gold); font-style: italic; }
+.lux .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.lux .footer-inner p,
+.lux .footer-inner a {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ivory);
+  opacity: 0.85;
+}
+.lux .footer-inner a:hover { opacity: 1; color: var(--gold-light); }
+.lux .footer-tag {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  color: var(--ivory);
+  opacity: 0.6;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.lux .footer-bottom {
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(244, 237, 225, 0.5);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* responsive */
+@media (max-width: 900px) {
+  .lux .site-nav { padding: 16px 20px; flex-wrap: wrap; gap: 10px; }
+  .lux .site-nav ul { gap: 18px; font-size: 10px; }
+  .lux .hero { grid-template-columns: 1fr; min-height: auto; }
+  .lux .hero-left { padding: 50px 24px; }
+  .lux .hero-left::before, .lux .hero-left::after { display: none; }
+  .lux .hero-right { aspect-ratio: 4/3; }
+  .lux .about { padding: 70px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .lux .portfolio { padding: 70px 24px; }
+  .lux .portfolio-grid { grid-template-columns: 1fr; gap: 20px; }
+  .lux .pf-item-1 { grid-row: auto; }
+  .lux .testimonial { padding: 80px 24px; }
+  .lux .testimonial::before { font-size: 200px; top: -20px; }
+  .lux .cta { padding: 70px 24px; }
+  .lux .site-footer { padding: 40px 24px; }
+  .lux .footer-inner { grid-template-columns: 1fr; gap: 24px; padding-bottom: 24px; }
+  .lux .tag-strip { padding: 14px 24px; font-size: 15px; }
+}
+</style>
+
+<section id="luxury" class="lux">
+  <nav class="site-nav">
+    <div class="nav-wordmark">Paper<span class="amp">&amp;</span>Petals</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Inquire</a></li>
+    </ul>
+  </nav>
+
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Floral design — Utah &amp; beyond</div>
+      <h1>Elevated. Timeless.<br><span class="serif-em">Romantic.</span></h1>
+      <p class="hero-sub">Art-driven florals for weddings and celebrations — composed with intention, arranged with restraint.</p>
+      <div class="hero-cta-row">
+        <a href="#" class="hero-cta">Begin Inquiry</a>
+        <div class="hero-meta">Limited 2026 Dates</div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-caption">Archival <em>No. I</em><br>The Summer Collection</div>
+    </div>
+  </div>
+
+  <div class="tag-strip">
+    <span>Weddings</span>
+    <span>Events</span>
+    <span>Installations</span>
+    <span>Custom Arrangements</span>
+  </div>
+
+  <section class="about">
+    <div class="about-img"></div>
+    <div class="about-text">
+      <div class="about-label">The Studio</div>
+      <h2>Two passions, <em>one studio.</em></h2>
+      <p>Paper &amp; Petals was founded by TaLeah — an artist and floral designer who believes that flowers are not décor, but the connective tissue of a celebration. Every bouquet, ceremony piece, and tablescape is arranged to feel both of the moment and out of time.</p>
+      <p>We work with couples who value craft. Who see the blooms as part of the story. Who want something that will still feel right ten years from now.</p>
+      <div class="signature">— TaLeah</div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">Selected Work</div>
+      <h2>The <em>Archive.</em></h2>
+    </div>
+    <div class="portfolio-grid">
+      <div class="pf-item pf-item-1">
+        <div class="pf-img"></div>
+        <div class="pf-caption">
+          <span class="pf-title">Bridal — The Highland</span>
+          <em>Spring ‘25</em>
+        </div>
+      </div>
+      <div class="pf-item pf-item-2">
+        <div class="pf-img"></div>
+        <div class="pf-caption">
+          <span class="pf-title">Ceremony — The Ranches</span>
+          <em>Summer ‘25</em>
+        </div>
+      </div>
+      <div class="pf-item pf-item-3">
+        <div class="pf-img"></div>
+        <div class="pf-caption">
+          <span class="pf-title">Tablescape — Private Estate</span>
+          <em>Fall ‘25</em>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="label">Kind Words</div>
+      <q>TaLeah did a <em>fabulous</em> job on the florals for my wedding. I was blown away with what she had curated.</q>
+      <div class="attribution">From a bride<em>Ashlie S.</em></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Begin the conversation</div>
+      <h2>Let's create <em>something enduring.</em></h2>
+      <p>We accept a limited number of weddings each season. Send a short note about your date and vision and we'll be in touch within two business days.</p>
+      <div class="btn-row">
+        <a href="#" class="btn-primary">Inquire Now</a>
+        <a href="#" class="btn-ghost">View Portfolio</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Paper<span class="amp">&amp;</span>Petals</div>
+        <p class="footer-tag">Elevated, timeless, romantic florals for Utah's most considered celebrations.</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Utah</p>
+        <p>By appointment</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:4353400117">435.340.0117</a></p>
+        <p><a href="mailto:paperandpetalsllc@gmail.com">paperandpetalsllc<br>@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Paper &amp; Petals, LLC</span>
+      <span>As featured in Utah Valley Bride</span>
+    </div>
+  </footer>
+</section>
+
+</body>
+</html>
