@@ -1,0 +1,3296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Briar &amp; Blossom — Four Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@300..800&family=DM+Sans:opsz,wght@9..40,300..700&family=Archivo:wght@400..900&family=JetBrains+Mono:wght@300..700&family=Kalam:wght@300;400;700&family=Caveat:wght@400..700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', system-ui, sans-serif; color: #1a1a1a; background: #ffffff; line-height: 1.5; overflow-x: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+
+  /* ============ PROPOSAL NAV ============ */
+  .proposal-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #1a2018;
+    color: #f1ede0;
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .proposal-nav .brand { font-weight: 600; }
+  .proposal-nav .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .proposal-nav .nav-links a { opacity: 0.6; transition: opacity 0.2s; }
+  .proposal-nav .nav-links a:hover { opacity: 1; }
+  .proposal-nav .nav-links a span.num { color: #c8a870; margin-right: 4px; }
+
+  /* ============ INTRO ============ */
+  .intro {
+    min-height: 50vh;
+    background: #f4efe4;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 18% 28%, rgba(74, 95, 69, 0.09) 0%, transparent 45%),
+      radial-gradient(circle at 82% 72%, rgba(170, 130, 90, 0.08) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .intro-inner { max-width: 1100px; position: relative; z-index: 1; width: 100%; }
+  .intro .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #6a7860; margin-bottom: 24px;
+  }
+  .intro h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(40px, 6vw, 82px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: #1a2018;
+    margin-bottom: 28px;
+  }
+  .intro h1 em { font-style: italic; font-weight: 400; color: #4a5f45; }
+  .intro p.lead {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px; line-height: 1.55;
+    color: #2a2f25;
+    font-weight: 400;
+    max-width: 820px;
+    margin-bottom: 40px;
+  }
+  .intro p.lead::first-letter { color: #4a5f45; font-style: italic; }
+
+  .intro .placeholder-note {
+    max-width: 820px;
+    margin: 0 0 48px;
+    padding: 18px 22px;
+    background: rgba(74, 95, 69, 0.06);
+    border-left: 2px solid #4a5f45;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #5a6a55;
+    letter-spacing: 0.01em;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro .placeholder-note .note-label {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4a5f45;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .intro .placeholder-note .note-body { color: #3a4a35; }
+
+  .option-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1100px) {
+    .option-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  .option-card {
+    background: #fff;
+    border: 1px solid #e0d9c5;
+    padding: 30px 26px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .option-card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -24px rgba(40,44,32,0.22); border-color: #c3b898; }
+  .option-card .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6a7860;
+  }
+  .option-card h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #1a2018;
+  }
+  .option-card .swatch-row {
+    display: flex;
+    gap: 0;
+    height: 28px;
+    margin: 6px 0 4px;
+  }
+  .option-card .swatch { flex: 1; }
+  .option-card p {
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #3a4035;
+  }
+  .option-card .view-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #4a5f45;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .proposal-nav { flex-direction: column; gap: 10px; padding: 14px 20px; }
+    .proposal-nav .nav-links { gap: 14px; font-size: 10.5px; }
+    .intro { padding: 60px 20px; }
+    .option-cards { grid-template-columns: 1fr; }
+  }
+
+  /* ============ DIRECTION DIVIDER ============ */
+  .direction-divider {
+    background: #1a2018;
+    color: #f1ede0;
+    padding: 70px 40px;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    border-top: 1px solid #c8a870;
+    border-bottom: 4px solid #c8a870;
+  }
+  .direction-divider::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: rgba(200, 168, 112, 0.25);
+  }
+  .dd-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+  }
+  .dd-progress {
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    color: #c8a870;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .dd-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    color: #f1ede0;
+  }
+  .dd-name em {
+    font-style: italic;
+    color: #c8a870;
+    font-weight: 300;
+  }
+  .dd-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.6vw, 19px);
+    color: rgba(241, 237, 224, 0.62);
+    max-width: 380px;
+    text-align: right;
+    line-height: 1.45;
+    font-weight: 300;
+    padding-bottom: 12px;
+  }
+  @media (max-width: 900px) {
+    .direction-divider { padding: 44px 20px; border-bottom-width: 3px; }
+    .direction-divider::before { left: 20px; right: 20px; }
+    .dd-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    .dd-sub { text-align: left; max-width: none; padding-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="proposal-nav">
+  <div class="brand">BRIAR &amp; BLOSSOM // DESIGN PROPOSALS</div>
+  <div class="nav-links">
+    <a href="#intro"><span class="num">00</span>INTRO</a>
+    <a href="#familiar"><span class="num">01</span>FAMILIAR</a>
+    <a href="#garden"><span class="num">02</span>GARDEN</a>
+    <a href="#editorial"><span class="num">03</span>EDITORIAL</a>
+    <a href="#warm"><span class="num">04</span>WARM</a>
+  </div>
+</nav>
+
+<section id="intro" class="intro">
+  <div class="intro-inner">
+    <p class="eyebrow">Four directions — one brand</p>
+    <h1>Briar &amp; Blossom, <em>four ways.</em></h1>
+    <p class="lead">Four different feels for the same site. Same sections, same story — but each one carries a different mood. Scroll through all four, then tell me which one feels most like <em>you</em>. We can also mix elements from different directions if something catches your eye.</p>
+    <div class="placeholder-note">
+      <span class="note-label">Heads up</span>
+      <span class="note-body">Photos, testimonials, and video are pulled straight from your current site. A handful of photos cycle through multiple sections because Showit only exposes a limited number publicly. Focus on the overall feel, color, and pacing — not specific photo placement. Once you pick a direction, we'll swap in the full-res originals and sort each one into the right slot.</span>
+    </div>
+    <div class="option-cards">
+      <a href="#familiar" class="option-card">
+        <div class="card-num">01 — Familiar</div>
+        <h3>Close to current</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#faf7ef"></div>
+          <div class="swatch" style="background:#e8dcc2"></div>
+          <div class="swatch" style="background:#6a7860"></div>
+          <div class="swatch" style="background:#1a2018"></div>
+        </div>
+        <p>Cream, warm stone, muted moss. Numbered nav, video hero, mixed serif/sans. Reads as the current site — just rebuilt on portable hosting.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#garden" class="option-card">
+        <div class="card-num">02 — Garden</div>
+        <h3>Secret garden</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#f0ead9"></div>
+          <div class="swatch" style="background:#4a5f45"></div>
+          <div class="swatch" style="background:#8d4a3d"></div>
+          <div class="swatch" style="background:#1e281a"></div>
+        </div>
+        <p>Deep forest green, cream, aubergine. Botanical illustrations, ornate serifs, layered textures. Reads as romantic, fairytale, storybook.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#editorial" class="option-card">
+        <div class="card-num">03 — Editorial</div>
+        <h3>Magazine &amp; refined</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#faf7f0"></div>
+          <div class="swatch" style="background:#d4b88a"></div>
+          <div class="swatch" style="background:#1a1816"></div>
+          <div class="swatch" style="background:#8a6a48"></div>
+        </div>
+        <p>Cream, warm gold, ink black. Big Bodoni display, visible grid, high contrast. Reads as high-end wedding magazine cover story.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#warm" class="option-card">
+        <div class="card-num">04 — Warm</div>
+        <h3>Personal &amp; handmade</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fbf3e9"></div>
+          <div class="swatch" style="background:#e8b39a"></div>
+          <div class="swatch" style="background:#a8b896"></div>
+          <div class="swatch" style="background:#3c352e"></div>
+        </div>
+        <p>Peach, cream, dusty sage. Handwritten accents, rounded cards, first-person copy. Reads as approachable and genuinely Maddy.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 01 — of 04</div>
+      <h2 class="dd-name">Familiar<em>.</em></h2>
+    </div>
+    <p class="dd-sub">As close as possible to her current site — numbered nav, video hero, garden neutrals. For if she just wants off Showit without changing the feel.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 01 — FAMILIAR ==============================
+     ========================================================= -->
+<style>
+.fam {
+  --cream: #faf7ef;
+  --cream-warm: #f4eedd;
+  --stone: #e8dcc2;
+  --moss: #6a7860;
+  --moss-deep: #4a5546;
+  --gold: #b89759;
+  --ink: #1a2018;
+  --ink-soft: #3a4035;
+  --muted: #8a857a;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+.fam a { color: inherit; }
+
+/* nav — numbered, top-left logo, right-side list */
+.fam .site-nav {
+  padding: 32px 56px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background: var(--cream);
+  gap: 40px;
+  position: relative;
+}
+.fam .site-nav::after {
+  content: '';
+  position: absolute;
+  left: 56px;
+  right: 56px;
+  bottom: 0;
+  height: 1px;
+  background: rgba(74, 85, 70, 0.15);
+}
+.fam .nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  grid-column: 1;
+  line-height: 1;
+}
+.fam .nav-logo em { font-style: italic; color: var(--moss); padding: 0 2px; }
+.fam .nav-logo small {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss);
+  margin-top: 4px;
+  font-weight: 400;
+}
+.fam .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 38px;
+  grid-column: 3;
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: var(--ink);
+  font-weight: 400;
+}
+.fam .site-nav ul a { transition: color 0.25s; display: flex; align-items: baseline; gap: 6px; }
+.fam .site-nav ul a:hover { color: var(--moss); }
+.fam .site-nav ul .num {
+  font-size: 9px;
+  color: var(--moss);
+  letter-spacing: 0.1em;
+}
+.fam .nav-cta {
+  grid-column: 4;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 12px 22px;
+  font-weight: 500;
+  transition: background 0.25s;
+}
+.fam .nav-cta:hover { background: var(--moss-deep); }
+
+/* hero — full video background */
+.fam .hero {
+  position: relative;
+  height: 88vh;
+  min-height: 620px;
+  overflow: hidden;
+  background: var(--ink);
+}
+.fam .hero video,
+.fam .hero-fallback {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+.fam .hero-fallback {
+  background-size: cover;
+  background-position: center;
+  background-image: url('https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg');
+}
+.fam .hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(26, 32, 24, 0.15) 0%, rgba(26, 32, 24, 0.45) 100%);
+  z-index: 1;
+}
+.fam .hero-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 2;
+  padding: 40px;
+}
+.fam .hero-eyebrow {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 239, 0.85);
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.fam .hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(44px, 7vw, 108px);
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+  color: var(--cream);
+  max-width: 1000px;
+  margin-bottom: 40px;
+}
+.fam .hero h1 em { font-style: italic; font-weight: 300; color: #e8dcc2; }
+.fam .hero-cta {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--cream);
+  padding: 18px 38px;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.fam .hero-cta:hover { background: var(--stone); transform: translateY(-2px); }
+.fam .hero-scroll {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 239, 0.7);
+  z-index: 2;
+  font-weight: 400;
+}
+.fam .hero-scroll::after {
+  content: '';
+  display: block;
+  width: 1px;
+  height: 30px;
+  background: rgba(250, 247, 239, 0.5);
+  margin: 10px auto 0;
+}
+
+/* intro/about strip */
+.fam .about {
+  padding: 140px 40px 120px;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 90px;
+  align-items: center;
+}
+.fam .about-text .kicker {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 500;
+  margin-bottom: 24px;
+}
+.fam .about h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.fam .about h2 em { font-style: italic; color: var(--moss); }
+.fam .about p {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.fam .about .learn-more {
+  margin-top: 30px;
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 4px;
+  font-weight: 500;
+  transition: all 0.25s;
+}
+.fam .about .learn-more:hover { color: var(--moss); border-color: var(--moss); }
+.fam .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.showit.co/1600/2yR3lPhFtm-HPHJsEfYX0Q/309712/i5a7512.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* services */
+.fam .services {
+  padding: 100px 40px;
+  background: var(--cream-warm);
+  text-align: center;
+}
+.fam .services .kicker {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.fam .services h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--ink);
+  margin-bottom: 60px;
+}
+.fam .services h2 em { font-style: italic; color: var(--moss); }
+.fam .svc-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(74, 85, 70, 0.15);
+  border: 1px solid rgba(74, 85, 70, 0.15);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.fam .svc-item {
+  background: var(--cream);
+  padding: 36px 24px;
+  text-align: left;
+}
+.fam .svc-item .num {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  color: var(--moss);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.fam .svc-item h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 22px;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.fam .svc-item p {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  font-weight: 300;
+}
+
+/* portfolio */
+.fam .portfolio {
+  padding: 120px 40px;
+}
+.fam .portfolio-head {
+  text-align: center;
+  margin-bottom: 70px;
+}
+.fam .portfolio-head .kicker {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.fam .portfolio-head h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 52px);
+  color: var(--ink);
+}
+.fam .portfolio-head h2 em { font-style: italic; color: var(--moss); }
+.fam .pf-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.fam .pf-item {
+  aspect-ratio: 4/5;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.5s ease;
+  cursor: pointer;
+}
+.fam .pf-item:hover { transform: scale(1.02); }
+.fam .pf-item.tall { grid-row: span 2; aspect-ratio: 4/9; }
+.fam .pf-view {
+  margin-top: 50px;
+  text-align: center;
+}
+.fam .pf-view a {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 5px;
+  font-weight: 500;
+  transition: all 0.25s;
+}
+.fam .pf-view a:hover { color: var(--moss); border-color: var(--moss); }
+
+/* testimonials */
+.fam .testimonials {
+  padding: 130px 40px;
+  background: var(--stone);
+  text-align: center;
+}
+.fam .testimonials .kicker {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss-deep);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.fam .testimonials h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 48px);
+  color: var(--ink);
+  margin-bottom: 60px;
+}
+.fam .testimonials h2 em { font-style: italic; color: var(--moss-deep); }
+.fam .quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+}
+.fam .quote-card {
+  background: var(--cream);
+  padding: 34px 28px;
+  border: 1px solid rgba(74, 85, 70, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+.fam .quote-card .stars {
+  color: var(--gold);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+.fam .quote-card q {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 24px;
+  quotes: none;
+  flex: 1;
+  font-weight: 400;
+}
+.fam .quote-card q::before, .fam .quote-card q::after { content: ''; }
+.fam .quote-card .attr {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--moss-deep);
+  font-weight: 500;
+  padding-top: 14px;
+  border-top: 1px solid rgba(74, 85, 70, 0.15);
+}
+
+/* cta */
+.fam .cta {
+  padding: 130px 40px;
+  text-align: center;
+  background: var(--cream);
+}
+.fam .cta .kicker {
+  font-family: 'Jost', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.48em;
+  text-transform: uppercase;
+  color: var(--moss);
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.fam .cta h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(36px, 4.8vw, 68px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 28px;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .cta h2 em { font-style: italic; color: var(--moss); }
+.fam .cta p {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 520px;
+  margin: 0 auto 40px;
+}
+.fam .cta-btn {
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 20px 46px;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.3s;
+  font-family: 'Jost', sans-serif;
+}
+.fam .cta-btn:hover { background: var(--moss-deep); transform: translateY(-2px); }
+
+/* footer */
+.fam .site-footer {
+  padding: 70px 40px 34px;
+  background: var(--ink);
+  color: var(--stone);
+  font-family: 'Jost', sans-serif;
+}
+.fam .footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(241, 237, 224, 0.1);
+}
+.fam .footer-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 6px;
+}
+.fam .footer-mark em { font-style: italic; color: var(--gold); }
+.fam .footer-sub {
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+.fam .footer-tag {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 17px;
+  color: rgba(241, 237, 224, 0.75);
+  max-width: 340px;
+}
+.fam .footer-col-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.fam .footer-inner a,
+.fam .footer-inner p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(241, 237, 224, 0.8);
+  font-weight: 300;
+}
+.fam .footer-inner a:hover { color: var(--cream); }
+.fam .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(241, 237, 224, 0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .fam .site-nav { padding: 20px; grid-template-columns: 1fr; gap: 14px; justify-items: center; text-align: center; }
+  .fam .nav-logo, .fam .site-nav ul, .fam .nav-cta { grid-column: 1; }
+  .fam .site-nav::after { left: 20px; right: 20px; }
+  .fam .site-nav ul { gap: 16px; font-size: 11px; flex-wrap: wrap; justify-content: center; }
+  .fam .hero { height: 72vh; min-height: 500px; }
+  .fam .about { padding: 70px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .fam .services { padding: 70px 20px; }
+  .fam .svc-grid { grid-template-columns: 1fr 1fr; }
+  .fam .portfolio { padding: 70px 20px; }
+  .fam .pf-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .fam .pf-item.tall { grid-row: auto; aspect-ratio: 4/5; }
+  .fam .testimonials { padding: 80px 20px; }
+  .fam .quote-grid { grid-template-columns: 1fr; gap: 16px; }
+  .fam .cta { padding: 80px 20px; }
+  .fam .site-footer { padding: 50px 24px 30px; }
+  .fam .footer-inner { grid-template-columns: 1fr; gap: 30px; }
+}
+</style>
+
+<section id="familiar" class="fam">
+  <nav class="site-nav">
+    <a href="#" class="nav-logo">Briar <em>&amp;</em> Blossom<small>Co. — Utah</small></a>
+    <ul>
+      <li><a href="#"><span class="num">01.</span> home</a></li>
+      <li><a href="#"><span class="num">02.</span> about</a></li>
+      <li><a href="#"><span class="num">03.</span> portfolio</a></li>
+      <li><a href="#"><span class="num">04.</span> pricing</a></li>
+      <li><a href="#"><span class="num">05.</span> contact</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Inquire</a>
+  </nav>
+
+  <section class="hero">
+    <video autoplay muted loop playsinline class="hero-video" poster="https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg">
+      <source src="https://static.showit.co/file/Bk10BuSA_lAIfrsN0kIXOA/309712/briar_and_blossom_1080p.mp4" type="video/mp4">
+    </video>
+    <div class="hero-fallback" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Briar &amp; Blossom Co. · Salt Lake City &amp; Park City</p>
+      <h1>Floral designs as beautiful and <em>unique as your love.</em></h1>
+      <a href="#" class="hero-cta">Inquire Now</a>
+    </div>
+    <p class="hero-scroll">Scroll</p>
+  </section>
+
+  <section class="about">
+    <div class="about-text">
+      <div class="kicker">01 — About</div>
+      <h2>Statement florals that <em>tell your story.</em></h2>
+      <p>Briar &amp; Blossom specializes in lush floral designs that feel timeless yet deeply personal — the kinds of florals you'd find in a secret garden, straight out of a fairytale.</p>
+      <p>Every arrangement is designed around you — your story, your colors, your venue. No preset menus, no filler, no pieces that could belong to anyone else's wedding.</p>
+      <a href="#" class="learn-more">More about Maddy →</a>
+    </div>
+    <div class="about-img"></div>
+  </section>
+
+  <section class="services">
+    <div class="kicker">02 — Services</div>
+    <h2>What we <em>design.</em></h2>
+    <div class="svc-grid">
+      <div class="svc-item">
+        <div class="num">i.</div>
+        <h3>Wedding Florals</h3>
+        <p>Bouquets, ceremony, reception, installations — the full story of your day in flowers.</p>
+      </div>
+      <div class="svc-item">
+        <div class="num">ii.</div>
+        <h3>Bridal Bouquets</h3>
+        <p>Handheld bouquets composed as wearable art, heirloom-quality from the first stem.</p>
+      </div>
+      <div class="svc-item">
+        <div class="num">iii.</div>
+        <h3>Event Florals</h3>
+        <p>Engagements, showers, dinners, private events — gatherings that deserve flowers.</p>
+      </div>
+      <div class="svc-item">
+        <div class="num">iv.</div>
+        <h3>Design Consults</h3>
+        <p>Mood boards, color palettes, seasonal planning — a full design conversation.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">03 — Portfolio</div>
+      <h2>Recent <em>celebrations.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item tall" style="background-image:url('https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/cTOuAg7XW855pXxJQuqTiQ/309712/karli_and_amp_bane_and_39_s-weddingday_-549.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/R2nw7TQ40hlOqRaeGXG36A/309712/ashton_and_amp_mason_and_39_sweddingdayfinal-107.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/OFV-CnbJFkhTpQ1TVO52Cw/309712/jayde_and_tywedding_108.jpg');"></div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/ihO2b6f44PqexwPKAk_KzQ/309712/the_wilsons_wedding_4_-_frances_simone_photog-06.jpg');"></div>
+    </div>
+    <div class="pf-view"><a href="#">View full portfolio →</a></div>
+  </section>
+
+  <section class="testimonials">
+    <div class="kicker">04 — Kind Words</div>
+    <h2>From our <em>couples.</em></h2>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>The flowers were absolutely stunning — elegant, vibrant, and perfectly matched to our color palette.</q>
+        <div class="attr">Courtney &amp; Sean</div>
+      </div>
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>She goes the extra mile to make florals simple and seamless. She was the best to work with from start to finish.</q>
+        <div class="attr">Karli &amp; Bane</div>
+      </div>
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>Maddy's floral design has been the best I've seen by far. My photos could not have been nearly as good without her florals.</q>
+        <div class="attr">Abigail Leanne · Photographer</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="kicker">05 — Inquire</div>
+    <h2>Let's make something <em>unforgettable.</em></h2>
+    <p>Tell us your date, venue, and the feeling you're chasing. We'll follow up within two business days with availability and next steps.</p>
+    <a href="#" class="cta-btn">Start an Inquiry</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Briar <em>&amp;</em> Blossom</div>
+        <div class="footer-sub">Co. — Floral Design</div>
+        <p class="footer-tag">Statement florals for weddings and events, designed for couples with a story to tell.</p>
+      </div>
+      <div>
+        <div class="footer-col-label">Studio</div>
+        <p>Salt Lake City</p>
+        <p>Park City, UT</p>
+      </div>
+      <div>
+        <div class="footer-col-label">Explore</div>
+        <p><a href="#">About</a></p>
+        <p><a href="#">Portfolio</a></p>
+        <p><a href="#">Pricing</a></p>
+      </div>
+      <div>
+        <div class="footer-col-label">Connect</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">Inquire</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Briar &amp; Blossom Co.</span>
+      <span>Salt Lake City · Park City</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 02 — of 04</div>
+      <h2 class="dd-name">Garden<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Secret garden, fairytale, storybook — deep forest greens, aubergine, cream, botanical illustrations. Leans hardest into the existing brand promise.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 02 — GARDEN ================================
+     ========================================================= -->
+<style>
+.gdn {
+  --cream: #f0ead9;
+  --cream-deep: #e6dec5;
+  --moss: #4a5f45;
+  --moss-deep: #2c3a28;
+  --forest: #1e281a;
+  --aubergine: #8d4a3d;
+  --rose: #c29b8e;
+  --gold: #a8885f;
+  --ink: #1e281a;
+  --ink-soft: #3a4834;
+  --muted: #7a7565;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'EB Garamond', serif;
+  position: relative;
+  overflow: hidden;
+}
+.gdn a { color: inherit; }
+
+/* decorative sprig SVG layer */
+.gdn .sprig {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--moss);
+  opacity: 0.35;
+}
+
+/* nav */
+.gdn .site-nav {
+  padding: 26px 56px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  background: var(--cream);
+  border-bottom: 1px solid var(--moss);
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+}
+.gdn .nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: 0.02em;
+  color: var(--forest);
+  line-height: 1;
+}
+.gdn .nav-logo em { font-style: italic; font-weight: 400; color: var(--aubergine); padding: 0 2px; }
+.gdn .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  grid-column: 3;
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: var(--forest);
+  font-weight: 500;
+}
+.gdn .site-nav ul a { transition: color 0.25s; padding: 4px 0; border-bottom: 1px solid transparent; }
+.gdn .site-nav ul a:hover { border-color: var(--aubergine); color: var(--aubergine); }
+
+/* hero */
+.gdn .hero {
+  padding: 90px 56px 110px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+  min-height: 85vh;
+}
+.gdn .hero .sprig-1 { top: 40px; left: 2%; width: 180px; height: 180px; transform: rotate(-14deg); }
+.gdn .hero .sprig-2 { bottom: 30px; right: 3%; width: 220px; height: 220px; transform: rotate(24deg); color: var(--aubergine); opacity: 0.3; }
+.gdn .hero-text { position: relative; z-index: 1; }
+.gdn .hero-eyebrow {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--aubergine);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.gdn .hero-eyebrow::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--aubergine);
+}
+.gdn .hero h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(52px, 7.2vw, 116px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  color: var(--forest);
+  margin-bottom: 34px;
+}
+.gdn .hero h1 em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--moss);
+}
+.gdn .hero-sub {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 440px;
+  margin-bottom: 40px;
+  font-style: italic;
+}
+.gdn .hero-cta {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--forest);
+  padding: 18px 38px;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.gdn .hero-cta:hover { background: var(--aubergine); transform: translateY(-2px); }
+.gdn .hero-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.showit.co/1600/rR1303MXnVgHZib7XawUKQ/309712/i5a6412.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.gdn .hero-img::before {
+  content: '';
+  position: absolute;
+  top: -18px; left: -18px; right: 18px; bottom: 18px;
+  border: 1px solid var(--moss);
+  z-index: -1;
+}
+.gdn .hero-img::after {
+  content: 'Floral Design — Utah';
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cream);
+  padding: 8px 18px;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--forest);
+  letter-spacing: 0.06em;
+  border: 1px solid var(--moss);
+}
+
+/* marquee */
+.gdn .marquee {
+  background: var(--forest);
+  color: var(--cream);
+  padding: 22px 0;
+  overflow: hidden;
+  position: relative;
+  border-top: 1px solid var(--gold);
+  border-bottom: 1px solid var(--gold);
+}
+.gdn .marquee-track {
+  display: flex;
+  gap: 50px;
+  white-space: nowrap;
+  animation: gdn-mq 32s linear infinite;
+  width: max-content;
+}
+.gdn .marquee span {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 28px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+}
+.gdn .marquee span::after {
+  content: '❦';
+  color: var(--gold);
+  font-style: normal;
+  font-size: 20px;
+}
+@keyframes gdn-mq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* about */
+.gdn .about {
+  padding: 140px 56px 120px;
+  background: var(--forest);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.gdn .about .sprig-3 { top: 60px; left: 8%; width: 140px; height: 140px; color: var(--gold); opacity: 0.3; }
+.gdn .about .sprig-4 { bottom: 60px; right: 6%; width: 180px; height: 180px; transform: rotate(-30deg); color: var(--rose); opacity: 0.2; }
+.gdn .about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 80px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.gdn .about-img {
+  aspect-ratio: 3/4;
+  background-image: url('https://static.showit.co/1600/z2CWRVKdqnNcQ3x5Y_UZgQ/309712/i5a7517.jpg');
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--gold);
+}
+.gdn .about-text .kicker {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--gold);
+  margin-bottom: 16px;
+}
+.gdn .about-text h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(38px, 5vw, 66px);
+  line-height: 1.02;
+  color: var(--cream);
+  margin-bottom: 30px;
+}
+.gdn .about-text h2 em { font-style: italic; color: var(--rose); font-weight: 300; }
+.gdn .about-text p {
+  font-family: 'EB Garamond', serif;
+  font-size: 19px;
+  line-height: 1.7;
+  color: rgba(240, 234, 217, 0.85);
+  margin-bottom: 20px;
+}
+.gdn .about-text p:first-letter { color: var(--gold); font-style: italic; font-size: 1.3em; }
+.gdn .about-text .signature {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 32px;
+  color: var(--gold);
+  margin-top: 24px;
+}
+
+/* services listing */
+.gdn .services {
+  padding: 130px 56px;
+  position: relative;
+}
+.gdn .services .sprig-5 { top: 60px; right: 6%; width: 200px; height: 200px; transform: rotate(-18deg); }
+.gdn .services-head {
+  text-align: center;
+  margin-bottom: 70px;
+  max-width: 780px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  z-index: 1;
+}
+.gdn .services-head .kicker {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--aubergine);
+  margin-bottom: 14px;
+}
+.gdn .services-head h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(38px, 5vw, 68px);
+  color: var(--forest);
+  line-height: 1;
+}
+.gdn .services-head h2 em { font-style: italic; color: var(--moss); }
+.gdn .svc-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  gap: 1px;
+  background: var(--moss);
+  border: 1px solid var(--moss);
+  position: relative;
+  z-index: 1;
+}
+.gdn .svc-row {
+  background: var(--cream);
+  padding: 38px 40px;
+  display: grid;
+  grid-template-columns: 100px 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+  transition: background 0.25s;
+}
+.gdn .svc-row:hover { background: var(--cream-deep); }
+.gdn .svc-row .num {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 48px;
+  font-weight: 400;
+  color: var(--aubergine);
+  line-height: 1;
+}
+.gdn .svc-row h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--forest);
+}
+.gdn .svc-row p {
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* portfolio layered */
+.gdn .portfolio {
+  padding: 120px 56px;
+  background: var(--cream-deep);
+  position: relative;
+}
+.gdn .portfolio .sprig-6 { bottom: 40px; left: 6%; width: 200px; height: 200px; transform: rotate(40deg); color: var(--aubergine); opacity: 0.25; }
+.gdn .portfolio-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.gdn .portfolio-head .kicker {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--aubergine);
+  margin-bottom: 12px;
+}
+.gdn .portfolio-head h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(38px, 5vw, 66px);
+  color: var(--forest);
+}
+.gdn .portfolio-head h2 em { font-style: italic; color: var(--moss); }
+.gdn .pf-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.gdn .pf-item {
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 4/5;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.5s;
+}
+.gdn .pf-item:hover { transform: scale(1.02); }
+.gdn .pf-item::after {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(240, 234, 217, 0.35);
+  pointer-events: none;
+  transition: inset 0.4s;
+}
+.gdn .pf-item:hover::after { inset: 18px; }
+.gdn .pf-item-1 { grid-row: 1 / 3; aspect-ratio: 4/9; }
+.gdn .pf-caption {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--cream);
+  padding: 8px 16px;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--forest);
+  border: 1px solid var(--moss);
+  z-index: 2;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+/* testimonial (single pull-quote) */
+.gdn .testimonial {
+  padding: 160px 56px;
+  background: var(--forest);
+  color: var(--cream);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.gdn .testimonial .sprig-7 { top: 30px; left: 4%; width: 220px; height: 220px; color: var(--gold); opacity: 0.22; }
+.gdn .testimonial .sprig-8 { bottom: 30px; right: 4%; width: 220px; height: 220px; transform: rotate(180deg); color: var(--rose); opacity: 0.22; }
+.gdn .testimonial-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.gdn .testimonial::before {
+  content: '"';
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 340px;
+  color: var(--moss);
+  opacity: 0.35;
+  line-height: 1;
+  pointer-events: none;
+}
+.gdn .testimonial .kicker {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+.gdn .testimonial q {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 300;
+  font-size: clamp(26px, 3.2vw, 44px);
+  line-height: 1.32;
+  color: var(--cream);
+  margin-bottom: 40px;
+  quotes: none;
+}
+.gdn .testimonial q::before, .gdn .testimonial q::after { content: ''; }
+.gdn .testimonial .attribution {
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  color: var(--rose);
+  letter-spacing: 0.04em;
+}
+.gdn .testimonial .attribution strong {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+
+/* cta */
+.gdn .cta {
+  padding: 140px 56px;
+  text-align: center;
+  background: var(--cream);
+  position: relative;
+}
+.gdn .cta .sprig-9 { top: 40px; right: 10%; width: 160px; height: 160px; transform: rotate(-10deg); }
+.gdn .cta .sprig-10 { bottom: 40px; left: 10%; width: 140px; height: 140px; transform: rotate(25deg); color: var(--aubergine); opacity: 0.3; }
+.gdn .cta-inner { max-width: 780px; margin: 0 auto; position: relative; z-index: 1; }
+.gdn .cta .kicker {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--aubergine);
+  margin-bottom: 16px;
+}
+.gdn .cta h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5.6vw, 78px);
+  line-height: 1;
+  color: var(--forest);
+  margin-bottom: 28px;
+}
+.gdn .cta h2 em { font-style: italic; color: var(--moss); font-weight: 300; }
+.gdn .cta p {
+  font-family: 'EB Garamond', serif;
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  max-width: 580px;
+  margin: 0 auto 40px;
+}
+.gdn .cta-btn {
+  font-family: 'EB Garamond', serif;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--forest);
+  padding: 20px 44px;
+  font-weight: 500;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.gdn .cta-btn:hover { background: var(--aubergine); transform: translateY(-2px); }
+
+/* footer */
+.gdn .site-footer {
+  padding: 70px 56px 36px;
+  background: var(--moss-deep);
+  color: var(--cream);
+  font-family: 'EB Garamond', serif;
+}
+.gdn .footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(240, 234, 217, 0.1);
+}
+.gdn .footer-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--cream);
+  margin-bottom: 8px;
+}
+.gdn .footer-mark em { font-style: italic; color: var(--rose); }
+.gdn .footer-tag {
+  font-style: italic;
+  font-size: 17px;
+  color: rgba(240, 234, 217, 0.75);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.gdn .footer-inner .col-label {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 18px;
+  color: var(--rose);
+  margin-bottom: 14px;
+}
+.gdn .footer-inner a,
+.gdn .footer-inner p {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(240, 234, 217, 0.82);
+}
+.gdn .footer-inner a:hover { color: var(--cream); }
+.gdn .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: rgba(240, 234, 217, 0.5);
+  font-style: italic;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+@media (max-width: 960px) {
+  .gdn .site-nav { grid-template-columns: 1fr; text-align: center; gap: 12px; padding: 20px; }
+  .gdn .site-nav ul { grid-column: 1; justify-content: center; flex-wrap: wrap; gap: 14px; font-size: 13px; }
+  .gdn .hero { padding: 50px 24px 60px; grid-template-columns: 1fr; gap: 40px; }
+  .gdn .hero .sprig-1, .gdn .hero .sprig-2 { display: none; }
+  .gdn .marquee span { font-size: 22px; }
+  .gdn .about { padding: 80px 24px; }
+  .gdn .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .gdn .services { padding: 70px 20px; }
+  .gdn .svc-row { grid-template-columns: 1fr; gap: 14px; padding: 28px 24px; }
+  .gdn .portfolio { padding: 70px 20px; }
+  .gdn .pf-grid { grid-template-columns: 1fr; gap: 14px; }
+  .gdn .pf-item-1 { grid-row: auto; aspect-ratio: 4/5; }
+  .gdn .testimonial { padding: 80px 20px; }
+  .gdn .testimonial::before { font-size: 160px; top: 10px; }
+  .gdn .cta { padding: 80px 20px; }
+  .gdn .cta .sprig-9, .gdn .cta .sprig-10 { display: none; }
+  .gdn .site-footer { padding: 50px 20px 30px; }
+  .gdn .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<!-- botanical sprig SVG -->
+<svg width="0" height="0" style="position:absolute;" aria-hidden="true">
+  <symbol id="gdn-sprig" viewBox="0 0 100 120">
+    <path d="M50 115 Q 50 85 50 20" stroke="currentColor" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+    <path d="M50 98 Q 38 92 28 82 Q 32 80 42 84 Q 48 90 50 98" fill="currentColor" opacity="0.55"/>
+    <path d="M50 98 Q 62 92 72 82 Q 68 80 58 84 Q 52 90 50 98" fill="currentColor" opacity="0.55"/>
+    <path d="M50 78 Q 40 72 32 64 Q 36 62 44 66 Q 49 72 50 78" fill="currentColor" opacity="0.6"/>
+    <path d="M50 78 Q 60 72 68 64 Q 64 62 56 66 Q 51 72 50 78" fill="currentColor" opacity="0.6"/>
+    <path d="M50 58 Q 42 52 36 46 Q 40 44 46 48 Q 49 54 50 58" fill="currentColor" opacity="0.7"/>
+    <path d="M50 58 Q 58 52 64 46 Q 60 44 54 48 Q 51 54 50 58" fill="currentColor" opacity="0.7"/>
+    <path d="M50 40 Q 44 34 40 28 Q 44 26 48 30 Q 50 36 50 40" fill="currentColor" opacity="0.8"/>
+    <path d="M50 40 Q 56 34 60 28 Q 56 26 52 30 Q 50 36 50 40" fill="currentColor" opacity="0.8"/>
+    <circle cx="50" cy="22" r="5" fill="currentColor" opacity="0.85"/>
+    <circle cx="50" cy="18" r="3" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<section id="garden" class="gdn">
+  <nav class="site-nav">
+    <a href="#" class="nav-logo">Briar<em>&amp;</em>Blossom</a>
+    <ul>
+      <li><a href="#">home</a></li>
+      <li><a href="#">about</a></li>
+      <li><a href="#">portfolio</a></li>
+      <li><a href="#">pricing</a></li>
+      <li><a href="#">contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <svg class="sprig sprig-1"><use href="#gdn-sprig"/></svg>
+    <svg class="sprig sprig-2"><use href="#gdn-sprig"/></svg>
+    <div class="hero-text">
+      <div class="hero-eyebrow">A floral studio in Salt Lake City &amp; Park City</div>
+      <h1>Straight out of a <em>secret garden.</em></h1>
+      <p class="hero-sub">Lush floral designs for weddings &amp; events — timeless, deeply personal, always a little fairytale.</p>
+      <a href="#" class="hero-cta">Inquire About Your Date</a>
+    </div>
+    <div class="hero-img"></div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>weddings</span>
+      <span>events</span>
+      <span>bridal bouquets</span>
+      <span>installations</span>
+      <span>weddings</span>
+      <span>events</span>
+      <span>bridal bouquets</span>
+      <span>installations</span>
+    </div>
+  </div>
+
+  <section class="about">
+    <svg class="sprig sprig-3"><use href="#gdn-sprig"/></svg>
+    <svg class="sprig sprig-4"><use href="#gdn-sprig"/></svg>
+    <div class="about-inner">
+      <div class="about-img"></div>
+      <div class="about-text">
+        <div class="kicker">Meet Maddy</div>
+        <h2>Florals that feel <em>timeless, yet deeply personal.</em></h2>
+        <p>Briar &amp; Blossom was founded on the belief that florals shouldn't just fill a room — they should anchor the memory of the whole day. Each design is built around the couple, the venue, and the season.</p>
+        <p>The kinds of florals you'd find in a secret garden, straight out of a fairytale — statement pieces that tell <em>your</em> story.</p>
+        <div class="signature">— Maddy</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services">
+    <svg class="sprig sprig-5"><use href="#gdn-sprig"/></svg>
+    <div class="services-head">
+      <div class="kicker">The offering</div>
+      <h2>What we <em>design.</em></h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-row">
+        <div class="num">i.</div>
+        <h3>Wedding florals</h3>
+        <p>Bouquets, ceremony pieces, reception tablescapes, and full installations — the complete visual story of your day.</p>
+      </div>
+      <div class="svc-row">
+        <div class="num">ii.</div>
+        <h3>Bridal bouquets</h3>
+        <p>Handheld wearable art, composed to match your dress, venue, and the time of day — yours to keep and preserve.</p>
+      </div>
+      <div class="svc-row">
+        <div class="num">iii.</div>
+        <h3>Event florals</h3>
+        <p>Engagements, showers, anniversaries, private dinners — gatherings that deserve flowers, in any scale.</p>
+      </div>
+      <div class="svc-row">
+        <div class="num">iv.</div>
+        <h3>Design consultations</h3>
+        <p>Mood boards, color palettes, seasonal planning — a full design conversation before we touch a single stem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <svg class="sprig sprig-6"><use href="#gdn-sprig"/></svg>
+    <div class="portfolio-head">
+      <div class="kicker">Selected work</div>
+      <h2>The <em>archive.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item pf-item-1" style="background-image:url('https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg');">
+        <div class="pf-caption">Bridal — Highland</div>
+      </div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/cTOuAg7XW855pXxJQuqTiQ/309712/karli_and_amp_bane_and_39_s-weddingday_-549.jpg');">
+        <div class="pf-caption">Karli &amp; Bane</div>
+      </div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/R2nw7TQ40hlOqRaeGXG36A/309712/ashton_and_amp_mason_and_39_sweddingdayfinal-107.jpg');">
+        <div class="pf-caption">Ashton &amp; Mason</div>
+      </div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/OFV-CnbJFkhTpQ1TVO52Cw/309712/jayde_and_tywedding_108.jpg');">
+        <div class="pf-caption">Jayde &amp; Ty</div>
+      </div>
+      <div class="pf-item" style="background-image:url('https://static.showit.co/1200/yJ6Cl92vpfjy_GeWkI3aRA/309712/rebekah_spencer_-_wedding_day_-_annie_eyring_photo-333.jpg');">
+        <div class="pf-caption">Rebekah &amp; Spencer</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <svg class="sprig sprig-7"><use href="#gdn-sprig"/></svg>
+    <svg class="sprig sprig-8"><use href="#gdn-sprig"/></svg>
+    <div class="testimonial-inner">
+      <div class="kicker">From a photographer</div>
+      <q>Maddy's floral design has been the best I've seen by far. My photos could not have been nearly as good without her florals.</q>
+      <p class="attribution">
+        <strong>Abigail Leanne</strong>
+        Photographer
+      </p>
+    </div>
+  </section>
+
+  <section class="cta">
+    <svg class="sprig sprig-9"><use href="#gdn-sprig"/></svg>
+    <svg class="sprig sprig-10"><use href="#gdn-sprig"/></svg>
+    <div class="cta-inner">
+      <div class="kicker">Shall we begin?</div>
+      <h2>Let's make your day <em>unforgettable.</em></h2>
+      <p>Share your date, venue, and the feeling you're chasing — we'll follow up within two business days with availability and next steps.</p>
+      <a href="#" class="cta-btn">Start an Inquiry</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Briar <em>&amp;</em> Blossom</div>
+        <p class="footer-tag">Lush, romantic florals for weddings &amp; events — designed from a secret garden in Utah.</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Salt Lake City</p>
+        <p>Park City, Utah</p>
+      </div>
+      <div>
+        <div class="col-label">Explore</div>
+        <p><a href="#">About</a></p>
+        <p><a href="#">Portfolio</a></p>
+        <p><a href="#">Pricing</a></p>
+      </div>
+      <div>
+        <div class="col-label">Connect</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">Inquire</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Briar &amp; Blossom Co.</span>
+      <span>All designs made with care</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 03 — of 04</div>
+      <h2 class="dd-name">Editorial<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Magazine cover story — big Bodoni, cream &amp; ink, visible grid. Photos do the work. High-end and refined.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 03 — EDITORIAL =============================
+     ========================================================= -->
+<style>
+.ed {
+  --cream: #faf7f0;
+  --cream-warm: #f3ece0;
+  --ink: #1a1816;
+  --ink-soft: #3a3632;
+  --gold: #d4b88a;
+  --gold-deep: #a68752;
+  --rule: #d8d0c0;
+  --muted: #8a7e6a;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+}
+.ed a { color: inherit; }
+
+/* masthead nav */
+.ed .masthead {
+  padding: 18px 56px;
+  border-bottom: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: var(--cream);
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+}
+.ed .masthead .issue { grid-column: 1; }
+.ed .masthead .wordmark {
+  grid-column: 2;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--ink);
+}
+.ed .masthead .wordmark em { font-style: italic; font-weight: 400; color: var(--gold-deep); padding: 0 4px; }
+.ed .masthead .dateline { grid-column: 3; justify-self: end; }
+.ed .masthead ul {
+  grid-column: 1 / 4;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+}
+.ed .masthead ul a { transition: color 0.25s; font-weight: 500; }
+.ed .masthead ul a:hover { color: var(--gold-deep); }
+
+/* hero */
+.ed .hero {
+  padding: 90px 56px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+}
+.ed .hero-left .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.ed .hero h1 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(60px, 8vw, 136px);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.ed .hero h1 em { font-style: italic; font-weight: 300; color: var(--gold-deep); }
+.ed .hero-sub {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-soft);
+  max-width: 440px;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+.ed .hero-cta-row { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.ed .hero-cta {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 20px 40px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.ed .hero-cta:hover { background: var(--gold-deep); }
+.ed .hero-meta {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+}
+.ed .hero-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.ed .hero-img::after {
+  content: 'Briar &amp; Blossom · No. 01';
+  position: absolute;
+  bottom: -18px;
+  right: -18px;
+  background: var(--cream);
+  padding: 10px 22px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 600;
+  border: 1px solid var(--ink);
+}
+
+/* feature strip */
+.ed .feature-strip {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 22px 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  border-top: 4px solid var(--gold);
+}
+.ed .feature-strip .item .lbl {
+  font-family: 'Archivo', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.ed .feature-strip .item .val {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.2;
+}
+.ed .feature-strip .item .val em { font-style: italic; color: var(--gold); }
+
+/* feature article (about) */
+.ed .feature {
+  padding: 140px 56px 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.ed .feature-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 64px;
+}
+.ed .feature-head::before,
+.ed .feature-head::after {
+  content: '';
+  height: 1px;
+  background: var(--ink);
+}
+.ed .feature-head .label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.ed .feature-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.ed .feature-body h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5.2vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.ed .feature-body h2 em { font-style: italic; font-weight: 300; color: var(--gold-deep); }
+.ed .feature-body .body-col {
+  column-count: 1;
+}
+.ed .feature-body p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.ed .feature-body p:first-child:first-letter {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: 5em;
+  float: left;
+  line-height: 0.85;
+  margin: 8px 12px 0 0;
+  color: var(--gold-deep);
+}
+.ed .feature-body .body-col .byline {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  margin-top: 10px;
+}
+.ed .feature-body .body-col .byline strong { color: var(--ink); }
+
+/* portfolio editorial */
+.ed .portfolio {
+  background: var(--cream-warm);
+  padding: 140px 56px 140px;
+  position: relative;
+}
+.ed .portfolio::before {
+  content: 'PORTFOLIO';
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(60px, 14vw, 220px);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+  opacity: 0.12;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.ed .portfolio-head {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+}
+.ed .portfolio-head .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.ed .portfolio-head h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  color: var(--ink);
+  line-height: 1;
+}
+.ed .portfolio-head h2 em { font-style: italic; color: var(--gold-deep); font-weight: 300; }
+.ed .pf-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.ed .pf-item { position: relative; overflow: hidden; }
+.ed .pf-item .pf-img {
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s;
+}
+.ed .pf-item:hover .pf-img { transform: scale(1.03); }
+.ed .pf-item-1 { grid-column: 1 / span 7; }
+.ed .pf-item-1 .pf-img { aspect-ratio: 5/4; background-image: url('https://static.showit.co/1600/rR1303MXnVgHZib7XawUKQ/309712/i5a6412.jpg'); }
+.ed .pf-item-2 { grid-column: 8 / span 5; }
+.ed .pf-item-2 .pf-img { aspect-ratio: 4/5; background-image: url('https://static.showit.co/1200/OFV-CnbJFkhTpQ1TVO52Cw/309712/jayde_and_tywedding_108.jpg'); }
+.ed .pf-item-3 { grid-column: 1 / span 4; }
+.ed .pf-item-3 .pf-img { aspect-ratio: 4/5; background-image: url('https://static.showit.co/1200/cTOuAg7XW855pXxJQuqTiQ/309712/karli_and_amp_bane_and_39_s-weddingday_-549.jpg'); }
+.ed .pf-item-4 { grid-column: 5 / span 4; }
+.ed .pf-item-4 .pf-img { aspect-ratio: 4/5; background-image: url('https://static.showit.co/1200/R2nw7TQ40hlOqRaeGXG36A/309712/ashton_and_amp_mason_and_39_sweddingdayfinal-107.jpg'); }
+.ed .pf-item-5 { grid-column: 9 / span 4; }
+.ed .pf-item-5 .pf-img { aspect-ratio: 4/5; background-image: url('https://static.showit.co/1200/ihO2b6f44PqexwPKAk_KzQ/309712/the_wilsons_wedding_4_-_frances_simone_photog-06.jpg'); }
+.ed .pf-caption {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ed .pf-caption .title { color: var(--ink); font-weight: 600; }
+.ed .pf-caption em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-deep);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* testimonial pull quote */
+.ed .testimonial {
+  padding: 160px 56px;
+  text-align: center;
+  background: var(--ink);
+  color: var(--cream);
+  position: relative;
+}
+.ed .testimonial::before {
+  content: '"';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bodoni Moda', serif;
+  font-size: 400px;
+  font-style: italic;
+  color: var(--gold-deep);
+  opacity: 0.25;
+  line-height: 1;
+  pointer-events: none;
+}
+.ed .testimonial-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+.ed .testimonial .label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 36px;
+}
+.ed .testimonial q {
+  display: block;
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(30px, 3.6vw, 52px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--cream);
+  quotes: none;
+  margin-bottom: 44px;
+}
+.ed .testimonial q::before, .ed .testimonial q::after { content: ''; }
+.ed .testimonial .attribution {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+.ed .testimonial .attribution em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--cream);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  display: block;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+/* cta */
+.ed .cta {
+  padding: 160px 56px 140px;
+  text-align: center;
+  background: var(--cream);
+}
+.ed .cta-inner { max-width: 880px; margin: 0 auto; }
+.ed .cta .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.ed .cta h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.ed .cta h2 em { font-style: italic; color: var(--gold-deep); font-weight: 300; }
+.ed .cta p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 auto 44px;
+}
+.ed .cta .btn-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.ed .cta-btn {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 20px 42px;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+.ed .cta .primary { background: var(--ink); color: var(--cream); }
+.ed .cta .primary:hover { background: var(--gold-deep); }
+.ed .cta .ghost { color: var(--ink); border: 1px solid var(--ink); }
+.ed .cta .ghost:hover { background: var(--ink); color: var(--cream); }
+
+/* footer */
+.ed .site-footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 60px 56px 32px;
+  font-family: 'Archivo', sans-serif;
+}
+.ed .footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(250, 247, 240, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.ed .footer-mark {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.ed .footer-mark em { font-style: italic; color: var(--gold); }
+.ed .footer-tag {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(250, 247, 240, 0.7);
+  line-height: 1.5;
+  max-width: 320px;
+}
+.ed .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.ed .footer-inner a,
+.ed .footer-inner p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(250, 247, 240, 0.8);
+}
+.ed .footer-inner a:hover { color: var(--gold); }
+.ed .footer-bottom {
+  padding-top: 22px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 240, 0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .ed .masthead { padding: 16px 20px; grid-template-columns: 1fr; text-align: center; }
+  .ed .masthead .issue, .ed .masthead .dateline { display: none; }
+  .ed .masthead ul { grid-column: 1; font-size: 10px; gap: 18px; }
+  .ed .hero { padding: 50px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .ed .feature-strip { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 22px 24px; }
+  .ed .feature { padding: 70px 24px; }
+  .ed .feature-head { grid-template-columns: 1fr; gap: 20px; }
+  .ed .feature-head::before, .ed .feature-head::after { display: none; }
+  .ed .feature-body { grid-template-columns: 1fr; gap: 30px; }
+  .ed .portfolio { padding: 80px 20px; }
+  .ed .portfolio::before { font-size: 80px; top: 24px; }
+  .ed .pf-grid { grid-template-columns: 1fr; gap: 16px; }
+  .ed .pf-item { grid-column: 1 / -1 !important; }
+  .ed .testimonial { padding: 90px 20px; }
+  .ed .testimonial::before { font-size: 200px; top: -10px; }
+  .ed .cta { padding: 80px 20px; }
+  .ed .site-footer { padding: 50px 20px 30px; }
+  .ed .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<section id="editorial" class="ed">
+  <nav class="masthead">
+    <div class="issue">Vol. I · No. 01</div>
+    <div class="wordmark">Briar <em>&amp;</em> Blossom</div>
+    <div class="dateline">Utah · MMXXVI</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Folio</a></li>
+      <li><a href="#">Studio</a></li>
+      <li><a href="#">Investment</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="kicker">The Bridal Issue · Cover Story</div>
+      <h1>Designs as beautiful<br>&amp; <em>unique</em> as your love.</h1>
+      <p class="hero-sub">Lush, personal floral design for the weddings worth remembering — from a studio between Salt Lake City and Park City.</p>
+      <div class="hero-cta-row">
+        <a href="#" class="hero-cta">Begin Inquiry</a>
+        <div class="hero-meta">Limited 2026 dates</div>
+      </div>
+    </div>
+    <div class="hero-img"></div>
+  </section>
+
+  <div class="feature-strip">
+    <div class="item">
+      <div class="lbl">Est.</div>
+      <div class="val">Two <em>thousand</em> twenty-two</div>
+    </div>
+    <div class="item">
+      <div class="lbl">Region</div>
+      <div class="val">Salt Lake · <em>Park City</em></div>
+    </div>
+    <div class="item">
+      <div class="lbl">Specialty</div>
+      <div class="val">Wedding <em>florals</em></div>
+    </div>
+    <div class="item">
+      <div class="lbl">Booking</div>
+      <div class="val">2026 · <em>open</em></div>
+    </div>
+  </div>
+
+  <section class="feature">
+    <div class="feature-head">
+      <span></span>
+      <span class="label">§ 01 — The Studio</span>
+      <span></span>
+    </div>
+    <div class="feature-body">
+      <h2>Flowers that hold the <em>memory</em> of the day.</h2>
+      <div class="body-col">
+        <p>Briar &amp; Blossom Co. is the work of Maddy — a floral designer whose arrangements are less décor and more narrative. Each piece she designs starts with the couple, the venue, and the mood: the kind of floral story you'd find in a secret garden, straight out of a fairytale.</p>
+        <p>The studio specializes in lush, personal, statement-making florals — bouquets, ceremony pieces, reception tablescapes, installations. No preset menus. No filler. Just flowers that feel made for the one day they'll live in.</p>
+        <div class="byline"><strong>Based in</strong> Salt Lake City &amp; Park City, Utah · <strong>Est.</strong> 2022</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">The Folio</div>
+      <h2>Recent <em>editorial.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item pf-item-1">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Editorial — The Highland</span><em>Spring '25</em></div>
+      </div>
+      <div class="pf-item pf-item-2">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Jayde &amp; Ty</span><em>Ceremony</em></div>
+      </div>
+      <div class="pf-item pf-item-3">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Karli &amp; Bane</span><em>Bridal</em></div>
+      </div>
+      <div class="pf-item pf-item-4">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Ashton &amp; Mason</span><em>Reception</em></div>
+      </div>
+      <div class="pf-item pf-item-5">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">The Wilsons</span><em>Installation</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="label">Cover Endorsement</div>
+      <q>The flowers were absolutely stunning — elegant, vibrant, and perfectly matched to our color palette.</q>
+      <div class="attribution">From a bride<em>Courtney &amp; Sean</em></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Next Issue · Your Wedding</div>
+      <h2>Let's make it the <em>cover story.</em></h2>
+      <p>Share your date, venue, and the feeling you're chasing. We respond to inquiries within two business days.</p>
+      <div class="btn-row">
+        <a href="#" class="cta-btn primary">Begin Inquiry</a>
+        <a href="#" class="cta-btn ghost">View Folio</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Briar <em>&amp;</em> Blossom</div>
+        <p class="footer-tag">Statement floral design for weddings &amp; events — from Salt Lake City and Park City, Utah.</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Salt Lake City</p>
+        <p>Park City, UT</p>
+      </div>
+      <div>
+        <div class="col-label">Sections</div>
+        <p><a href="#">Studio</a></p>
+        <p><a href="#">Folio</a></p>
+        <p><a href="#">Investment</a></p>
+      </div>
+      <div>
+        <div class="col-label">Subscribe</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">Inquire</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Briar &amp; Blossom Co.</span>
+      <span>Vol. I · No. 01</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 04 — of 04</div>
+      <h2 class="dd-name">Warm<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Personal, handmade, first-person — handwritten accents, rounded cards, peach &amp; sage. Feels like working with Maddy, not a brand.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 04 — WARM ==================================
+     ========================================================= -->
+<style>
+.wrm {
+  --cream: #fbf3e9;
+  --cream-deep: #f5e7d4;
+  --blush: #fbeadf;
+  --peach: #e8b39a;
+  --peach-deep: #cf8b6e;
+  --sage: #a8b896;
+  --sage-deep: #7a8c68;
+  --butter: #f5d9a8;
+  --ink: #3c352e;
+  --ink-soft: #5a5248;
+  --muted: #8a8276;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.wrm a { color: inherit; }
+
+/* decorative sprig layer */
+.wrm .sprig {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--sage-deep);
+  opacity: 0.45;
+}
+
+/* nav */
+.wrm .site-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 48px;
+  position: relative;
+  z-index: 2;
+}
+.wrm .nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: 28px;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+.wrm .nav-logo em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--peach-deep);
+  font-size: 38px;
+  line-height: 0.5;
+}
+.wrm .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.wrm .site-nav ul a { position: relative; padding: 4px 0; transition: color 0.25s; }
+.wrm .site-nav ul a::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 2px;
+  background: var(--peach-deep);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.wrm .site-nav ul a:hover::after { transform: scaleX(1); }
+.wrm .nav-btn {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.25s, transform 0.25s;
+}
+.wrm .nav-btn:hover { background: var(--peach-deep); transform: translateY(-2px); }
+
+/* hero */
+.wrm .hero {
+  padding: 60px 48px 80px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+}
+.wrm .hero .sprig-1 { top: 40px; right: 46%; width: 100px; height: 100px; transform: rotate(-20deg); }
+.wrm .hero .sprig-2 { bottom: 30px; left: 42%; width: 130px; height: 130px; transform: rotate(34deg); color: var(--peach-deep); }
+.wrm .hero-text { position: relative; z-index: 1; }
+.wrm .hero-hi {
+  font-family: 'Caveat', cursive;
+  font-weight: 500;
+  font-size: 40px;
+  color: var(--peach-deep);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  line-height: 1;
+}
+.wrm .hero-hi::before {
+  content: '';
+  width: 44px;
+  height: 2px;
+  background: var(--peach-deep);
+  border-radius: 2px;
+}
+.wrm .hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(42px, 5.8vw, 84px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 30px;
+  letter-spacing: -0.005em;
+}
+.wrm .hero h1 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 500;
+  color: var(--peach-deep);
+  font-size: 1.1em;
+  padding-right: 4px;
+}
+.wrm .hero h1 .underline {
+  position: relative;
+  display: inline-block;
+}
+.wrm .hero h1 .underline::after {
+  content: '';
+  position: absolute;
+  left: -2%; right: -2%;
+  bottom: 2px;
+  height: 12px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' fill='none'><path d='M2 8 Q 50 0 100 6 T 198 7' stroke='%23e8b39a' stroke-width='4' stroke-linecap='round' fill='none'/></svg>") no-repeat center/100% 100%;
+  z-index: -1;
+}
+.wrm .hero .sub {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 500px;
+  margin-bottom: 38px;
+}
+.wrm .hero .btn-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+.wrm .hero .btn {
+  padding: 16px 28px;
+  border-radius: 999px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s;
+}
+.wrm .btn-primary { background: var(--peach-deep); color: var(--cream); }
+.wrm .btn-primary:hover { background: var(--ink); transform: translateY(-2px); }
+.wrm .btn-ghost { color: var(--ink); border: 1.5px solid var(--ink); }
+.wrm .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+.wrm .little-note {
+  font-family: 'Caveat', cursive;
+  font-size: 18px;
+  color: var(--ink-soft);
+  margin-left: 4px;
+}
+
+.wrm .hero-img-stack {
+  position: relative;
+  height: 580px;
+}
+.wrm .hero-img-stack .img {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  box-shadow: 0 18px 42px -22px rgba(60, 53, 46, 0.35);
+}
+.wrm .hero-img-stack .img-1 {
+  width: 64%; height: 74%;
+  top: 0; right: 12%;
+  background-image: url('https://static.showit.co/1600/X5HmUbbN-f9NqCXPJt4_wg/309712/i5a6568.jpg');
+  transform: rotate(-4deg);
+}
+.wrm .hero-img-stack .img-2 {
+  width: 44%; height: 46%;
+  bottom: 5%; right: 0;
+  background-image: url('https://static.showit.co/1200/cTOuAg7XW855pXxJQuqTiQ/309712/karli_and_amp_bane_and_39_s-weddingday_-549.jpg');
+  transform: rotate(7deg);
+  z-index: 2;
+}
+.wrm .hero-img-stack .img-3 {
+  width: 40%; height: 42%;
+  bottom: 12%; left: 0;
+  background-image: url('https://static.showit.co/1600/z2CWRVKdqnNcQ3x5Y_UZgQ/309712/i5a7517.jpg');
+  transform: rotate(-8deg);
+}
+.wrm .hero-img-stack .tape {
+  position: absolute;
+  width: 90px; height: 24px;
+  background: var(--butter);
+  opacity: 0.8;
+  top: -10px; left: 38%;
+  transform: translateX(-50%) rotate(-5deg);
+  border-radius: 2px;
+}
+
+/* marquee */
+.wrm .marquee {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 20px 0;
+  overflow: hidden;
+  border-top: 2px solid var(--peach);
+  border-bottom: 2px solid var(--peach);
+}
+.wrm .marquee-track {
+  display: flex;
+  gap: 50px;
+  white-space: nowrap;
+  animation: wrm-mq 30s linear infinite;
+  width: max-content;
+}
+.wrm .marquee span {
+  font-family: 'Caveat', cursive;
+  font-size: 32px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 50px;
+  color: var(--cream);
+}
+.wrm .marquee span::after { content: '✿'; color: var(--peach); font-size: 22px; }
+@keyframes wrm-mq {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* about */
+.wrm .about {
+  padding: 100px 48px;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+}
+.wrm .about-img-wrap { position: relative; }
+.wrm .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.showit.co/1600/2yR3lPhFtm-HPHJsEfYX0Q/309712/i5a7512.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  box-shadow: 0 22px 48px -24px rgba(60, 53, 46, 0.32);
+  transform: rotate(-2deg);
+}
+.wrm .about-img-wrap::before {
+  content: '';
+  position: absolute;
+  top: 14px; left: 14px; right: -14px; bottom: -14px;
+  background: var(--peach);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0.35;
+  transform: rotate(2deg);
+}
+.wrm .about-text .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: var(--peach-deep);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.wrm .about-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(36px, 4.6vw, 60px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 26px;
+}
+.wrm .about-text h2 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  color: var(--sage-deep);
+  font-weight: 500;
+  font-size: 1.05em;
+}
+.wrm .about-text p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.wrm .about-text .sig {
+  margin-top: 28px;
+  font-family: 'Caveat', cursive;
+  font-size: 44px;
+  color: var(--peach-deep);
+  font-weight: 500;
+}
+.wrm .about-text .sig::before { content: '— '; }
+
+/* do list */
+.wrm .do-list {
+  padding: 100px 48px;
+  background: var(--cream-deep);
+  position: relative;
+}
+.wrm .do-list .sprig-3 { top: 40px; left: 6%; width: 120px; height: 120px; transform: rotate(20deg); }
+.wrm .do-list .sprig-4 { bottom: 40px; right: 8%; width: 140px; height: 140px; transform: rotate(-24deg); color: var(--peach-deep); }
+.wrm .do-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 56px;
+  position: relative;
+  z-index: 1;
+}
+.wrm .do-head .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: var(--peach-deep);
+  margin-bottom: 10px;
+}
+.wrm .do-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(36px, 4.6vw, 58px);
+  color: var(--ink);
+  line-height: 1.05;
+}
+.wrm .do-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.wrm .do-card {
+  background: var(--cream);
+  padding: 32px 28px;
+  border-radius: 20px;
+  transition: transform 0.25s, box-shadow 0.25s;
+  border: 1.5px solid transparent;
+}
+.wrm .do-card:hover { transform: translateY(-4px) rotate(0.5deg); box-shadow: 0 22px 36px -22px rgba(60, 53, 46, 0.3); border-color: var(--peach); }
+.wrm .do-card .icon {
+  width: 46px; height: 46px;
+  background: var(--blush);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  font-family: 'Caveat', cursive;
+  font-size: 26px;
+  color: var(--peach-deep);
+  font-weight: 500;
+}
+.wrm .do-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.wrm .do-card p {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+/* scrapbook portfolio */
+.wrm .scrap {
+  padding: 110px 48px;
+  position: relative;
+}
+.wrm .scrap-head { text-align: center; max-width: 720px; margin: 0 auto 50px; }
+.wrm .scrap-head .kicker { font-family: 'Caveat', cursive; font-size: 28px; color: var(--peach-deep); margin-bottom: 10px; }
+.wrm .scrap-head h2 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(36px, 4.6vw, 56px); color: var(--ink); line-height: 1.05; }
+.wrm .scrap-head p { font-family: 'Caveat', cursive; font-size: 22px; color: var(--ink-soft); margin-top: 8px; }
+.wrm .scrap-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.wrm .scrap-item {
+  background-size: cover;
+  background-position: center;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 14px 28px -16px rgba(60, 53, 46, 0.28);
+  transition: transform 0.3s;
+}
+.wrm .scrap-item:hover { transform: translateY(-4px) rotate(0deg) !important; }
+.wrm .scrap-item .caption {
+  position: absolute;
+  bottom: 14px; left: 14px; right: 14px;
+  background: rgba(251, 243, 233, 0.94);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--ink);
+}
+.wrm .scrap-1 { grid-column: 1 / span 5; aspect-ratio: 4/5; background-image: url('https://static.showit.co/1200/cTOuAg7XW855pXxJQuqTiQ/309712/karli_and_amp_bane_and_39_s-weddingday_-549.jpg'); transform: rotate(-2deg); }
+.wrm .scrap-2 { grid-column: 6 / span 7; aspect-ratio: 16/11; background-image: url('https://static.showit.co/1600/rR1303MXnVgHZib7XawUKQ/309712/i5a6412.jpg'); transform: rotate(1deg); }
+.wrm .scrap-3 { grid-column: 1 / span 4; aspect-ratio: 1/1; background-image: url('https://static.showit.co/1200/OFV-CnbJFkhTpQ1TVO52Cw/309712/jayde_and_tywedding_108.jpg'); transform: rotate(3deg); }
+.wrm .scrap-4 { grid-column: 5 / span 4; aspect-ratio: 1/1; background-image: url('https://static.showit.co/1200/R2nw7TQ40hlOqRaeGXG36A/309712/ashton_and_amp_mason_and_39_sweddingdayfinal-107.jpg'); transform: rotate(-3deg); }
+.wrm .scrap-5 { grid-column: 9 / span 4; aspect-ratio: 1/1; background-image: url('https://static.showit.co/1200/ihO2b6f44PqexwPKAk_KzQ/309712/the_wilsons_wedding_4_-_frances_simone_photog-06.jpg'); transform: rotate(2deg); }
+
+/* testimonials: grid of speech bubbles */
+.wrm .testimonials {
+  padding: 110px 48px;
+  background: var(--blush);
+  position: relative;
+}
+.wrm .testimonials .sprig-5 { top: 40px; right: 8%; width: 100px; height: 100px; transform: rotate(-18deg); color: var(--peach-deep); }
+.wrm .testimonials .sprig-6 { bottom: 40px; left: 8%; width: 120px; height: 120px; transform: rotate(40deg); }
+.wrm .testimonials-head { text-align: center; max-width: 640px; margin: 0 auto 56px; position: relative; z-index: 1; }
+.wrm .testimonials-head .kicker { font-family: 'Caveat', cursive; font-size: 28px; color: var(--peach-deep); margin-bottom: 10px; }
+.wrm .testimonials-head h2 { font-family: 'Playfair Display', serif; font-weight: 500; font-size: clamp(36px, 4.6vw, 54px); color: var(--ink); line-height: 1.05; }
+.wrm .quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.wrm .quote-card {
+  background: var(--cream);
+  padding: 32px 28px;
+  border-radius: 22px;
+  box-shadow: 0 20px 42px -24px rgba(60, 53, 46, 0.28);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.wrm .quote-card:nth-child(even) { transform: translateY(12px); }
+.wrm .quote-card::before {
+  content: '"';
+  position: absolute;
+  top: -14px;
+  left: 22px;
+  font-family: 'Playfair Display', serif;
+  font-size: 80px;
+  color: var(--peach);
+  line-height: 1;
+}
+.wrm .quote-card q {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--ink);
+  margin-bottom: 22px;
+  quotes: none;
+  flex: 1;
+  font-weight: 400;
+}
+.wrm .quote-card q::before, .wrm .quote-card q::after { content: ''; }
+.wrm .quote-card .attr {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: var(--peach-deep);
+  font-weight: 500;
+}
+
+/* cta */
+.wrm .cta {
+  padding: 120px 48px;
+  text-align: center;
+  position: relative;
+  background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+}
+.wrm .cta .sprig-7 { top: 30%; left: 10%; width: 100px; height: 100px; transform: rotate(40deg); }
+.wrm .cta .sprig-8 { bottom: 25%; right: 10%; width: 120px; height: 120px; transform: rotate(-26deg); color: var(--peach-deep); }
+.wrm .cta-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+.wrm .cta .kicker { font-family: 'Caveat', cursive; font-size: 32px; color: var(--peach-deep); margin-bottom: 12px; }
+.wrm .cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: clamp(40px, 5.4vw, 72px);
+  line-height: 1.02;
+  color: var(--ink);
+  margin-bottom: 22px;
+}
+.wrm .cta h2 em { font-family: 'Caveat', cursive; font-style: normal; color: var(--peach-deep); font-weight: 500; font-size: 1.1em; }
+.wrm .cta p {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 40px;
+  max-width: 560px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.wrm .cta .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.wrm .cta .btn {
+  padding: 18px 32px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.3s;
+}
+.wrm .cta .btn-primary { background: var(--peach-deep); color: var(--cream); }
+.wrm .cta .btn-primary:hover { background: var(--ink); transform: translateY(-3px); }
+.wrm .cta .btn-ghost { color: var(--ink); border: 1.5px solid var(--ink); }
+.wrm .cta .btn-ghost:hover { background: var(--ink); color: var(--cream); }
+
+/* footer */
+.wrm .site-footer {
+  padding: 60px 48px 34px;
+  background: var(--ink);
+  color: var(--cream);
+}
+.wrm .footer-mark-row { text-align: center; margin-bottom: 44px; }
+.wrm .footer-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  color: var(--cream);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.wrm .footer-mark em { font-family: 'Caveat', cursive; font-style: normal; color: var(--peach); font-size: 1.1em; font-weight: 500; }
+.wrm .footer-tag {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: rgba(251, 243, 233, 0.8);
+}
+.wrm .footer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 34px;
+  border-bottom: 1px solid rgba(251, 243, 233, 0.1);
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+.wrm .footer-cols .col-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--peach);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.wrm .footer-cols a, .wrm .footer-cols p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(251, 243, 233, 0.85);
+}
+.wrm .footer-cols a:hover { color: var(--peach); }
+.wrm .footer-bottom {
+  text-align: center;
+  padding-top: 22px;
+  font-size: 12px;
+  color: rgba(251, 243, 233, 0.55);
+}
+.wrm .footer-bottom em { font-family: 'Caveat', cursive; font-style: normal; color: var(--peach); font-size: 18px; }
+
+@media (max-width: 960px) {
+  .wrm .site-nav { flex-direction: column; padding: 18px 20px; gap: 14px; }
+  .wrm .site-nav ul { gap: 18px; font-size: 14px; }
+  .wrm .hero { padding: 40px 20px 60px; grid-template-columns: 1fr; gap: 40px; }
+  .wrm .hero-img-stack { height: 380px; }
+  .wrm .hero .sprig-1, .wrm .hero .sprig-2 { display: none; }
+  .wrm .marquee span { font-size: 24px; }
+  .wrm .about { padding: 70px 20px; grid-template-columns: 1fr; gap: 60px; }
+  .wrm .do-list { padding: 70px 20px; }
+  .wrm .do-grid { grid-template-columns: 1fr; gap: 16px; }
+  .wrm .scrap { padding: 70px 20px; }
+  .wrm .scrap-grid { grid-template-columns: 1fr; }
+  .wrm .scrap-item { grid-column: auto !important; aspect-ratio: 4/3 !important; transform: rotate(0) !important; }
+  .wrm .testimonials { padding: 70px 20px; }
+  .wrm .quotes-grid { grid-template-columns: 1fr; gap: 20px; }
+  .wrm .quote-card:nth-child(even) { transform: none; }
+  .wrm .cta { padding: 70px 20px; }
+  .wrm .cta .sprig-7, .wrm .cta .sprig-8 { display: none; }
+  .wrm .site-footer { padding: 50px 20px 30px; }
+  .wrm .footer-cols { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute;" aria-hidden="true">
+  <symbol id="wrm-sprig" viewBox="0 0 100 100">
+    <path d="M50 95 Q 50 60 50 20 M50 70 Q 35 60 25 48 M50 70 Q 65 60 75 48 M50 50 Q 36 40 30 30 M50 50 Q 64 40 70 30 M50 30 Q 40 22 36 14 M50 30 Q 60 22 64 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+    <circle cx="25" cy="48" r="3" fill="currentColor"/>
+    <circle cx="75" cy="48" r="3" fill="currentColor"/>
+    <circle cx="30" cy="30" r="2.5" fill="currentColor"/>
+    <circle cx="70" cy="30" r="2.5" fill="currentColor"/>
+    <circle cx="50" cy="18" r="4" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<section id="warm" class="wrm">
+  <nav class="site-nav">
+    <div class="nav-logo">Briar<em>&amp;</em>Blossom</div>
+    <ul>
+      <li><a href="#">home</a></li>
+      <li><a href="#">about</a></li>
+      <li><a href="#">work</a></li>
+      <li><a href="#">pricing</a></li>
+    </ul>
+    <a href="#" class="nav-btn">Say hi →</a>
+  </nav>
+
+  <section class="hero">
+    <svg class="sprig sprig-1"><use href="#wrm-sprig"/></svg>
+    <svg class="sprig sprig-2"><use href="#wrm-sprig"/></svg>
+    <div class="hero-text">
+      <div class="hero-hi">hi, I'm Maddy —</div>
+      <h1>and I make <span class="underline"><em>flowers</em></span> for the <em>best day</em> of your life.</h1>
+      <p class="sub">I run Briar &amp; Blossom Co., a little floral studio between Salt Lake City and Park City. I design lush, personal florals that look like they grew up in a secret garden — for couples who want their day to feel like <em>theirs</em>.</p>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary">Let's chat →</a>
+        <a href="#" class="btn btn-ghost">See my work</a>
+        <span class="little-note">usually reply in a day ✿</span>
+      </div>
+    </div>
+    <div class="hero-img-stack">
+      <div class="img img-1"><div class="tape"></div></div>
+      <div class="img img-2"></div>
+      <div class="img img-3"></div>
+    </div>
+  </section>
+
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>lush</span>
+      <span>romantic</span>
+      <span>timeless</span>
+      <span>personal</span>
+      <span>lush</span>
+      <span>romantic</span>
+      <span>timeless</span>
+      <span>personal</span>
+    </div>
+  </div>
+
+  <section class="about">
+    <div class="about-img-wrap"><div class="about-img"></div></div>
+    <div class="about-text">
+      <div class="kicker">my story</div>
+      <h2>Two florists in one —<br><em>artist &amp; arranger.</em></h2>
+      <p>I started Briar &amp; Blossom because I couldn't stop thinking about flowers. I love the way a single bouquet can tie together a whole day — the dress, the venue, the light, the way people feel in the room.</p>
+      <p>I don't do preset packages or filler arrangements. Every piece I design is built around you — because your day deserves flowers that could <em>only</em> belong to you.</p>
+      <div class="sig">Maddy</div>
+    </div>
+  </section>
+
+  <section class="do-list">
+    <svg class="sprig sprig-3"><use href="#wrm-sprig"/></svg>
+    <svg class="sprig sprig-4"><use href="#wrm-sprig"/></svg>
+    <div class="do-head">
+      <div class="kicker">the menu</div>
+      <h2>Here's what I can do.</h2>
+    </div>
+    <div class="do-grid">
+      <div class="do-card">
+        <div class="icon">i</div>
+        <h3>Wedding florals</h3>
+        <p>Bouquets, ceremony, reception, installations. The whole story of your day, told in flowers.</p>
+      </div>
+      <div class="do-card">
+        <div class="icon">ii</div>
+        <h3>Bridal bouquets</h3>
+        <p>The piece you'll hold all day. I design yours like a tiny sculpture — heirloom from the first stem.</p>
+      </div>
+      <div class="do-card">
+        <div class="icon">iii</div>
+        <h3>Event florals</h3>
+        <p>Showers, engagements, dinners, anniversaries. Gatherings that deserve a little something extra.</p>
+      </div>
+      <div class="do-card">
+        <div class="icon">iv</div>
+        <h3>Design chats</h3>
+        <p>Mood boards &amp; color palettes to work out the vibe before we touch a single stem.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scrap">
+    <div class="scrap-head">
+      <div class="kicker">recent work</div>
+      <h2>A little scrapbook.</h2>
+      <p>a few favorites from this year · swipe through for the full gallery</p>
+    </div>
+    <div class="scrap-grid">
+      <div class="scrap-item scrap-1"><div class="caption">Karli &amp; Bane — bridal</div></div>
+      <div class="scrap-item scrap-2"><div class="caption">Editorial bouquet</div></div>
+      <div class="scrap-item scrap-3"><div class="caption">Jayde &amp; Ty — ceremony</div></div>
+      <div class="scrap-item scrap-4"><div class="caption">Ashton &amp; Mason</div></div>
+      <div class="scrap-item scrap-5"><div class="caption">The Wilsons</div></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <svg class="sprig sprig-5"><use href="#wrm-sprig"/></svg>
+    <svg class="sprig sprig-6"><use href="#wrm-sprig"/></svg>
+    <div class="testimonials-head">
+      <div class="kicker">kind notes</div>
+      <h2>What past couples said.</h2>
+    </div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <q>The flowers were absolutely stunning — elegant, vibrant, and perfectly matched to our color palette.</q>
+        <div class="attr">— Courtney &amp; Sean</div>
+      </div>
+      <div class="quote-card">
+        <q>She goes the extra mile to make florals simple and seamless. Truly the best to work with.</q>
+        <div class="attr">— Karli &amp; Bane</div>
+      </div>
+      <div class="quote-card">
+        <q>I had to get it preserved so I can stare at it forever!</q>
+        <div class="attr">— Hailey &amp; Ryan</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <svg class="sprig sprig-7"><use href="#wrm-sprig"/></svg>
+    <svg class="sprig sprig-8"><use href="#wrm-sprig"/></svg>
+    <div class="cta-inner">
+      <div class="kicker">let's chat</div>
+      <h2>Want flowers on <em>your day?</em></h2>
+      <p>Drop me a note about your date, venue, and the feeling you're after — even if it's just a Pinterest board and a vibe. I'll get back to you within a day or so.</p>
+      <div class="btn-row">
+        <a href="#" class="btn btn-primary">Start an inquiry →</a>
+        <a href="#" class="btn btn-ghost">FAQ</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-mark-row">
+      <div class="footer-mark">Briar<em>&amp;</em>Blossom</div>
+      <p class="footer-tag">made with love in Utah</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="col-label">Reach out</div>
+        <p><a href="#">Inquire</a></p>
+        <p><a href="#">Email Maddy</a></p>
+      </div>
+      <div>
+        <div class="col-label">Find me</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Salt Lake City</p>
+        <p>Park City, UT</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Briar &amp; Blossom Co. · made with <em>a lot of love</em>
+    </div>
+  </footer>
+</section>
+
+</body>
+</html>
