@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wedding Vendor Pricing · Sam Nichols</title>
+  <meta name="description" content="Flat-fee, done-for-you websites for wedding vendors — florists, photographers, planners. No monthly subscriptions, no DIY overwhelm.">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Instrument+Sans:ital,wght@0,400..600;1,400..600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #f4ede0;
+      --paper: #f9f2e4;
+      --bone: #e8dcc4;
+      --bone-soft: #eee3cf;
+      --ink: #2a221b;
+      --espresso: #5b3a26;
+      --umber: #8c5f3f;
+      --rust: #b35c3a;
+      --muted: #9c866a;
+      --font-display: "Cormorant Garamond", "EB Garamond", "Georgia", serif;
+      --font-body: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.55;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "kern", "liga";
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 100;
+      opacity: 0.4;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.12  0 0 0 0 0.09  0 0 0 0.1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+      mix-blend-mode: multiply;
+    }
+
+    a { color: inherit; }
+
+    /* ===== Topbar ===== */
+    .topbar {
+      position: relative;
+      z-index: 10;
+      padding: 28px 48px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--espresso);
+    }
+
+    .topbar a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color .25s ease;
+      padding-bottom: 2px;
+    }
+    .topbar a:hover { border-color: currentColor; }
+
+    .topbar-mark {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 22px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-style: normal;
+      color: var(--ink);
+    }
+
+    .topbar-meta { display: flex; gap: 14px; align-items: center; }
+    .topbar-meta .dot { width: 4px; height: 4px; background: var(--umber); border-radius: 50%; }
+
+    /* ===== Hero ===== */
+    .hero {
+      position: relative;
+      padding: 32px 48px 72px;
+      max-width: 1400px;
+      margin: 0 auto;
+      isolation: isolate;
+    }
+
+    .eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.38em;
+      text-transform: uppercase;
+      color: var(--espresso);
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 1px;
+      background: currentColor;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(48px, 7.5vw, 108px);
+      line-height: 0.95;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      margin-bottom: 28px;
+      max-width: 1050px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 400;
+      color: var(--espresso);
+    }
+
+    .hero-tagline {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2vw, 24px);
+      font-style: italic;
+      font-weight: 400;
+      color: var(--espresso);
+      max-width: 620px;
+      line-height: 1.3;
+    }
+
+    /* rotated vertical wordmark */
+    .guide-mark {
+      position: absolute;
+      top: 24px;
+      right: -20px;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: var(--font-display);
+      font-weight: 300;
+      font-size: clamp(56px, 7vw, 108px);
+      letter-spacing: -0.02em;
+      font-style: italic;
+      color: var(--bone);
+      line-height: 0.88;
+      user-select: none;
+      pointer-events: none;
+      z-index: -1;
+    }
+    @media (max-width: 960px) { .guide-mark { display: none; } }
+
+    /* ornament */
+    .ornament {
+      display: block;
+      width: 48px;
+      height: 20px;
+      margin: 20px auto;
+      color: var(--umber);
+      opacity: 0.55;
+    }
+
+    /* ===== Sections ===== */
+    section { position: relative; }
+
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 56px 48px;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: clamp(34px, 4.6vw, 56px);
+      line-height: 1;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-weight: 500;
+      font-size: 26px;
+      color: var(--ink);
+    }
+
+    /* ===== Core Pricing ===== */
+    .core {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 64px;
+      align-items: stretch;
+    }
+
+    .core-price {
+      border-top: 1px solid var(--espresso);
+      border-bottom: 1px solid var(--espresso);
+      padding: 28px 0 32px;
+    }
+
+    .section-label {
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--espresso);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .section-label .num {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 16px;
+      color: var(--umber);
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 28px;
+      font-family: var(--font-display);
+      flex-wrap: wrap;
+    }
+
+    .price-old {
+      font-size: clamp(24px, 2.8vw, 36px);
+      color: var(--umber);
+      opacity: 0.5;
+      text-decoration: line-through;
+      text-decoration-thickness: 2px;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .price-new {
+      font-size: clamp(78px, 11vw, 140px);
+      line-height: 0.88;
+      color: var(--ink);
+      font-weight: 600;
+      letter-spacing: -0.045em;
+    }
+
+    .price-notes {
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--espresso);
+      line-height: 1.6;
+    }
+    .price-notes strong {
+      font-weight: 600;
+      color: var(--rust);
+    }
+    .price-notes .div {
+      display: inline-block;
+      margin: 0 10px;
+      color: var(--bone);
+    }
+
+    .core-details { display: flex; flex-direction: column; justify-content: center; }
+
+    .core-details .lead {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.3;
+      color: var(--espresso);
+      margin: 10px 0 22px;
+    }
+
+    .features {
+      list-style: none;
+      border-top: 1px solid var(--bone);
+    }
+    .features li {
+      padding: 11px 0;
+      border-bottom: 1px solid var(--bone);
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      align-items: baseline;
+      gap: 14px;
+      font-size: 15px;
+      color: var(--ink);
+    }
+    .features li .idx {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: 14px;
+      color: var(--umber);
+    }
+    .features li strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+    .features li span.note {
+      display: block;
+      font-size: 15px;
+      color: var(--espresso);
+      margin-top: 2px;
+      font-family: var(--font-display);
+      font-style: italic;
+      line-height: 1.4;
+    }
+
+    .sub-features {
+      list-style: none;
+      margin-top: 10px;
+    }
+    .features .sub-features li {
+      display: block;
+      padding: 5px 0;
+      border-bottom: none;
+      font-size: 15px;
+      font-weight: 400;
+      color: var(--ink);
+      position: relative;
+      padding-left: 20px;
+    }
+    .features .sub-features li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      top: 4px;
+      color: var(--umber);
+      font-family: var(--font-body);
+      font-size: 13px;
+    }
+
+    .features-note {
+      margin-top: 14px;
+      font-size: 15px;
+      color: var(--muted);
+      font-style: italic;
+      font-family: var(--font-display);
+      line-height: 1.45;
+    }
+
+    /* ===== Support ===== */
+    .support {
+      background: var(--paper);
+      border-top: 1px solid var(--bone);
+      border-bottom: 1px solid var(--bone);
+    }
+
+    .support-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 36px;
+    }
+
+    .support-head p {
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(17px, 1.8vw, 22px);
+      color: var(--espresso);
+      max-width: 480px;
+      text-align: right;
+      line-height: 1.3;
+    }
+
+    .support-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .support-card {
+      background: var(--cream);
+      padding: 28px 32px;
+      border: 1px solid var(--bone);
+      position: relative;
+      transition: transform .35s ease, box-shadow .35s ease;
+    }
+    .support-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 40px -20px rgba(42, 34, 27, 0.25);
+    }
+
+    .support-card-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--bone);
+    }
+
+    .support-card-head small {
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--umber);
+      font-weight: 500;
+    }
+
+    .support-card .desc {
+      color: var(--espresso);
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .support-card ul { list-style: none; }
+    .support-card li {
+      padding: 10px 0;
+      font-size: 14px;
+      border-bottom: 1px dashed var(--bone);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+      color: var(--ink);
+    }
+    .support-card li:last-of-type { border-bottom: none; padding-bottom: 0; }
+    .support-card .price {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 22px;
+      white-space: nowrap;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .support-card .fine {
+      margin-top: 14px;
+      font-size: 15px;
+      line-height: 1.45;
+      color: var(--muted);
+      font-style: italic;
+      font-family: var(--font-display);
+    }
+
+    .custom-builds {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid var(--bone);
+      text-align: center;
+      font-family: var(--font-display);
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(18px, 2vw, 24px);
+      color: var(--ink);
+    }
+    .custom-builds a {
+      color: var(--rust);
+      border-bottom: 1px solid currentColor;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .custom-builds a:hover { color: var(--ink); }
+
+    /* ===== Details ===== */
+    .details-head {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .details-head .section-label {
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--bone);
+      border: 1px solid var(--bone);
+    }
+    .details-grid > div {
+      background: var(--cream);
+      padding: 24px 24px;
+      font-family: var(--font-display);
+      font-size: 18px;
+      line-height: 1.35;
+      color: var(--ink);
+      font-weight: 400;
+      counter-increment: detail;
+      position: relative;
+      min-height: auto;
+    }
+    .details-grid > div::before {
+      content: "0" counter(detail);
+      display: block;
+      font-family: var(--font-body);
+      font-size: 10px;
+      letter-spacing: 0.32em;
+      color: var(--umber);
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+    .details-grid { counter-reset: detail; }
+
+    .details-grid em {
+      font-style: italic;
+      color: var(--espresso);
+      font-weight: 400;
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      background: var(--ink);
+      color: var(--cream);
+      text-align: center;
+      padding: 72px 48px 60px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(179, 92, 58, 0.2), transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-inner { position: relative; max-width: 900px; margin: 0 auto; }
+
+    .cta .eyebrow { color: var(--bone); justify-content: center; display: flex; margin-bottom: 16px; }
+    .cta .eyebrow::before { background: var(--bone); }
+
+    .cta h2 {
+      color: var(--cream);
+      margin: 0 auto 28px;
+      font-weight: 400;
+      font-style: italic;
+      font-size: clamp(32px, 4.6vw, 56px);
+    }
+    .cta h2 span {
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 16px 36px;
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid var(--cream);
+      color: var(--cream);
+      transition: all .3s ease;
+      background: transparent;
+      cursor: pointer;
+    }
+    .btn:hover { background: var(--cream); color: var(--ink); }
+    .btn.primary { background: var(--cream); color: var(--ink); }
+    .btn.primary:hover { background: var(--rust); border-color: var(--rust); color: var(--cream); }
+
+    .cta-sub {
+      font-family: var(--font-display);
+      font-style: italic;
+      color: var(--bone);
+      font-size: 15px;
+      margin-top: 16px;
+      opacity: 0.8;
+    }
+
+    /* ===== Footer ===== */
+    footer {
+      background: var(--ink);
+      color: var(--bone);
+      text-align: center;
+      padding: 22px 48px;
+      border-top: 1px solid rgba(244, 237, 224, 0.08);
+      font-family: var(--font-body);
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+    }
+    footer a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: border-color .2s;
+    }
+    footer a:hover { border-color: currentColor; }
+    footer .sep { opacity: 0.4; margin: 0 14px; }
+
+    /* ===== Animations ===== */
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal > * {
+      opacity: 0;
+      animation: rise 0.85s cubic-bezier(0.2, 0.65, 0.3, 1) forwards;
+    }
+    .reveal > *:nth-child(1) { animation-delay: 0.15s; }
+    .reveal > *:nth-child(2) { animation-delay: 0.28s; }
+    .reveal > *:nth-child(3) { animation-delay: 0.42s; }
+    .reveal > *:nth-child(4) { animation-delay: 0.55s; }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .9s cubic-bezier(0.2,0.65,0.3,1), transform .9s cubic-bezier(0.2,0.65,0.3,1);
+    }
+    .fade-in.in {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 960px) {
+      .topbar { padding: 20px 24px; font-size: 10px; }
+      .topbar-mark { font-size: 20px; }
+      .hero { padding: 24px 24px 80px; }
+      .wrap { padding: 70px 24px; }
+      .core { grid-template-columns: 1fr; gap: 48px; }
+      .support-head { grid-template-columns: 1fr; }
+      .support-head p { text-align: left; }
+      .support-grid { grid-template-columns: 1fr; }
+      .details-grid { grid-template-columns: 1fr; }
+      .details-grid > div { min-height: auto; }
+      .cta { padding: 90px 24px 80px; }
+    }
+
+    @media (max-width: 480px) {
+      .price-line { gap: 16px; }
+      .price-new { font-size: clamp(80px, 22vw, 120px); }
+      .support-card { padding: 32px 28px; }
+      .btn { padding: 16px 28px; font-size: 10px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .fade-in { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topbar">
+    <div class="topbar-meta">
+      <span>For Wedding Vendors</span>
+      <span class="dot"></span>
+      <span>Pricing · 2026</span>
+    </div>
+  </header>
+
+  <main class="hero reveal">
+    <div class="guide-mark" aria-hidden="true">Pricing<br>Guide</div>
+    <div class="eyebrow">Web Design by Sam</div>
+    <h1>Don't worry <em>about your&nbsp;website.</em></h1>
+    <p class="hero-tagline">Running a business is worry enough. Flat-fee, done-for-you sites for florists, bakers, makeup artists, planners — or anyone else.</p>
+  </main>
+
+  <svg class="ornament" viewBox="0 0 120 32" fill="none" aria-hidden="true">
+    <path d="M2 16 Q 30 4, 60 16 T 118 16" stroke="currentColor" stroke-width="1" fill="none"/>
+    <circle cx="60" cy="16" r="2.5" fill="currentColor"/>
+    <circle cx="8" cy="16" r="1.5" fill="currentColor"/>
+    <circle cx="112" cy="16" r="1.5" fill="currentColor"/>
+  </svg>
+
+  <section>
+    <div class="wrap">
+      <div class="section-label">
+        <span>§ 01 — The Core Website</span>
+        <span class="num">fully custom</span>
+      </div>
+
+      <div class="core fade-in">
+        <div class="core-price">
+          <div class="price-line">
+            <span class="price-old">$1,500</span>
+            <span class="price-new">$800</span>
+          </div>
+          <div class="price-notes">
+            <p>Already have a website? <strong>Get $200 off</strong> to transfer &amp; update.</p>
+            <p>Payment plans available.</p>
+          </div>
+        </div>
+
+        <div class="core-details">
+          <h3>What's included</h3>
+          <p class="lead">A fully custom, done-for-you site — without ongoing fees or DIY overwhelm.</p>
+          <ul class="features">
+            <li>
+              <span class="idx">i.</span>
+              <span>
+                <strong>Standard Pages</strong>
+                <ul class="sub-features">
+                  <li>Home</li>
+                  <li>Portfolio<span class="note">with individual project subpages</span></li>
+                  <li>About</li>
+                  <li>Inquiry form<span class="note">connected to Petala, Honeybook, or your email</span></li>
+                </ul>
+              </span>
+            </li>
+            <li><span class="idx">ii.</span><span><strong>Foundational SEO &amp; mobile-first build</strong></span></li>
+          </ul>
+          <p class="features-note">Need additional tabs? Custom pricing — please inquire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="support">
+    <div class="wrap">
+      <div class="section-label">
+        <span>§ 02 — Ongoing Support</span>
+        <span class="num">low-lift upkeep</span>
+      </div>
+
+      <div class="support-head fade-in">
+        <h2>How do I make changes<br>in the future?</h2>
+        <p>Swap out photos, update text, add to your portfolio — on your schedule.</p>
+      </div>
+
+      <div class="support-grid fade-in">
+        <article class="support-card">
+          <div class="support-card-head">
+            <h3>Website Updates</h3>
+            <small>Low-touch</small>
+          </div>
+          <p class="desc">List any changes — swap photos, update text, add to your portfolio, change colors. Changes scheduled within <strong>2 business days</strong>.</p>
+          <ul>
+            <li><span>Monthly plan<br><small style="font-size:15px;color:var(--muted);font-family:var(--font-display);font-style:italic;">one update per month · 3-month minimum</small></span><span class="price">$50<span style="font-size:14px;color:var(--muted);">/mo</span></span></li>
+            <li><span>One-time update</span><span class="price">$100</span></li>
+          </ul>
+          <p class="fine">Not sure what counts, or what can be done? I'm always happy to answer questions — email me at <a href="mailto:snic9004@gmail.com" style="color:var(--rust);border-bottom:1px solid currentColor;text-decoration:none;">snic9004@gmail.com</a>.</p>
+        </article>
+
+        <article class="support-card">
+          <div class="support-card-head">
+            <h3>Full Overhaul</h3>
+            <small>Rebrand</small>
+          </div>
+          <p class="desc">Describe the feel of the site you want and consult on several options. Change structure, wording, photos, and visual direction.</p>
+          <ul>
+            <li><span>Complete refresh</span><span class="price">$300</span></li>
+          </ul>
+          <p class="fine">Best when your work has evolved past your current site.</p>
+        </article>
+      </div>
+
+      <p class="custom-builds fade-in">Need something bigger? <a href="services.html#contact-form">Custom builds — get a quote.</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="details-head fade-in">
+        <div class="section-label" style="justify-content:center;">
+          <span>§ 03 — Why this works</span>
+        </div>
+        <h2>Built once. <em style="font-style:italic;">Owned by you.</em></h2>
+      </div>
+
+      <div class="details-grid fade-in">
+        <div>Update your site once or twice a year? Options for <em>no monthly subscription.</em></div>
+        <div>Built once, <em>owned by you.</em></div>
+        <div>Ongoing support prices <em>locked in for three years.</em></div>
+        <div>Saves hours of <em>DIY frustration.</em></div>
+        <div>Easy to update as your work <em>evolves.</em></div>
+        <div>Only required recurring cost is the <em>annual URL fee.</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner fade-in">
+      <div class="eyebrow">Let's begin</div>
+      <h2>Inquire to get started,<br>or <span>ask a question.</span></h2>
+      <div class="cta-buttons">
+        <a href="services.html#contact-form" class="btn primary">Go to the Inquiry Form &rarr;</a>
+        <a href="projects.html" class="btn">See My Other Work</a>
+      </div>
+      <p class="cta-sub">Replies within two business days.</p>
+    </div>
+  </section>
+
+  <footer>
+    <span>&copy; 2026 Sam Nichols</span>
+    <span class="sep">·</span>
+    <a href="mailto:snic9004@gmail.com">snic9004@gmail.com</a>
+    <span class="sep">·</span>
+    <a href="index.html">samnichols.dev</a>
+  </footer>
+
+  <script>
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -80px 0px', threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
