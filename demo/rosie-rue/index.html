@@ -1,0 +1,3486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Rosie Rue Floral Co. — Four Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Instrument+Serif:ital@0;1&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Gloock&family=Caveat:wght@400..700&family=JetBrains+Mono:wght@300..700&family=DM+Sans:opsz,wght@9..40,300..700&family=Manrope:wght@300..800&family=Archivo:wght@400..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', system-ui, sans-serif; color: #1a1a1a; background: #ffffff; line-height: 1.5; overflow-x: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+
+  .proposal-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #1a0f14;
+    color: #faecdf;
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .proposal-nav .brand { font-weight: 600; }
+  .proposal-nav .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .proposal-nav .nav-links a { opacity: 0.6; transition: opacity 0.2s; }
+  .proposal-nav .nav-links a:hover { opacity: 1; }
+  .proposal-nav .nav-links a span.num { color: #e8a29a; margin-right: 4px; }
+
+  .intro {
+    min-height: 50vh;
+    background: #fbf0ea;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 18% 30%, rgba(230, 130, 120, 0.16) 0%, transparent 45%),
+      radial-gradient(circle at 85% 72%, rgba(210, 140, 180, 0.14) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .intro-inner { max-width: 1100px; position: relative; z-index: 1; width: 100%; }
+  .intro .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #8e5a5c; margin-bottom: 24px;
+  }
+  .intro h1 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+    font-size: clamp(40px, 6vw, 84px);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: #1a0f14;
+    margin-bottom: 28px;
+  }
+  .intro h1 em {
+    font-style: italic; font-weight: 400; color: #b24755;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  }
+  .intro p.lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; line-height: 1.55;
+    color: #2a1a1e;
+    font-weight: 400;
+    max-width: 820px;
+    margin-bottom: 40px;
+  }
+  .intro p.lead::first-letter { color: #b24755; font-style: italic; }
+
+  .intro .placeholder-note {
+    max-width: 820px;
+    margin: 0 0 48px;
+    padding: 18px 22px;
+    background: rgba(178, 71, 85, 0.07);
+    border-left: 2px solid #b24755;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #6a3a40;
+    letter-spacing: 0.01em;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro .placeholder-note .note-label {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #b24755;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .intro .placeholder-note .note-body { color: #3a1c22; }
+
+  .option-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1100px) { .option-cards { grid-template-columns: repeat(2, 1fr); } }
+  .option-card {
+    background: #fff;
+    border: 1px solid #f0d8d0;
+    padding: 30px 26px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .option-card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -24px rgba(40,15,20,0.22); border-color: #e8a29a; }
+  .option-card .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #8e5a5c;
+  }
+  .option-card h3 {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #1a0f14;
+  }
+  .option-card .swatch-row { display: flex; gap: 0; height: 28px; margin: 6px 0 4px; }
+  .option-card .swatch { flex: 1; }
+  .option-card p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #3a2228;
+  }
+  .option-card .view-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #b24755;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .proposal-nav { flex-direction: column; gap: 10px; padding: 14px 20px; }
+    .proposal-nav .nav-links { gap: 14px; font-size: 10.5px; }
+    .intro { padding: 60px 20px; }
+    .option-cards { grid-template-columns: 1fr; }
+  }
+
+  .direction-divider {
+    background: #1a0f14;
+    color: #faecdf;
+    padding: 70px 40px;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    border-top: 1px solid #e8a29a;
+    border-bottom: 4px solid #e8a29a;
+  }
+  .direction-divider::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: rgba(232, 162, 154, 0.28);
+  }
+  .dd-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+  }
+  .dd-progress {
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    color: #e8a29a;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .dd-name {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.015em;
+    color: #faecdf;
+  }
+  .dd-name em {
+    font-style: italic;
+    color: #e8a29a;
+    font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  }
+  .dd-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.6vw, 19px);
+    color: rgba(250, 236, 223, 0.7);
+    max-width: 400px;
+    text-align: right;
+    line-height: 1.45;
+    padding-bottom: 12px;
+  }
+  @media (max-width: 900px) {
+    .direction-divider { padding: 44px 20px; border-bottom-width: 3px; }
+    .direction-divider::before { left: 20px; right: 20px; }
+    .dd-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    .dd-sub { text-align: left; max-width: none; padding-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="proposal-nav">
+  <div class="brand">ROSIE RUE // DESIGN PROPOSALS</div>
+  <div class="nav-links">
+    <a href="#intro"><span class="num">00</span>INTRO</a>
+    <a href="#watercolor"><span class="num">01</span>WATERCOLOR</a>
+    <a href="#dusk"><span class="num">02</span>DUSK</a>
+    <a href="#zine"><span class="num">03</span>ZINE</a>
+    <a href="#kinetic"><span class="num">04</span>KINETIC</a>
+  </div>
+</nav>
+
+<section id="intro" class="intro">
+  <div class="intro-inner">
+    <p class="eyebrow">Four directions — all new territory</p>
+    <h1>Rosie Rue, <em>four ways.</em></h1>
+    <p class="lead">Four different feels for the same site. Same sections, same story — but each one carries a distinctly different mood. Scroll through all four, then tell me which one feels most like <em>you</em>. Mix-and-match encouraged if something from one direction catches your eye but another feels closer overall.</p>
+    <div class="placeholder-note">
+      <span class="note-label">Heads up</span>
+      <span class="note-body">Every photo is from your actual Squarespace portfolio — we lucked out and could grab them directly. Your tagline, phone, and 1,000+ weddings stat are real. Testimonials are placeholders (couldn't find quotes on your site) and pricing is illustrative. Focus on the feel of each direction, not the exact words.</span>
+    </div>
+    <div class="option-cards">
+      <a href="#watercolor" class="option-card">
+        <div class="card-num">01 — Watercolor</div>
+        <h3>Painterly &amp; dreamy</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fbf0ea"></div>
+          <div class="swatch" style="background:#e8a29a"></div>
+          <div class="swatch" style="background:#a8b896"></div>
+          <div class="swatch" style="background:#7a3f47"></div>
+        </div>
+        <p>Blush, sage, wine. Painted watercolor wash backgrounds, Fraunces italic, soft organic shapes. Feels like a wedding invitation come to life.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#dusk" class="option-card">
+        <div class="card-num">02 — Dusk</div>
+        <h3>Moody &amp; dramatic</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#0a0608"></div>
+          <div class="swatch" style="background:#2a0f1e"></div>
+          <div class="swatch" style="background:#e8623a"></div>
+          <div class="swatch" style="background:#f4e0c8"></div>
+        </div>
+        <p>Near-black, deep plum, hot coral. Dark mode — florals pop against darkness. Serif italic, gallery-at-night feel. First dark direction so far.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#zine" class="option-card">
+        <div class="card-num">03 — Zine</div>
+        <h3>Handmade &amp; eclectic</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fef7e8"></div>
+          <div class="swatch" style="background:#ff5a6e"></div>
+          <div class="swatch" style="background:#2e4e3e"></div>
+          <div class="swatch" style="background:#f5b830"></div>
+        </div>
+        <p>Cream, hot pink, yellow, forest. Cut-paper collage, rotated photos, mixed type, washi tape. Maximalist-lite DIY-magazine energy.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#kinetic" class="option-card">
+        <div class="card-num">04 — Kinetic</div>
+        <h3>Modernist &amp; typographic</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fafaf7"></div>
+          <div class="swatch" style="background:#1a1a1a"></div>
+          <div class="swatch" style="background:#e85a3a"></div>
+          <div class="swatch" style="background:#b3b8a3"></div>
+        </div>
+        <p>Warm white, black, single coral accent. Giant Fraunces bleeding off edges, grid-breaking, oversized numerals. Architectural and confident.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 01 — of 04</div>
+      <h2 class="dd-name">Watercolor<em>.</em></h2>
+    </div>
+    <p class="dd-sub">A painted-stationery feel — soft wash backgrounds, dreamy Fraunces italic, organic curves. Feels like a wedding invitation.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 01 — WATERCOLOR ============================
+     ========================================================= -->
+<style>
+.wc {
+  --cream: #fbf0ea;
+  --cream-deep: #f5e0d3;
+  --wash-pink: #f5c4b8;
+  --wash-rose: #e8a29a;
+  --wash-sage: #c4d0b3;
+  --sage-deep: #a8b896;
+  --wine: #7a3f47;
+  --wine-deep: #56242c;
+  --ink: #2a1a1e;
+  --ink-soft: #4c3338;
+  --muted: #9a7b7e;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Cormorant Garamond', serif;
+  position: relative;
+  overflow: hidden;
+}
+.wc a { color: inherit; }
+
+/* watercolor wash background layer */
+.wc .wash {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.7;
+}
+
+/* nav — soft round buttons, no rules */
+.wc .site-nav {
+  padding: 34px 56px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 40px;
+  position: relative;
+  z-index: 2;
+}
+.wc .nav-logo {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--ink);
+}
+.wc .nav-logo .small {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--wine);
+  margin-left: 8px;
+  vertical-align: 4px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+}
+.wc .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  justify-self: center;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.wc .site-nav ul a { transition: color 0.25s; padding: 4px 0; }
+.wc .site-nav ul a:hover { color: var(--wine); }
+.wc .nav-cta {
+  padding: 12px 24px;
+  border-radius: 999px;
+  background: var(--wine);
+  color: var(--cream);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.25s;
+}
+.wc .nav-cta:hover { background: var(--ink); transform: translateY(-2px); }
+
+/* hero */
+.wc .hero {
+  padding: 60px 56px 100px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+  min-height: 85vh;
+}
+.wc .hero .wash-1 { top: -80px; left: -80px; width: 420px; height: 420px; background: var(--wash-pink); }
+.wc .hero .wash-2 { bottom: -100px; right: -80px; width: 480px; height: 480px; background: var(--wash-sage); opacity: 0.45; }
+.wc .hero .wash-3 { top: 30%; right: 36%; width: 260px; height: 260px; background: var(--wash-rose); opacity: 0.5; }
+.wc .hero-text { position: relative; z-index: 1; }
+.wc .hero-eyebrow {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 22px;
+  color: var(--wine);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.wc .hero-eyebrow::before {
+  content: '';
+  width: 48px;
+  height: 2px;
+  background: var(--wine);
+  border-radius: 2px;
+}
+.wc .hero h1 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  font-size: clamp(54px, 7.2vw, 116px);
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.wc .hero h1 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 350;
+  color: var(--wine);
+  display: inline-block;
+  position: relative;
+}
+.wc .hero h1 em::after {
+  content: '';
+  position: absolute;
+  left: -4%; right: -4%; bottom: 10px;
+  height: 16px;
+  background: var(--wash-pink);
+  opacity: 0.5;
+  z-index: -1;
+  border-radius: 8px;
+}
+.wc .hero-sub {
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 480px;
+  margin-bottom: 40px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.wc .hero-btn {
+  padding: 18px 32px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.wc .hero-btn:hover { background: var(--wine); transform: translateY(-2px); }
+
+/* painted hero image with organic frame */
+.wc .hero-img-wrap {
+  position: relative;
+  aspect-ratio: 4/5;
+}
+.wc .hero-img {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/0a0c2b5e-2ef6-4ab4-adaa-71a30652cc46/Utah+Wedding+Florists+-+Colorful+Bouquet+at++White+Shanty+Venue+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+260.jpg?format=1500w');
+  background-size: cover;
+  background-position: center;
+  border-radius: 50% 40% 50% 45% / 40% 50% 40% 50%;
+  box-shadow: 0 30px 70px -30px rgba(122, 63, 71, 0.45);
+}
+.wc .hero-img::after {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  border: 2px solid var(--wine);
+  border-radius: 50% 40% 50% 45% / 40% 50% 40% 50%;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.wc .hero-sticker {
+  position: absolute;
+  bottom: 30px;
+  left: -40px;
+  background: var(--cream);
+  padding: 14px 20px;
+  border-radius: 999px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 17px;
+  color: var(--wine);
+  box-shadow: 0 12px 30px -14px rgba(122, 63, 71, 0.3);
+  border: 1px solid var(--wash-pink);
+}
+
+/* quote strip */
+.wc .quote-strip {
+  padding: 60px 56px;
+  text-align: center;
+  position: relative;
+}
+.wc .quote-strip .wash-4 { top: 20%; left: 4%; width: 180px; height: 180px; background: var(--wash-rose); opacity: 0.35; }
+.wc .quote-strip .wash-5 { bottom: 10%; right: 4%; width: 200px; height: 200px; background: var(--wash-sage); opacity: 0.4; }
+.wc .quote-strip blockquote {
+  max-width: 860px;
+  margin: 0 auto;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  font-size: clamp(28px, 3.4vw, 48px);
+  line-height: 1.2;
+  color: var(--ink);
+  position: relative;
+  z-index: 1;
+}
+.wc .quote-strip blockquote::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--wine);
+  margin: 0 auto 24px;
+  border-radius: 2px;
+}
+.wc .quote-strip blockquote em { color: var(--wine); }
+
+/* about */
+.wc .about {
+  padding: 120px 56px;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  position: relative;
+}
+.wc .about .wash-6 { top: -40px; right: 40%; width: 280px; height: 280px; background: var(--wash-pink); opacity: 0.55; }
+.wc .about-text .kicker {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--wine);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.wc .about-text h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: clamp(40px, 5.2vw, 68px);
+  line-height: 1.02;
+  color: var(--ink);
+  margin-bottom: 30px;
+}
+.wc .about-text h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--wine);
+}
+.wc .about-text p {
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+  font-family: 'Cormorant Garamond', serif;
+}
+.wc .about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-top: 34px;
+  padding-top: 30px;
+  border-top: 1px solid var(--wash-pink);
+}
+.wc .about-stats .num {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 42px;
+  color: var(--wine);
+  line-height: 1;
+}
+.wc .about-stats .lbl {
+  font-family: 'Manrope', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.wc .about-img-wrap {
+  position: relative;
+  aspect-ratio: 3/4;
+  transform: rotate(2deg);
+}
+.wc .about-img-wrap .img-back {
+  position: absolute;
+  inset: -14px -14px 18px 18px;
+  background: var(--wash-sage);
+  border-radius: 45% 55% 50% 40% / 50% 45% 55% 50%;
+  opacity: 0.55;
+  z-index: 0;
+}
+.wc .about-img {
+  position: absolute;
+  inset: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/22fc276a-6bb2-4592-b691-6eed4b9aff0b/rachel-moseley-photo-46.jpg?format=1500w');
+  background-size: cover;
+  background-position: center;
+  border-radius: 45% 55% 50% 40% / 50% 45% 55% 50%;
+  z-index: 1;
+}
+
+/* services */
+.wc .services {
+  padding: 120px 56px;
+  background: var(--cream-deep);
+  position: relative;
+  overflow: hidden;
+}
+.wc .services .wash-7 { top: 30px; left: 10%; width: 200px; height: 200px; background: var(--wash-pink); opacity: 0.4; }
+.wc .services .wash-8 { bottom: 30px; right: 10%; width: 220px; height: 220px; background: var(--wash-sage); opacity: 0.4; }
+.wc .services-head {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 60px;
+  position: relative;
+  z-index: 1;
+}
+.wc .services-head .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 22px;
+  color: var(--wine);
+  margin-bottom: 12px;
+}
+.wc .services-head h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: clamp(40px, 5vw, 66px);
+  color: var(--ink);
+  line-height: 1;
+}
+.wc .services-head h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--wine);
+}
+.wc .svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.wc .svc-card {
+  background: var(--cream);
+  padding: 36px 32px;
+  border-radius: 32px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.wc .svc-card:hover {
+  transform: translateY(-6px) rotate(0.5deg);
+  box-shadow: 0 20px 40px -22px rgba(122, 63, 71, 0.3);
+}
+.wc .svc-card .num-stamp {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  font-size: 44px;
+  color: var(--wash-pink);
+  line-height: 1;
+}
+.wc .svc-card h3 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 500;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.wc .svc-card p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.wc .svc-card a {
+  font-family: 'Manrope', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--wine);
+  border-bottom: 1px solid var(--wine);
+  padding-bottom: 3px;
+  font-weight: 600;
+}
+
+/* portfolio */
+.wc .portfolio {
+  padding: 130px 56px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.wc .portfolio-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.wc .portfolio-head .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 22px;
+  color: var(--wine);
+  margin-bottom: 12px;
+}
+.wc .portfolio-head h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: clamp(40px, 5vw, 68px);
+  color: var(--ink);
+  line-height: 1;
+}
+.wc .portfolio-head h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--wine);
+}
+.wc .pf-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+.wc .pf-item {
+  aspect-ratio: 4/5;
+  background-size: cover;
+  background-position: center;
+  border-radius: 40% 30% 40% 35% / 30% 40% 30% 40%;
+  transition: border-radius 0.6s ease, transform 0.4s;
+  cursor: pointer;
+  box-shadow: 0 14px 34px -22px rgba(42, 26, 30, 0.3);
+}
+.wc .pf-item:hover {
+  border-radius: 20px;
+  transform: scale(1.02);
+}
+
+/* cta — floating painted card */
+.wc .cta {
+  padding: 140px 56px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.wc .cta .wash-9 { top: 30%; left: 8%; width: 200px; height: 200px; background: var(--wash-rose); opacity: 0.5; }
+.wc .cta .wash-10 { bottom: 20%; right: 8%; width: 220px; height: 220px; background: var(--wash-sage); opacity: 0.5; }
+.wc .cta-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.wc .cta .kicker {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 22px;
+  color: var(--wine);
+  margin-bottom: 14px;
+}
+.wc .cta h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 350;
+  font-size: clamp(48px, 6.2vw, 96px);
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.wc .cta h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--wine);
+}
+.wc .cta p {
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 540px;
+  margin: 0 auto 40px;
+}
+.wc .cta-btn {
+  padding: 20px 44px;
+  background: var(--wine);
+  color: var(--cream);
+  border-radius: 999px;
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  display: inline-block;
+  transition: all 0.3s;
+}
+.wc .cta-btn:hover { background: var(--ink); transform: translateY(-2px); }
+
+/* footer */
+.wc .site-footer {
+  padding: 70px 56px 40px;
+  background: var(--wine-deep);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.wc .site-footer::before {
+  content: '';
+  position: absolute;
+  top: -120px; left: -80px;
+  width: 300px; height: 300px;
+  background: var(--wash-rose);
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.25;
+}
+.wc .footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 34px;
+  border-bottom: 1px solid rgba(251, 240, 234, 0.12);
+  position: relative;
+  z-index: 1;
+}
+.wc .footer-mark {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  font-size: 36px;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+.wc .footer-mark .co {
+  font-style: normal;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--wash-pink);
+  vertical-align: 6px;
+  margin-left: 8px;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 500;
+}
+.wc .footer-tag {
+  font-size: 16px;
+  color: rgba(251, 240, 234, 0.72);
+  max-width: 340px;
+  line-height: 1.55;
+}
+.wc .footer-inner .col-label {
+  font-family: 'Manrope', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--wash-pink);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.wc .footer-inner a,
+.wc .footer-inner p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(251, 240, 234, 0.82);
+}
+.wc .footer-inner a:hover { color: var(--wash-pink); }
+.wc .footer-bottom {
+  position: relative;
+  z-index: 1;
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(251, 240, 234, 0.45);
+  font-family: 'Manrope', sans-serif;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .wc .site-nav { grid-template-columns: 1fr; gap: 14px; padding: 22px; text-align: center; }
+  .wc .site-nav ul { justify-self: center; flex-wrap: wrap; gap: 16px; font-size: 12px; }
+  .wc .hero { padding: 40px 24px 80px; grid-template-columns: 1fr; gap: 50px; }
+  .wc .hero-img-wrap { max-width: 360px; margin: 0 auto; }
+  .wc .quote-strip { padding: 50px 20px; }
+  .wc .about { padding: 70px 24px; grid-template-columns: 1fr; gap: 50px; }
+  .wc .services { padding: 70px 20px; }
+  .wc .svc-grid { grid-template-columns: 1fr; gap: 18px; }
+  .wc .portfolio { padding: 70px 20px; }
+  .wc .pf-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .wc .cta { padding: 80px 24px; }
+  .wc .site-footer { padding: 50px 24px 30px; }
+  .wc .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
+
+<section id="watercolor" class="wc">
+  <div class="wash wash-1"></div>
+  <div class="wash wash-2"></div>
+
+  <nav class="site-nav">
+    <a href="#" class="nav-logo">Rosie Rue<span class="small">Floral Co.</span></a>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Process</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Free Design Call</a>
+  </nav>
+
+  <section class="hero">
+    <div class="wash wash-3"></div>
+    <div class="hero-text">
+      <div class="hero-eyebrow">Utah Wedding Florals</div>
+      <h1>Trendy yet <em>timeless</em> florals for everyone.</h1>
+      <p class="hero-sub">Colorful, playful, always personal — flowers that feel like a painting of the day you've been dreaming about.</p>
+      <a href="#" class="hero-btn">Book a free design call →</a>
+    </div>
+    <div class="hero-img-wrap">
+      <div class="hero-img"></div>
+      <div class="hero-sticker">1,000+ weddings &amp; counting</div>
+    </div>
+  </section>
+
+  <div class="quote-strip">
+    <div class="wash wash-4"></div>
+    <div class="wash wash-5"></div>
+    <blockquote>We want your wedding to feel <em>unique and special</em> to you — not a pulled-from-a-catalog version of someone else's.</blockquote>
+  </div>
+
+  <section class="about">
+    <div class="wash wash-6"></div>
+    <div class="about-text">
+      <div class="kicker">The Studio</div>
+      <h2>An eye for design, a <em>passion</em> for the day.</h2>
+      <p>Rosie Rue is a team of florists and event designers who have worked in weddings long enough to know the trends — and long enough to know which ones will still look right in ten years.</p>
+      <p>We don't do preset packages. Every booking begins with a free design call where we listen first and sketch second.</p>
+      <div class="about-stats">
+        <div><div class="num">1,000+</div><div class="lbl">weddings</div></div>
+        <div><div class="num">40+</div><div class="lbl">venues</div></div>
+        <div><div class="num">7 yr</div><div class="lbl">designing</div></div>
+      </div>
+    </div>
+    <div class="about-img-wrap">
+      <div class="img-back"></div>
+      <div class="about-img"></div>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="wash wash-7"></div>
+    <div class="wash wash-8"></div>
+    <div class="services-head">
+      <div class="kicker">what we bring</div>
+      <h2>A little of <em>everything</em> floral.</h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="num-stamp">i</div>
+        <h3>Wedding florals</h3>
+        <p>Bouquets, boutonnieres, ceremony pieces, reception tablescapes, and cake florals — a complete visual throughline.</p>
+        <a href="#">See recent →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num-stamp">ii</div>
+        <h3>Full event design</h3>
+        <p>Mood boards, color, venue layout, and linens — design consulting beyond just the flowers.</p>
+        <a href="#">How it works →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num-stamp">iii</div>
+        <h3>Installations &amp; arches</h3>
+        <p>Freestanding and suspended installations — the statement pieces that make the ceremony unforgettable.</p>
+        <a href="#">Browse installs →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">Selected work</div>
+      <h2>A few of our <em>favorites.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/051291bc-5dfe-49ef-8a76-208e7b9a42d5/Utah+Wedding+Florists+-+Oranges+Bouquet+at+Temple+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+44.jpg?format=1000w');"></div>
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/2992ae0d-fe80-4354-b7d9-02c73b525b97/Utah+Wedding+Florists+-+Pinks+Bouquet+at+Twenty+%26+Creek+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+540.jpg?format=1000w');"></div>
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/1cb7b88b-b90e-42dc-beb9-918671f6e68e/Utah+Wedding+Florists+-+Colorful+Bouquet+at+Southworth+Hall+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+473.jpg?format=1000w');"></div>
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/4a7c1cab-3845-459a-91cf-25e199973c4e/Utah+Wedding+Florists+-+Coral+%2B+Peach+Bouquet+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+313.jpg?format=1000w');"></div>
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/345bace2-9f12-4b14-af0c-b3ba3201e6a9/Utah+Wedding+Florists+-+White+Bouquet+at+Wadley+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+147.jpg?format=1000w');"></div>
+      <div class="pf-item" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/30017986-0191-4acf-bab8-3b6a926470a1/Utah+Wedding+Florists+-+Colorful+Bouquet+at+Quiet+Meadow+Farm+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+512.jpg?format=1000w');"></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wash wash-9"></div>
+    <div class="wash wash-10"></div>
+    <div class="cta-inner">
+      <div class="kicker">Ready to get started?</div>
+      <h2>Let's <em>paint your day.</em></h2>
+      <p>Free design call — tell us your date and vision, we'll sketch a starting direction within two business days.</p>
+      <a href="#" class="cta-btn">Book a Call</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Rosie Rue<span class="co">Floral Co.</span></div>
+        <p class="footer-tag">Utah wedding florals — trendy yet timeless, designed for every couple.</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:3853093353">(385) 309-3353</a></p>
+        <p>Text-friendly</p>
+      </div>
+      <div>
+        <div class="col-label">Explore</div>
+        <p><a href="#">Portfolio</a></p>
+        <p><a href="#">About</a></p>
+        <p><a href="#">FAQ</a></p>
+      </div>
+      <div>
+        <div class="col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Rosie Rue Floral Co.</span>
+      <span>Made in Utah</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 02 — of 04</div>
+      <h2 class="dd-name">Dusk<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Dark mode, first time. Near-black with hot coral accents — florals pop like spotlit pieces in a gallery at night.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 02 — DUSK (DARK MODE) =======================
+     ========================================================= -->
+<style>
+.dsk {
+  --black: #0a0608;
+  --plum: #2a0f1e;
+  --plum-deep: #180810;
+  --coral: #e8623a;
+  --coral-light: #f4926a;
+  --cream: #f4e0c8;
+  --cream-dim: #d4b898;
+  --sage: #7a8668;
+  --muted: #a48878;
+  --text: #eadfd1;
+  --text-soft: rgba(234, 223, 209, 0.72);
+  --rule: rgba(234, 223, 209, 0.12);
+
+  background: var(--black);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+}
+.dsk a { color: inherit; }
+
+/* nav */
+.dsk .site-nav {
+  padding: 22px 56px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--rule);
+}
+.dsk .nav-logo {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--cream);
+  letter-spacing: -0.005em;
+}
+.dsk .nav-logo .co {
+  font-family: 'DM Sans', sans-serif;
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--coral);
+  vertical-align: 8px;
+  margin-left: 8px;
+  font-weight: 500;
+}
+.dsk .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  font-weight: 500;
+}
+.dsk .site-nav ul a { transition: color 0.25s; }
+.dsk .site-nav ul a:hover { color: var(--coral); }
+.dsk .nav-cta {
+  padding: 12px 22px;
+  background: var(--coral);
+  color: var(--black);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: background 0.25s;
+}
+.dsk .nav-cta:hover { background: var(--coral-light); }
+
+/* hero — split screen with spotlight image */
+.dsk .hero {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  min-height: 88vh;
+}
+.dsk .hero-left {
+  padding: 80px 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+.dsk .hero-left::before {
+  content: '01 — Hero';
+  position: absolute;
+  top: 80px;
+  left: 56px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.4em;
+  color: var(--coral);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.dsk .hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 22px;
+  margin-top: 40px;
+  font-weight: 600;
+}
+.dsk .hero h1 {
+  font-family: 'Instrument Serif', serif;
+  font-weight: 400;
+  font-size: clamp(54px, 7.5vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+  color: var(--cream);
+  margin-bottom: 32px;
+}
+.dsk .hero h1 em {
+  font-style: italic;
+  color: var(--coral);
+}
+.dsk .hero-sub {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--text-soft);
+  max-width: 440px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.dsk .hero-cta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--coral);
+  padding: 18px 36px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.3s;
+  align-self: flex-start;
+}
+.dsk .hero-cta:hover { background: var(--cream); transform: translateY(-2px); }
+.dsk .hero-cta::after { content: '→'; }
+.dsk .hero-right {
+  position: relative;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/26d64724-610d-48c7-b643-6373459ffbb3/Utah+Wedding+Florists+-+Oranges+Arches+at+Louland+Falls+-+Flowers+by+Rosie+Rue+Floral+Co..jpg?format=2000w');
+  background-size: cover;
+  background-position: center;
+}
+.dsk .hero-right::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--black) 0%, transparent 30%, transparent 70%, rgba(10,6,8,0.5) 100%);
+}
+.dsk .hero-right::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 50%, transparent 30%, rgba(10,6,8,0.4) 90%);
+}
+.dsk .hero-meta {
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream-dim);
+  z-index: 2;
+  text-align: right;
+  line-height: 1.7;
+}
+.dsk .hero-meta em { color: var(--coral); font-style: normal; }
+
+/* ticker bar */
+.dsk .ticker {
+  background: var(--plum);
+  color: var(--cream);
+  padding: 18px 0;
+  overflow: hidden;
+  border-top: 1px solid var(--coral);
+  border-bottom: 1px solid var(--coral);
+}
+.dsk .ticker-track {
+  display: flex;
+  gap: 60px;
+  white-space: nowrap;
+  animation: dsk-tk 36s linear infinite;
+  width: max-content;
+  font-family: 'Instrument Serif', serif;
+  font-size: 24px;
+  font-style: italic;
+}
+.dsk .ticker-track span { display: flex; align-items: center; gap: 60px; }
+.dsk .ticker-track span::after { content: '◆'; color: var(--coral); font-style: normal; font-size: 12px; }
+@keyframes dsk-tk { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* about */
+.dsk .about {
+  padding: 140px 56px;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 80px;
+  align-items: center;
+}
+.dsk .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/22e84359-61cb-4a44-a1f2-9e544a109ec0/Utah+Wedding+Florists+-+Colorful+Bouquet+at++White+Shanty+Venue+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+268.jpg?format=1500w');
+  background-size: cover;
+  background-position: center;
+  border-left: 3px solid var(--coral);
+}
+.dsk .about-text .kicker {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.dsk .about-text h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(42px, 5.6vw, 80px);
+  line-height: 1.02;
+  color: var(--cream);
+  margin-bottom: 28px;
+  letter-spacing: -0.015em;
+}
+.dsk .about-text h2 em { font-style: italic; color: var(--coral); }
+.dsk .about-text p {
+  font-size: 19px;
+  line-height: 1.7;
+  color: var(--text-soft);
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+.dsk .about-text .signature {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--coral);
+}
+
+/* services as dramatic numbered rows */
+.dsk .services {
+  padding: 130px 56px;
+  background: var(--plum-deep);
+}
+.dsk .services-head {
+  max-width: 1300px;
+  margin: 0 auto 60px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.dsk .services-head::before,
+.dsk .services-head::after {
+  content: '';
+  height: 1px;
+  background: var(--rule);
+}
+.dsk .services-head h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(34px, 4vw, 52px);
+  color: var(--cream);
+  text-align: center;
+  line-height: 1;
+}
+.dsk .services-head h2 em { font-style: italic; color: var(--coral); }
+.dsk .svc-list {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.dsk .svc-row {
+  display: grid;
+  grid-template-columns: 80px 2fr 3fr auto;
+  gap: 40px;
+  padding: 38px 0;
+  border-bottom: 1px solid var(--rule);
+  align-items: center;
+  transition: padding-left 0.25s;
+}
+.dsk .svc-row:hover { padding-left: 20px; }
+.dsk .svc-row .num {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 48px;
+  color: var(--coral);
+  line-height: 1;
+}
+.dsk .svc-row h3 {
+  font-family: 'Instrument Serif', serif;
+  font-size: 30px;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+}
+.dsk .svc-row p {
+  color: var(--text-soft);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.dsk .svc-row a {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* portfolio — spotlit grid */
+.dsk .portfolio {
+  padding: 140px 56px;
+}
+.dsk .portfolio-head {
+  max-width: 1400px;
+  margin: 0 auto 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+.dsk .portfolio-head .kicker {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.dsk .portfolio-head h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(40px, 5vw, 72px);
+  color: var(--cream);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+.dsk .portfolio-head h2 em { font-style: italic; color: var(--coral); }
+.dsk .portfolio-head p {
+  font-size: 15px;
+  color: var(--text-soft);
+  max-width: 340px;
+  text-align: right;
+  line-height: 1.55;
+}
+.dsk .pf-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 22px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.dsk .pf-item {
+  position: relative;
+  overflow: hidden;
+  background: var(--plum);
+}
+.dsk .pf-item .img {
+  width: 100%; height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.7s ease, filter 0.4s;
+  filter: brightness(0.92) saturate(1.1);
+}
+.dsk .pf-item:hover .img { filter: brightness(1) saturate(1.2); transform: scale(1.03); }
+.dsk .pf-item::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 -60px 80px -40px rgba(10,6,8,0.6);
+  pointer-events: none;
+}
+.dsk .pf-item .caption {
+  position: absolute;
+  bottom: 16px;
+  left: 18px;
+  right: 18px;
+  z-index: 1;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream);
+  font-weight: 600;
+}
+.dsk .pf-item .caption em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--coral);
+  letter-spacing: 0;
+  text-transform: none;
+  display: block;
+  margin-top: 3px;
+}
+.dsk .pf-1 { grid-column: 1 / span 7; aspect-ratio: 3/2; }
+.dsk .pf-1 .img { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/4d0c7bd4-52fd-4b00-bcaa-245241aa65a8/Utah+Wedding+Florists+-+Coral+%2B+Peach+Free-Standing+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+321.jpg?format=1500w'); }
+.dsk .pf-2 { grid-column: 8 / span 5; aspect-ratio: 4/5; }
+.dsk .pf-2 .img { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/051291bc-5dfe-49ef-8a76-208e7b9a42d5/Utah+Wedding+Florists+-+Oranges+Bouquet+at+Temple+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+44.jpg?format=1500w'); }
+.dsk .pf-3 { grid-column: 1 / span 4; aspect-ratio: 4/5; }
+.dsk .pf-3 .img { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/1efe2357-d562-4a20-b8d9-6a82a06d8513/Utah+Wedding+Florists+-+Blue+%2B+White+Bouquet+at+Wadley+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+189.jpg?format=1500w'); }
+.dsk .pf-4 { grid-column: 5 / span 4; aspect-ratio: 4/5; }
+.dsk .pf-4 .img { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/2992ae0d-fe80-4354-b7d9-02c73b525b97/Utah+Wedding+Florists+-+Pinks+Bouquet+at+Twenty+%26+Creek+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+540.jpg?format=1500w'); }
+.dsk .pf-5 { grid-column: 9 / span 4; aspect-ratio: 4/5; }
+.dsk .pf-5 .img { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/36d054eb-3268-4561-8588-a8456477e9de/Utah+Wedding+Florists+-+White+Centerpieces%2C+Ceiling+at+Siempre+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+120.jpg?format=1500w'); }
+
+/* testimonial */
+.dsk .testimonial {
+  padding: 180px 56px;
+  text-align: center;
+  background: var(--plum);
+  position: relative;
+  overflow: hidden;
+}
+.dsk .testimonial::before {
+  content: '"';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 480px;
+  color: var(--coral);
+  opacity: 0.18;
+  line-height: 1;
+  pointer-events: none;
+}
+.dsk .testimonial-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+.dsk .testimonial .kicker {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+  margin-bottom: 40px;
+}
+.dsk .testimonial q {
+  display: block;
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: clamp(32px, 4vw, 56px);
+  line-height: 1.2;
+  color: var(--cream);
+  margin-bottom: 44px;
+  quotes: none;
+}
+.dsk .testimonial q::before, .dsk .testimonial q::after { content: ''; }
+.dsk .testimonial .attr {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+}
+.dsk .testimonial .attr em {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 20px;
+  color: var(--cream);
+  letter-spacing: 0;
+  text-transform: none;
+  display: block;
+  margin-top: 6px;
+}
+
+/* cta */
+.dsk .cta {
+  padding: 140px 56px;
+  text-align: center;
+  background: var(--black);
+  position: relative;
+}
+.dsk .cta::before {
+  content: '';
+  position: absolute;
+  top: 10%; left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 80%;
+  background: radial-gradient(circle, rgba(232, 98, 58, 0.15), transparent 60%);
+  pointer-events: none;
+}
+.dsk .cta-inner { max-width: 840px; margin: 0 auto; position: relative; z-index: 1; }
+.dsk .cta .kicker {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--coral);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.dsk .cta h2 {
+  font-family: 'Instrument Serif', serif;
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 0.95;
+  color: var(--cream);
+  margin-bottom: 30px;
+  letter-spacing: -0.02em;
+}
+.dsk .cta h2 em { font-style: italic; color: var(--coral); }
+.dsk .cta p {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--text-soft);
+  max-width: 540px;
+  margin: 0 auto 40px;
+  font-weight: 300;
+}
+.dsk .cta-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--black);
+  background: var(--coral);
+  padding: 22px 48px;
+  font-weight: 700;
+  transition: all 0.3s;
+}
+.dsk .cta-btn:hover { background: var(--cream); transform: translateY(-3px); }
+
+/* footer */
+.dsk .site-footer {
+  padding: 50px 56px 30px;
+  background: var(--plum-deep);
+  border-top: 1px solid var(--coral);
+  font-family: 'DM Sans', sans-serif;
+}
+.dsk .footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid var(--rule);
+}
+.dsk .footer-mark {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-size: 32px;
+  color: var(--cream);
+  margin-bottom: 10px;
+}
+.dsk .footer-tag {
+  font-size: 14px;
+  color: var(--text-soft);
+  line-height: 1.55;
+  max-width: 320px;
+  font-weight: 300;
+}
+.dsk .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.dsk .footer-inner a, .dsk .footer-inner p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--text-soft);
+  font-weight: 300;
+}
+.dsk .footer-inner a:hover { color: var(--coral); }
+.dsk .footer-bottom {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(234, 223, 209, 0.4);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .dsk .site-nav { padding: 18px 20px; flex-wrap: wrap; gap: 14px; }
+  .dsk .site-nav ul { gap: 16px; font-size: 10.5px; }
+  .dsk .hero { grid-template-columns: 1fr; min-height: auto; }
+  .dsk .hero-left { padding: 50px 24px; }
+  .dsk .hero-left::before { display: none; }
+  .dsk .hero-right { aspect-ratio: 4/3; }
+  .dsk .ticker-track { font-size: 18px; }
+  .dsk .about { padding: 80px 24px; grid-template-columns: 1fr; gap: 50px; }
+  .dsk .services { padding: 80px 20px; }
+  .dsk .services-head { grid-template-columns: 1fr; }
+  .dsk .services-head::before, .dsk .services-head::after { display: none; }
+  .dsk .svc-row { grid-template-columns: 1fr; gap: 14px; padding: 28px 0; }
+  .dsk .portfolio { padding: 70px 20px; }
+  .dsk .portfolio-head { flex-direction: column; align-items: flex-start; }
+  .dsk .portfolio-head p { text-align: left; }
+  .dsk .pf-grid { grid-template-columns: 1fr; }
+  .dsk .pf-1, .dsk .pf-2, .dsk .pf-3, .dsk .pf-4, .dsk .pf-5 { grid-column: 1 / -1; aspect-ratio: 4/5; }
+  .dsk .testimonial { padding: 100px 20px; }
+  .dsk .testimonial::before { font-size: 240px; top: -10px; }
+  .dsk .cta { padding: 90px 20px; }
+  .dsk .site-footer { padding: 40px 20px 24px; }
+  .dsk .footer-inner { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
+
+<section id="dusk" class="dsk">
+  <nav class="site-nav">
+    <a href="#" class="nav-logo">Rosie Rue<span class="co">Floral Co.</span></a>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Free Call →</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Utah Wedding Florals · Est. 2018</div>
+      <h1>Trendy yet<br>timeless florals,<br><em>in low light.</em></h1>
+      <p class="hero-sub">We design weddings that look as good at midnight as they do at noon — colors that carry into candlelit receptions.</p>
+      <a href="#" class="hero-cta">Book a Free Design Call</a>
+    </div>
+    <div class="hero-right">
+      <div class="hero-meta">Louland Falls<br><em>Summer 2025</em></div>
+    </div>
+  </section>
+
+  <div class="ticker">
+    <div class="ticker-track">
+      <span>Colorful</span>
+      <span>Personal</span>
+      <span>Timeless</span>
+      <span>Trendy</span>
+      <span>Utah-based</span>
+      <span>Colorful</span>
+      <span>Personal</span>
+      <span>Timeless</span>
+      <span>Trendy</span>
+      <span>Utah-based</span>
+    </div>
+  </div>
+
+  <section class="about">
+    <div class="about-img"></div>
+    <div class="about-text">
+      <div class="kicker">The Studio</div>
+      <h2>A thousand weddings in, <em>still obsessed.</em></h2>
+      <p>Rosie Rue is a team of florists and event designers based in Utah. We've worked on more than 1,000 weddings since opening — and we still find ourselves stopping in the parking lot of every venue to double-check a bouquet.</p>
+      <p>We don't do packages. Every wedding starts with a free design call, a real conversation, and an honest look at what you actually want.</p>
+      <div class="signature">— The Rosie Rue team</div>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="services-head">
+      <span></span>
+      <h2>Four ways we <em>show up.</em></h2>
+      <span></span>
+    </div>
+    <div class="svc-list">
+      <div class="svc-row">
+        <div class="num">i.</div>
+        <h3>Wedding florals</h3>
+        <p>Bouquets, boutonnieres, ceremony pieces, reception tablescapes, cake florals. The full floral throughline.</p>
+        <a href="#">See recent →</a>
+      </div>
+      <div class="svc-row">
+        <div class="num">ii.</div>
+        <h3>Installations &amp; arches</h3>
+        <p>Freestanding, suspended, ceiling-scape. The statement pieces that change how a room feels.</p>
+        <a href="#">Browse →</a>
+      </div>
+      <div class="svc-row">
+        <div class="num">iii.</div>
+        <h3>Full event design</h3>
+        <p>Mood boards, palette, venue layout, linens, details. Design consulting that goes beyond the stems.</p>
+        <a href="#">Learn more →</a>
+      </div>
+      <div class="svc-row">
+        <div class="num">iv.</div>
+        <h3>Preservation</h3>
+        <p>Partnered with White Poppy — your bouquet preserved as art you'll keep forever.</p>
+        <a href="#">How it works →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div>
+        <div class="kicker">Selected Work</div>
+        <h2>A year of <em>recent</em> weddings.</h2>
+      </div>
+      <p>Five from the last season — bouquets, installations, full reception designs. Full portfolio has 40+.</p>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item pf-1">
+        <div class="img"></div>
+        <div class="caption">Walker Farms<em>Freestanding install</em></div>
+      </div>
+      <div class="pf-item pf-2">
+        <div class="img"></div>
+        <div class="caption">Temple Ceremony<em>Oranges bouquet</em></div>
+      </div>
+      <div class="pf-item pf-3">
+        <div class="img"></div>
+        <div class="caption">Wadley Farms<em>Blue &amp; white</em></div>
+      </div>
+      <div class="pf-item pf-4">
+        <div class="img"></div>
+        <div class="caption">Twenty &amp; Creek<em>Pink bouquet</em></div>
+      </div>
+      <div class="pf-item pf-5">
+        <div class="img"></div>
+        <div class="caption">Siempre<em>Ceiling install</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="kicker">A past bride</div>
+      <q>They nailed exactly what I'd been trying to describe for months — but couldn't until I saw it walking down the aisle.</q>
+      <div class="attr">Utah bride, 2025<em>[Placeholder copy]</em></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Ready when you are</div>
+      <h2>Let's design it<br><em>in your colors.</em></h2>
+      <p>Free 30-minute design call. Tell us the date, the venue, and what's been sitting in your Pinterest board for months.</p>
+      <a href="#" class="cta-btn">Book a Call</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Rosie Rue</div>
+        <p class="footer-tag">Utah wedding florals &amp; event design — 1,000+ weddings, every one of them unique.</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:3853093353">(385) 309-3353</a></p>
+        <p>Text-friendly</p>
+      </div>
+      <div>
+        <div class="col-label">Services</div>
+        <p><a href="#">Weddings</a></p>
+        <p><a href="#">Events</a></p>
+        <p><a href="#">Preservation</a></p>
+      </div>
+      <div>
+        <div class="col-label">Social</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Rosie Rue Floral Co.</span>
+      <span>Salt Lake City, Utah</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 03 — of 04</div>
+      <h2 class="dd-name">Zine<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Handmade collage energy — cut-paper, rotated photos, washi tape, mixed type, bold pinks. DIY magazine, maximalist-lite.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 03 — ZINE ==================================
+     ========================================================= -->
+<style>
+.zn {
+  --paper: #fef7e8;
+  --paper-dark: #f5ead0;
+  --pink: #ff5a6e;
+  --pink-deep: #d4374b;
+  --yellow: #f5b830;
+  --green: #2e4e3e;
+  --green-bright: #5a8868;
+  --ink: #1a1612;
+  --ink-soft: #3a3530;
+  --muted: #887d6e;
+
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.zn a { color: inherit; }
+
+/* grain overlay */
+.zn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0.25;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.1  0 0 0 0 0.05  0 0 0 0.1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+.zn .tape {
+  position: absolute;
+  width: 100px; height: 22px;
+  background: var(--yellow);
+  opacity: 0.8;
+  transform: rotate(-4deg);
+  box-shadow: 0 2px 0 rgba(0,0,0,0.1);
+}
+
+/* nav */
+.zn .site-nav {
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 3px solid var(--ink);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.zn .nav-logo {
+  font-family: 'Gloock', serif;
+  font-size: 34px;
+  color: var(--ink);
+  letter-spacing: -0.015em;
+  position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.zn .nav-logo em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  color: var(--pink);
+  transform: rotate(-4deg) translateY(2px);
+  display: inline-block;
+}
+.zn .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.zn .site-nav ul a {
+  position: relative;
+  padding: 4px 8px;
+  transition: all 0.25s;
+}
+.zn .site-nav ul a:hover {
+  background: var(--yellow);
+  transform: rotate(-1deg);
+}
+.zn .nav-cta {
+  padding: 12px 20px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  border: 3px solid var(--ink);
+  transition: all 0.25s;
+  transform: rotate(-2deg);
+}
+.zn .nav-cta:hover { background: var(--pink); transform: rotate(2deg) translateY(-2px); }
+
+/* hero */
+.zn .hero {
+  padding: 60px 40px 100px;
+  position: relative;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.zn .hero-top-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--pink);
+  color: var(--paper);
+  padding: 10px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 36px;
+  transform: rotate(-2deg);
+}
+.zn .hero-top-label::before { content: '★'; }
+.zn .hero h1 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(56px, 8vw, 148px);
+  line-height: 0.92;
+  color: var(--ink);
+  margin-bottom: 40px;
+  letter-spacing: -0.02em;
+  max-width: 1100px;
+}
+.zn .hero h1 .hl-pink {
+  background: var(--pink);
+  color: var(--paper);
+  padding: 0 14px;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+}
+.zn .hero h1 .hl-yellow {
+  background: var(--yellow);
+  padding: 0 10px;
+  display: inline-block;
+  transform: rotate(1deg);
+}
+.zn .hero h1 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--pink);
+  font-size: 1.05em;
+}
+.zn .hero-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: start;
+}
+.zn .hero-body .sub {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 500px;
+  font-weight: 400;
+}
+.zn .hero-body .sub strong {
+  background: var(--yellow);
+  padding: 0 4px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.zn .hero-body .btn-row { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+.zn .hero-btn {
+  padding: 18px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 3px solid var(--ink);
+  transition: all 0.25s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.zn .btn-primary { background: var(--ink); color: var(--paper); }
+.zn .btn-primary:hover { background: var(--pink); border-color: var(--pink); transform: rotate(-1deg); }
+.zn .btn-ghost { background: transparent; color: var(--ink); }
+.zn .btn-ghost:hover { background: var(--yellow); transform: rotate(1deg); }
+.zn .handwrite-note {
+  font-family: 'Caveat', cursive;
+  font-size: 20px;
+  color: var(--green);
+  transform: rotate(-3deg);
+  margin-left: 8px;
+}
+
+/* hero collage */
+.zn .hero-collage {
+  position: relative;
+  height: 480px;
+  margin-top: -40px;
+}
+.zn .hero-collage .piece {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 14px 30px -18px rgba(26,22,18,0.35);
+}
+.zn .hero-collage .piece-1 {
+  width: 58%; height: 70%;
+  top: 0; right: 10%;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/0a0c2b5e-2ef6-4ab4-adaa-71a30652cc46/Utah+Wedding+Florists+-+Colorful+Bouquet+at++White+Shanty+Venue+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+260.jpg?format=1500w');
+  transform: rotate(-4deg);
+  border: 6px solid var(--paper);
+}
+.zn .hero-collage .piece-2 {
+  width: 44%; height: 46%;
+  bottom: 0; right: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/27635f0a-32ca-4554-a527-2fb2e273c177/Utah+Wedding+Florists+-+Colorful+Bouquet%2C+Boutonniere+at+Backyard+Wedding+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+413.jpg?format=1500w');
+  transform: rotate(6deg);
+  z-index: 2;
+  border: 6px solid var(--paper);
+}
+.zn .hero-collage .piece-3 {
+  width: 38%; height: 44%;
+  bottom: 10%; left: 0;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/2e167cf8-cba2-46a6-8ee3-181392ccc8bf/Utah+Wedding+Florists+-+Colorful+Bouquet%2C+Boutonniere+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+235.jpg?format=1500w');
+  transform: rotate(-7deg);
+  border: 6px solid var(--paper);
+}
+.zn .hero-collage .tape-1 { top: -10px; left: 52%; }
+.zn .hero-collage .tape-2 { bottom: 40%; right: 8%; transform: rotate(8deg); }
+
+/* marquee-like repeater */
+.zn .mq-bar {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 24px 0;
+  overflow: hidden;
+  border-top: 4px solid var(--pink);
+  border-bottom: 4px solid var(--pink);
+}
+.zn .mq-track {
+  display: flex;
+  gap: 40px;
+  white-space: nowrap;
+  animation: zn-mq 30s linear infinite;
+  width: max-content;
+  font-family: 'Gloock', serif;
+  font-size: 34px;
+}
+.zn .mq-track span { display: flex; align-items: center; gap: 40px; }
+.zn .mq-track span em { font-family: 'Caveat', cursive; font-style: normal; color: var(--yellow); font-weight: 700; }
+.zn .mq-track span::after { content: '◆'; color: var(--pink); font-size: 18px; font-family: 'DM Sans', sans-serif; }
+@keyframes zn-mq { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* about */
+.zn .about {
+  padding: 120px 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+}
+.zn .about-img-wrap { position: relative; }
+.zn .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/22fc276a-6bb2-4592-b691-6eed4b9aff0b/rachel-moseley-photo-46.jpg?format=1500w');
+  background-size: cover;
+  background-position: center;
+  border: 8px solid var(--paper);
+  box-shadow: 0 20px 40px -20px rgba(26,22,18,0.4);
+  transform: rotate(-3deg);
+}
+.zn .about-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 14px 14px -14px -14px;
+  background: var(--pink);
+  z-index: -1;
+  transform: rotate(3deg);
+}
+.zn .about-img-wrap .tape-a { top: -12px; left: 45%; }
+.zn .about-text .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: var(--pink);
+  margin-bottom: 14px;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+.zn .about-text h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(42px, 5.4vw, 74px);
+  line-height: 1;
+  color: var(--ink);
+  margin-bottom: 26px;
+  letter-spacing: -0.015em;
+}
+.zn .about-text h2 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--pink);
+  font-size: 1.1em;
+}
+.zn .about-text p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 16px;
+}
+.zn .about-text p strong {
+  background: var(--yellow);
+  padding: 0 4px;
+  color: var(--ink);
+}
+.zn .about-text .sig {
+  font-family: 'Caveat', cursive;
+  font-size: 40px;
+  color: var(--pink);
+  margin-top: 22px;
+}
+
+/* services — zine cards */
+.zn .services {
+  padding: 120px 40px;
+  background: var(--paper-dark);
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+.zn .services-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 60px;
+}
+.zn .services-head .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: var(--pink);
+  margin-bottom: 8px;
+}
+.zn .services-head h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(42px, 5.4vw, 74px);
+  line-height: 1;
+  color: var(--ink);
+}
+.zn .services-head h2 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--green);
+}
+.zn .svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.zn .svc-card {
+  background: var(--paper);
+  padding: 34px 28px;
+  border: 3px solid var(--ink);
+  position: relative;
+  transition: transform 0.25s;
+}
+.zn .svc-card:nth-child(1) { transform: rotate(-1.5deg); }
+.zn .svc-card:nth-child(2) { transform: rotate(1deg) translateY(-12px); }
+.zn .svc-card:nth-child(3) { transform: rotate(-0.5deg); }
+.zn .svc-card:hover { transform: translateY(-6px) rotate(0deg); background: var(--yellow); }
+.zn .svc-card .sticker {
+  position: absolute;
+  top: -16px;
+  right: 20px;
+  background: var(--pink);
+  color: var(--paper);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  padding: 6px 10px;
+  transform: rotate(4deg);
+  border: 2px solid var(--ink);
+}
+.zn .svc-card h3 {
+  font-family: 'Gloock', serif;
+  font-size: 28px;
+  color: var(--ink);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.zn .svc-card p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.zn .svc-card a {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: var(--pink);
+  font-weight: 700;
+}
+
+/* portfolio — cut-paper collage grid */
+.zn .portfolio {
+  padding: 130px 40px 150px;
+  position: relative;
+}
+.zn .portfolio-head {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.zn .portfolio-head .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 28px;
+  color: var(--pink);
+  margin-bottom: 8px;
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+.zn .portfolio-head h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(42px, 5.4vw, 74px);
+  color: var(--ink);
+  line-height: 1;
+}
+.zn .portfolio-head h2 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--pink);
+}
+.zn .pf-grid {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 18px;
+}
+.zn .pf-item {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border: 6px solid var(--paper);
+  box-shadow: 0 14px 30px -16px rgba(26,22,18,0.35);
+  transition: transform 0.3s;
+}
+.zn .pf-item:hover { transform: translateY(-5px) rotate(0deg) !important; }
+.zn .pf-item .label {
+  position: absolute;
+  bottom: -14px;
+  left: 20px;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 6px 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.zn .pf-1 { grid-column: 1 / span 5; aspect-ratio: 4/5; transform: rotate(-2deg); background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/4a7c1cab-3845-459a-91cf-25e199973c4e/Utah+Wedding+Florists+-+Coral+%2B+Peach+Bouquet+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+313.jpg?format=1200w'); }
+.zn .pf-2 { grid-column: 6 / span 7; aspect-ratio: 16/11; transform: rotate(1deg); background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/0984a6ef-8807-4e8e-aab6-53a3870e7a60/Utah+Wedding+Florists+-+Pink+%2B+Blue+Centerpieces+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+87.jpg?format=1500w'); }
+.zn .pf-3 { grid-column: 1 / span 4; aspect-ratio: 1/1; transform: rotate(3deg); background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/345bace2-9f12-4b14-af0c-b3ba3201e6a9/Utah+Wedding+Florists+-+White+Bouquet+at+Wadley+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+147.jpg?format=1200w'); }
+.zn .pf-4 { grid-column: 5 / span 4; aspect-ratio: 1/1; transform: rotate(-3deg); background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/30017986-0191-4acf-bab8-3b6a926470a1/Utah+Wedding+Florists+-+Colorful+Bouquet+at+Quiet+Meadow+Farm+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+512.jpg?format=1200w'); }
+.zn .pf-5 { grid-column: 9 / span 4; aspect-ratio: 1/1; transform: rotate(2deg); background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/14cd66e4-93fc-4be2-90a1-e80000e00e57/Utah+Wedding+Florists+-+Colorful+Centerpieces+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+214.jpg?format=1200w'); }
+
+/* cta */
+.zn .cta {
+  padding: 130px 40px;
+  background: var(--pink);
+  color: var(--paper);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.zn .cta::before {
+  content: 'BOOK A CALL · BOOK A CALL · BOOK A CALL · BOOK A CALL ·';
+  position: absolute;
+  top: 30px;
+  left: 0;
+  white-space: nowrap;
+  font-family: 'Gloock', serif;
+  font-size: 120px;
+  color: var(--paper);
+  opacity: 0.1;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  pointer-events: none;
+}
+.zn .cta-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.zn .cta .kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 36px;
+  color: var(--yellow);
+  margin-bottom: 14px;
+  transform: rotate(-3deg);
+  display: inline-block;
+}
+.zn .cta h2 {
+  font-family: 'Gloock', serif;
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 0.95;
+  color: var(--paper);
+  margin-bottom: 28px;
+  letter-spacing: -0.02em;
+}
+.zn .cta h2 em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--yellow);
+  font-size: 1.1em;
+}
+.zn .cta p {
+  font-size: 19px;
+  line-height: 1.6;
+  max-width: 540px;
+  margin: 0 auto 38px;
+}
+.zn .cta-btn {
+  padding: 22px 40px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border: 3px solid var(--paper);
+  transition: all 0.3s;
+  display: inline-block;
+}
+.zn .cta-btn:hover { background: var(--yellow); color: var(--ink); border-color: var(--ink); transform: rotate(-2deg) translateY(-2px); }
+
+/* footer */
+.zn .site-footer {
+  padding: 60px 40px 30px;
+  background: var(--ink);
+  color: var(--paper);
+  border-top: 4px solid var(--yellow);
+}
+.zn .footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px dashed rgba(254, 247, 232, 0.2);
+}
+.zn .footer-mark {
+  font-family: 'Gloock', serif;
+  font-size: 34px;
+  color: var(--paper);
+  margin-bottom: 10px;
+}
+.zn .footer-mark em {
+  font-family: 'Caveat', cursive;
+  font-style: normal;
+  font-weight: 700;
+  color: var(--pink);
+}
+.zn .footer-tag {
+  font-family: 'Caveat', cursive;
+  font-size: 22px;
+  color: rgba(254, 247, 232, 0.85);
+  max-width: 320px;
+  line-height: 1.3;
+}
+.zn .footer-inner .col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--pink);
+  margin-bottom: 14px;
+  font-weight: 700;
+}
+.zn .footer-inner a,
+.zn .footer-inner p {
+  font-size: 15px;
+  line-height: 1.8;
+  color: rgba(254, 247, 232, 0.85);
+}
+.zn .footer-inner a:hover { color: var(--yellow); }
+.zn .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(254, 247, 232, 0.5);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .zn .site-nav { padding: 18px 20px; }
+  .zn .site-nav ul { flex-wrap: wrap; gap: 12px; font-size: 12px; }
+  .zn .hero { padding: 40px 20px 60px; }
+  .zn .hero-body { grid-template-columns: 1fr; gap: 30px; }
+  .zn .hero-collage { height: 340px; margin-top: 20px; }
+  .zn .mq-track { font-size: 24px; }
+  .zn .about { padding: 70px 20px; grid-template-columns: 1fr; gap: 50px; }
+  .zn .services { padding: 70px 20px; }
+  .zn .svc-grid { grid-template-columns: 1fr; gap: 18px; }
+  .zn .svc-card { transform: none !important; }
+  .zn .portfolio { padding: 70px 20px; }
+  .zn .pf-grid { grid-template-columns: 1fr; }
+  .zn .pf-item { grid-column: 1 / -1 !important; aspect-ratio: 4/5 !important; transform: rotate(0) !important; }
+  .zn .cta { padding: 80px 20px; }
+  .zn .cta::before { font-size: 60px; }
+  .zn .site-footer { padding: 50px 20px 28px; }
+  .zn .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<section id="zine" class="zn">
+  <nav class="site-nav">
+    <a href="#" class="nav-logo">Rosie<em>Rue</em></a>
+    <ul>
+      <li><a href="#">home</a></li>
+      <li><a href="#">portfolio</a></li>
+      <li><a href="#">team</a></li>
+      <li><a href="#">faq</a></li>
+    </ul>
+    <a href="#" class="nav-cta">★ Free Call</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-top-label">Volume 01 · Issue 01</div>
+    <h1>Flowers that <span class="hl-pink">aren't boring</span> for couples who <span class="hl-yellow">aren't either.</span></h1>
+    <div class="hero-body">
+      <div>
+        <p class="sub">We're a Utah wedding florist with <strong>1,000+ weddings</strong> under our belts, zero preset packages, and a serious love for <strong>color</strong>. If you show up with a Pinterest board full of peonies and Post-It notes, we're going to get along great.</p>
+        <div class="btn-row">
+          <a href="#" class="hero-btn btn-primary">Book a Free Call →</a>
+          <a href="#" class="hero-btn btn-ghost">See the Portfolio</a>
+          <span class="handwrite-note">← start here</span>
+        </div>
+      </div>
+      <div class="hero-collage">
+        <div class="piece piece-1"></div>
+        <div class="tape tape-1"></div>
+        <div class="piece piece-2"></div>
+        <div class="tape tape-2"></div>
+        <div class="piece piece-3"></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="mq-bar">
+    <div class="mq-track">
+      <span>trendy <em>yet</em> timeless</span>
+      <span>trendy <em>yet</em> timeless</span>
+      <span>trendy <em>yet</em> timeless</span>
+      <span>trendy <em>yet</em> timeless</span>
+    </div>
+  </div>
+
+  <section class="about">
+    <div class="about-img-wrap">
+      <div class="about-img"></div>
+      <div class="tape tape-a"></div>
+    </div>
+    <div class="about-text">
+      <div class="kicker">about us</div>
+      <h2>A team of florists, a <em>lot</em> of color.</h2>
+      <p>Rosie Rue is a small team of event designers in Utah who've been doing this long enough to have <strong>opinions</strong>. We know which trends are actually worth doing. We also know which ones will be embarrassing in photos six months later.</p>
+      <p>Every wedding starts with a free design call — no forms, no packages, no surprises. Just a conversation about what you actually want.</p>
+      <div class="sig">— the team</div>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="services-head">
+      <div class="kicker">the menu</div>
+      <h2>Here's what we <em>do.</em></h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="sticker">NEW!</div>
+        <h3>Full wedding florals</h3>
+        <p>Bouquets, boutonnieres, ceremony arches, reception tables, cake florals — the full story.</p>
+        <a href="#">tell me more →</a>
+      </div>
+      <div class="svc-card">
+        <div class="sticker">POPULAR</div>
+        <h3>Installations</h3>
+        <p>Freestanding, suspended, ceilingscapes. The statement pieces couples book us for first.</p>
+        <a href="#">show me →</a>
+      </div>
+      <div class="svc-card">
+        <div class="sticker">FAVE</div>
+        <h3>Event design</h3>
+        <p>Mood boards, palette, linens, layout. Design consulting that goes way past just flowers.</p>
+        <a href="#">how it works →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">the folio</div>
+      <h2>A year in <em>color.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item pf-1"><div class="label">Walker Farms</div></div>
+      <div class="pf-item pf-2"><div class="label">Pink + Blue</div></div>
+      <div class="pf-item pf-3"><div class="label">Wadley</div></div>
+      <div class="pf-item pf-4"><div class="label">Quiet Meadow</div></div>
+      <div class="pf-item pf-5"><div class="label">Centerpiece</div></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">hey there 👋</div>
+      <h2>Let's make it <em>weird &amp; wonderful.</em></h2>
+      <p>Free design call. Tell us about the day — we'll sketch a direction and talk color. No pressure, no packages.</p>
+      <a href="#" class="cta-btn">Book a Call</a>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Rosie<em>Rue</em></div>
+        <p class="footer-tag">Utah wedding florals — made with serious love &amp; a lot of color.</p>
+      </div>
+      <div>
+        <div class="col-label">Reach out</div>
+        <p><a href="tel:3853093353">(385) 309-3353</a></p>
+        <p>Text works too</p>
+      </div>
+      <div>
+        <div class="col-label">Explore</div>
+        <p><a href="#">Portfolio</a></p>
+        <p><a href="#">FAQ</a></p>
+      </div>
+      <div>
+        <div class="col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Rosie Rue</span>
+      <span>Vol 01 · Utah</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 04 — of 04</div>
+      <h2 class="dd-name">Kinetic<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Modernist &amp; typographic — giant Fraunces bleeding off the edges, grid-breaking, oversized numerals. Architectural, confident, no nonsense.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 04 — KINETIC ===============================
+     ========================================================= -->
+<style>
+.kn {
+  --white: #fafaf7;
+  --white-deep: #f0efe8;
+  --black: #1a1a1a;
+  --black-soft: #2a2a2a;
+  --coral: #e85a3a;
+  --coral-deep: #c03d1e;
+  --sage: #b3b8a3;
+  --sage-deep: #8a9079;
+  --muted: #7a7a74;
+  --rule: #d8d8d0;
+
+  background: var(--white);
+  color: var(--black);
+  font-family: 'Archivo', sans-serif;
+}
+.kn a { color: inherit; }
+
+/* nav — minimal monospace */
+.kn .site-nav {
+  padding: 22px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  border-bottom: 1px solid var(--black);
+  background: var(--white);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 500;
+}
+.kn .nav-meta { grid-column: 1; }
+.kn .nav-meta em { color: var(--coral); font-style: normal; }
+.kn .nav-logo {
+  grid-column: 2;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 500;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--black);
+}
+.kn .nav-logo em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 50, "wght" 400;
+  color: var(--coral);
+  padding: 0 4px;
+}
+.kn .site-nav ul {
+  grid-column: 3;
+  justify-self: end;
+  list-style: none;
+  display: flex;
+  gap: 28px;
+}
+.kn .site-nav ul a { transition: color 0.2s; }
+.kn .site-nav ul a:hover { color: var(--coral); }
+
+/* hero — experimental big type */
+.kn .hero {
+  padding: 60px 40px 0;
+  position: relative;
+  overflow: hidden;
+}
+.kn .hero .meta-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 500;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+.kn .hero .meta-row em { color: var(--coral); font-style: normal; }
+.kn .hero .word-1 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: clamp(60px, 14vw, 260px);
+  line-height: 0.82;
+  letter-spacing: -0.04em;
+  color: var(--black);
+  display: block;
+}
+.kn .hero .word-1 span { display: block; }
+.kn .hero .word-1 .r2 {
+  font-style: italic;
+  color: var(--coral);
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  padding-left: clamp(60px, 10vw, 180px);
+}
+.kn .hero .word-1 .r3 {
+  text-align: right;
+  padding-right: clamp(20px, 3vw, 40px);
+}
+.kn .hero .tail-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid var(--black);
+}
+.kn .hero .tail-row .sub {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 72, "SOFT" 80, "wght" 400;
+  font-style: italic;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--black-soft);
+  max-width: 520px;
+}
+.kn .hero .tail-row .sub em {
+  font-style: normal;
+  color: var(--coral);
+  font-variation-settings: "opsz" 72, "SOFT" 30, "wght" 600;
+}
+.kn .hero .tail-row .actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+}
+.kn .hero-btn {
+  padding: 20px 38px;
+  background: var(--black);
+  color: var(--white);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.kn .hero-btn:hover { background: var(--coral); }
+.kn .hero-meta-tail {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+/* hero img band */
+.kn .hero-band {
+  margin-top: 80px;
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  gap: 0;
+  height: 60vh;
+  min-height: 420px;
+}
+.kn .hero-band .panel {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.kn .hero-band .panel-1 { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/1cb7b88b-b90e-42dc-beb9-918671f6e68e/Utah+Wedding+Florists+-+Colorful+Bouquet+at+Southworth+Hall+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+473.jpg?format=1200w'); }
+.kn .hero-band .panel-2 { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/373320be-52dd-425b-a5dc-409aeefa5f26/Utah+Wedding+Florists+-+Colorful+Centerpieces+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+129.jpg?format=2000w'); }
+.kn .hero-band .panel-3 { background-image: url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/29d06d3a-4318-40d9-b6bb-e4453a2af647/Utah+Wedding+Florists+-+Coral+%2B+Peach+Arches+at+Grove+Station+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+337.jpg?format=1200w'); }
+.kn .hero-band .panel-1::after,
+.kn .hero-band .panel-3::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: rgba(26,26,26,0.7);
+  padding: 6px 10px;
+}
+
+/* metrics strip */
+.kn .metrics {
+  padding: 30px 40px;
+  background: var(--black);
+  color: var(--white);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  border-bottom: 4px solid var(--coral);
+}
+.kn .metrics .cell .lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.kn .metrics .cell .val {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: 38px;
+  color: var(--white);
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+.kn .metrics .cell .val em {
+  font-style: italic;
+  color: var(--coral);
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+}
+
+/* about — asymmetric grid-break */
+.kn .about {
+  padding: 140px 40px;
+  position: relative;
+}
+.kn .about-inner {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 4fr 6fr 2fr;
+  gap: 50px;
+  align-items: start;
+}
+.kn .about-inner .col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 600;
+  padding-top: 16px;
+  border-top: 1px solid var(--black);
+}
+.kn .about-inner .col-label em { color: var(--coral); font-style: normal; font-weight: 700; }
+.kn .about-heading h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 400;
+  font-size: clamp(40px, 5.2vw, 84px);
+  line-height: 0.95;
+  color: var(--black);
+  letter-spacing: -0.02em;
+  margin-top: 28px;
+}
+.kn .about-heading h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--coral);
+}
+.kn .about-body {
+  padding-top: 28px;
+}
+.kn .about-body p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--black-soft);
+  margin-bottom: 18px;
+  font-weight: 400;
+}
+.kn .about-body p strong {
+  font-weight: 700;
+  color: var(--coral);
+}
+.kn .about-sidebar {
+  padding-top: 28px;
+}
+.kn .about-sidebar .stat {
+  margin-bottom: 30px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.kn .about-sidebar .stat:last-child { border: none; }
+.kn .about-sidebar .num {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: 56px;
+  line-height: 1;
+  color: var(--black);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+.kn .about-sidebar .num em {
+  font-style: italic;
+  color: var(--coral);
+}
+.kn .about-sidebar .lbl {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* portfolio — edge-bleed alternating */
+.kn .portfolio {
+  padding: 100px 0;
+  background: var(--white-deep);
+  border-top: 1px solid var(--black);
+  border-bottom: 1px solid var(--black);
+}
+.kn .portfolio-head {
+  padding: 0 40px 80px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: flex-end;
+  gap: 40px;
+  max-width: 1500px;
+  margin: 0 auto;
+}
+.kn .portfolio-head h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 0.92;
+  color: var(--black);
+  letter-spacing: -0.025em;
+}
+.kn .portfolio-head h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--coral);
+}
+.kn .portfolio-head .counter {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  font-size: 64px;
+  color: var(--coral);
+  line-height: 1;
+}
+.kn .portfolio-head .counter small {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--black);
+  margin-top: 8px;
+  font-weight: 600;
+}
+.kn .pf-entry {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  padding: 50px 40px;
+  max-width: 1500px;
+  margin: 0 auto;
+  border-top: 1px solid var(--rule);
+  align-items: center;
+}
+.kn .pf-entry:last-child { border-bottom: 1px solid var(--rule); }
+.kn .pf-entry.reverse .pf-img { order: 2; }
+.kn .pf-img {
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+}
+.kn .pf-entry-body .num {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: 120px;
+  line-height: 0.9;
+  color: var(--coral);
+  letter-spacing: -0.03em;
+  font-style: italic;
+}
+.kn .pf-entry-body h3 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 400;
+  font-size: clamp(28px, 3.4vw, 52px);
+  line-height: 1;
+  color: var(--black);
+  margin-top: 10px;
+  letter-spacing: -0.015em;
+}
+.kn .pf-entry-body h3 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--coral);
+}
+.kn .pf-entry-body p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--black-soft);
+  margin-top: 18px;
+  max-width: 480px;
+}
+.kn .pf-entry-body .details {
+  margin-top: 22px;
+  display: flex;
+  gap: 30px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.kn .pf-entry-body .details strong { color: var(--black); font-weight: 700; }
+
+/* testimonial */
+.kn .testimonial {
+  padding: 160px 40px;
+  text-align: left;
+  background: var(--white);
+  position: relative;
+}
+.kn .testimonial-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.kn .testimonial-inner .col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 600;
+  padding-top: 16px;
+  border-top: 1px solid var(--black);
+}
+.kn .testimonial-inner .col-label em { color: var(--coral); font-style: normal; font-weight: 700; }
+.kn .testimonial-inner q {
+  display: block;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: clamp(36px, 4.8vw, 84px);
+  line-height: 1;
+  color: var(--black);
+  letter-spacing: -0.02em;
+  margin-bottom: 32px;
+  quotes: none;
+}
+.kn .testimonial-inner q::before,
+.kn .testimonial-inner q::after { content: ''; }
+.kn .testimonial-inner q em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--coral);
+}
+.kn .testimonial-inner .attr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--black);
+  font-weight: 600;
+  padding-top: 16px;
+  border-top: 1px solid var(--black);
+}
+
+/* cta */
+.kn .cta {
+  padding: 140px 40px 160px;
+  background: var(--black);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+.kn .cta .big-word {
+  position: absolute;
+  top: -20px;
+  left: -30px;
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: clamp(200px, 28vw, 460px);
+  line-height: 0.85;
+  color: var(--coral);
+  opacity: 0.18;
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  font-style: italic;
+}
+.kn .cta-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 60px;
+  align-items: end;
+}
+.kn .cta h2 {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 400;
+  font-size: clamp(48px, 6.4vw, 116px);
+  line-height: 0.92;
+  color: var(--white);
+  letter-spacing: -0.025em;
+}
+.kn .cta h2 em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 300;
+  color: var(--coral);
+}
+.kn .cta-right p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: rgba(250, 250, 247, 0.78);
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.kn .cta-btn {
+  padding: 20px 38px;
+  background: var(--coral);
+  color: var(--black);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.kn .cta-btn:hover { background: var(--white); }
+
+/* footer */
+.kn .site-footer {
+  padding: 50px 40px 28px;
+  background: var(--black);
+  color: var(--white);
+  border-top: 1px solid rgba(250, 250, 247, 0.1);
+  font-family: 'JetBrains Mono', monospace;
+}
+.kn .footer-inner {
+  max-width: 1500px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(250, 250, 247, 0.12);
+}
+.kn .footer-mark {
+  font-family: 'Fraunces', serif;
+  font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 500;
+  font-size: 32px;
+  color: var(--white);
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+.kn .footer-mark em {
+  font-style: italic;
+  font-variation-settings: "opsz" 144, "SOFT" 100, "wght" 400;
+  color: var(--coral);
+}
+.kn .footer-tag {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-variation-settings: "opsz" 72, "SOFT" 80, "wght" 400;
+  font-size: 16px;
+  color: rgba(250, 250, 247, 0.65);
+  max-width: 300px;
+  line-height: 1.45;
+}
+.kn .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--coral);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.kn .footer-inner a,
+.kn .footer-inner p {
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(250, 250, 247, 0.75);
+  letter-spacing: 0.04em;
+}
+.kn .footer-inner a:hover { color: var(--coral); }
+.kn .footer-bottom {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(250, 250, 247, 0.4);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .kn .site-nav { grid-template-columns: 1fr; padding: 18px 20px; gap: 10px; text-align: center; }
+  .kn .nav-meta, .kn .nav-logo, .kn .site-nav ul { grid-column: 1; justify-self: center; }
+  .kn .hero { padding: 40px 20px 0; }
+  .kn .hero .word-1 .r2, .kn .hero .word-1 .r3 { padding: 0; text-align: left; }
+  .kn .hero .tail-row { grid-template-columns: 1fr; gap: 24px; }
+  .kn .hero .tail-row .actions { align-items: flex-start; }
+  .kn .hero-band { grid-template-columns: 1fr; height: auto; }
+  .kn .hero-band .panel { aspect-ratio: 4/3; }
+  .kn .metrics { grid-template-columns: 1fr 1fr; gap: 22px; padding: 22px 20px; }
+  .kn .about { padding: 70px 20px; }
+  .kn .about-inner { grid-template-columns: 1fr; gap: 30px; }
+  .kn .portfolio { padding: 60px 0; }
+  .kn .portfolio-head { grid-template-columns: 1fr; padding: 0 20px 40px; }
+  .kn .pf-entry { grid-template-columns: 1fr; padding: 40px 20px; gap: 24px; }
+  .kn .pf-entry.reverse .pf-img { order: 0; }
+  .kn .pf-entry-body .num { font-size: 72px; }
+  .kn .testimonial { padding: 80px 20px; }
+  .kn .testimonial-inner { grid-template-columns: 1fr; gap: 20px; }
+  .kn .cta { padding: 80px 20px; }
+  .kn .cta-inner { grid-template-columns: 1fr; gap: 30px; }
+  .kn .cta .big-word { font-size: 180px; }
+  .kn .site-footer { padding: 40px 20px 24px; }
+  .kn .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<section id="kinetic" class="kn">
+  <nav class="site-nav">
+    <div class="nav-meta">Rosie Rue — <em>Est.</em> 2018</div>
+    <a href="#" class="nav-logo">Rosie <em>Rue</em></a>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Portfolio</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Inquire</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="meta-row">
+      <span>Utah Wedding Florals — <em>A Floral Studio</em></span>
+      <span>No. 01 — of 01</span>
+      <span><em>2026</em> Bookings Open</span>
+    </div>
+    <div class="word-1">
+      <span class="r1">Trendy</span>
+      <span class="r2">yet timeless</span>
+      <span class="r3">florals.</span>
+    </div>
+    <div class="tail-row">
+      <p class="sub">A Utah studio building weddings around the couple instead of the catalog. <em>One thousand</em> weddings since 2018. Booking through 2026.</p>
+      <div class="actions">
+        <a href="#" class="hero-btn">Book a Free Call →</a>
+        <div class="hero-meta-tail">Reply within 24 hrs</div>
+      </div>
+    </div>
+    <div class="hero-band">
+      <div class="panel panel-1" data-label="Southworth Hall · Bridal"></div>
+      <div class="panel panel-2"></div>
+      <div class="panel panel-3" data-label="Grove Station · Arches"></div>
+    </div>
+  </section>
+
+  <div class="metrics">
+    <div class="cell"><div class="lbl">Weddings</div><div class="val"><em>1,000+</em></div></div>
+    <div class="cell"><div class="lbl">Venues</div><div class="val">40+</div></div>
+    <div class="cell"><div class="lbl">Avg. Booking Window</div><div class="val"><em>9</em> months</div></div>
+    <div class="cell"><div class="lbl">Reply Time</div><div class="val">&lt;24 <em>hrs</em></div></div>
+  </div>
+
+  <section class="about">
+    <div class="about-inner">
+      <div class="col-label"><em>§ 01</em> — The Studio</div>
+      <div class="about-heading">
+        <h2>Florals that <em>don't look</em> like anyone else's.</h2>
+      </div>
+      <div class="col-label"><em>Key</em> Metrics</div>
+      <div class="about-body">
+        <p>Rosie Rue is a team of designers and florists who have spent years in the wedding industry learning exactly how florals play with a room. We know which flowers last through a ten-hour day, which colors read at dusk, which arrangements photograph well.</p>
+        <p>Every project starts with a <strong>free design call</strong>. No forms, no presets, no surprises — just a conversation about the day you're planning and the florals that should be in it.</p>
+        <p>Utah-based, available statewide and beyond.</p>
+      </div>
+      <div class="about-sidebar">
+        <div class="stat">
+          <div class="num"><em>1,000</em>+</div>
+          <div class="lbl">weddings since '18</div>
+        </div>
+        <div class="stat">
+          <div class="num">40+</div>
+          <div class="lbl">venues across Utah</div>
+        </div>
+        <div class="stat">
+          <div class="num"><em>7</em> yr</div>
+          <div class="lbl">team tenure avg</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <h2>Selected<br><em>Weddings.</em></h2>
+      <div class="counter">04 <small>of 40+</small></div>
+    </div>
+
+    <article class="pf-entry">
+      <div class="pf-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/26d64724-610d-48c7-b643-6373459ffbb3/Utah+Wedding+Florists+-+Oranges+Arches+at+Louland+Falls+-+Flowers+by+Rosie+Rue+Floral+Co..jpg?format=1500w');"></div>
+      <div class="pf-entry-body">
+        <div class="num">01.</div>
+        <h3>Louland Falls — <em>Oranges Arch</em></h3>
+        <p>A freestanding ceremony arch in oranges, tangerines, and clipped leaf. Designed to read against the stone architecture of the Louland Falls gardens.</p>
+        <div class="details">
+          <span><strong>Venue</strong> Louland Falls</span>
+          <span><strong>Season</strong> Summer '25</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="pf-entry reverse">
+      <div class="pf-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/0984a6ef-8807-4e8e-aab6-53a3870e7a60/Utah+Wedding+Florists+-+Pink+%2B+Blue+Centerpieces+at+Walker+Farms+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+87.jpg?format=1500w');"></div>
+      <div class="pf-entry-body">
+        <div class="num">02.</div>
+        <h3>Walker Farms — <em>Pink &amp; Blue</em></h3>
+        <p>Reception centerpieces in pinks and muted blues. Low-profile designs for long-table seating, allowing clear sightlines across the room.</p>
+        <div class="details">
+          <span><strong>Venue</strong> Walker Farms</span>
+          <span><strong>Season</strong> Spring '25</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="pf-entry">
+      <div class="pf-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/051291bc-5dfe-49ef-8a76-208e7b9a42d5/Utah+Wedding+Florists+-+Oranges+Bouquet+at+Temple+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+44.jpg?format=1500w');"></div>
+      <div class="pf-entry-body">
+        <div class="num">03.</div>
+        <h3>The Temple — <em>Orange Bouquet</em></h3>
+        <p>A bridal bouquet in tangerine and butter tones with trailing greenery. Designed as wearable art — the photograph-first piece of the day.</p>
+        <div class="details">
+          <span><strong>Venue</strong> The Temple</span>
+          <span><strong>Season</strong> Fall '25</span>
+        </div>
+      </div>
+    </article>
+
+    <article class="pf-entry reverse">
+      <div class="pf-img" style="background-image:url('https://images.squarespace-cdn.com/content/v1/66cfaf071b440c61801d58f0/36d054eb-3268-4561-8588-a8456477e9de/Utah+Wedding+Florists+-+White+Centerpieces%2C+Ceiling+at+Siempre+-+Flowers+by+Rosie+Rue+Floral+Co.+-+Portfolio+120.jpg?format=1500w');"></div>
+      <div class="pf-entry-body">
+        <div class="num">04.</div>
+        <h3>Siempre — <em>Ceiling Install</em></h3>
+        <p>A suspended floral ceiling in white and soft cream, running the full length of the Siempre reception space. Largest install of the year.</p>
+        <div class="details">
+          <span><strong>Venue</strong> Siempre</span>
+          <span><strong>Season</strong> Fall '25</span>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="col-label"><em>§ 02</em> — Feedback</div>
+      <div>
+        <q>They didn't just <em>match</em> our color palette — they <em>designed</em> one we didn't know we wanted.</q>
+        <div class="attr">— Utah bride · 2025 · [Placeholder copy]</div>
+      </div>
+      <div class="col-label"><em>Rating</em> 5/5</div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="big-word">Bloom</div>
+    <div class="cta-inner">
+      <h2>Design the<br>day in<br><em>your colors.</em></h2>
+      <div class="cta-right">
+        <p>Free design call — tell us the date, venue, and vision. We'll send a direction and estimate within two business days. No forms, no bots, no packages.</p>
+        <a href="#" class="cta-btn">Book a Call →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Rosie <em>Rue</em></div>
+        <p class="footer-tag">A Utah floral studio — one thousand weddings and still counting, still obsessed.</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:3853093353">(385) 309-3353</a></p>
+        <p>Text · Call</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Utah · Statewide</p>
+      </div>
+      <div>
+        <div class="col-label">Social</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Rosie Rue Floral Co.</span>
+      <span>No. 01 · Utah · MMXXVI</span>
+    </div>
+  </footer>
+</section>
+
+</body>
+</html>
