@@ -1,0 +1,3170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lemon Drop Event Rentals — Four Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Manrope:wght@300..800&family=DM+Sans:opsz,wght@9..40,300..700&family=Archivo:wght@400..900&family=JetBrains+Mono:wght@300..700&family=Caprasimo&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Epilogue:wght@300..800&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Manrope', system-ui, sans-serif; color: #1a1a1a; background: #ffffff; line-height: 1.5; overflow-x: hidden; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; cursor: pointer; border: none; background: none; }
+
+  /* ============ PROPOSAL NAV ============ */
+  .proposal-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #1a1a1a;
+    color: #fdf8ec;
+    padding: 14px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .proposal-nav .brand { font-weight: 600; }
+  .proposal-nav .nav-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .proposal-nav .nav-links a { opacity: 0.6; transition: opacity 0.2s; }
+  .proposal-nav .nav-links a:hover { opacity: 1; }
+  .proposal-nav .nav-links a span.num { color: #ffd23f; margin-right: 4px; }
+
+  /* ============ INTRO ============ */
+  .intro {
+    min-height: 50vh;
+    background: #fdf8ec;
+    display: flex; align-items: center; justify-content: center;
+    padding: 80px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .intro::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      radial-gradient(circle at 15% 30%, rgba(255, 210, 63, 0.16) 0%, transparent 40%),
+      radial-gradient(circle at 85% 70%, rgba(46, 74, 46, 0.08) 0%, transparent 40%);
+    pointer-events: none;
+  }
+  .intro::after {
+    content: '🍋';
+    position: absolute;
+    top: 30px;
+    right: 40px;
+    font-size: 60px;
+    opacity: 0.4;
+    transform: rotate(-18deg);
+    pointer-events: none;
+  }
+  .intro-inner { max-width: 1100px; position: relative; z-index: 1; width: 100%; }
+  .intro .eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: #7a6a28; margin-bottom: 24px;
+  }
+  .intro h1 {
+    font-family: 'Caprasimo', serif;
+    font-size: clamp(40px, 6vw, 80px);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+  }
+  .intro h1 em { font-style: italic; font-weight: 400; color: #d4a015; }
+  .intro p.lead {
+    font-family: 'EB Garamond', serif;
+    font-size: 22px; line-height: 1.55;
+    color: #2a2a2a;
+    font-weight: 400;
+    max-width: 820px;
+    margin-bottom: 40px;
+  }
+  .intro p.lead::first-letter { color: #d4a015; font-style: italic; }
+
+  .intro .placeholder-note {
+    max-width: 820px;
+    margin: 0 0 48px;
+    padding: 18px 22px;
+    background: rgba(212, 160, 21, 0.1);
+    border-left: 2px solid #d4a015;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.65;
+    color: #6a5a28;
+    letter-spacing: 0.01em;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro .placeholder-note .note-label {
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #a47808;
+    flex-shrink: 0;
+    padding-top: 1px;
+  }
+  .intro .placeholder-note .note-body { color: #3a2e1a; }
+
+  .option-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 40px;
+  }
+  @media (max-width: 1100px) {
+    .option-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+  .option-card {
+    background: #fff;
+    border: 1px solid #e8dcb2;
+    padding: 30px 26px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  }
+  .option-card:hover { transform: translateY(-4px); box-shadow: 0 18px 42px -24px rgba(40,32,8,0.22); border-color: #d4b868; }
+  .option-card .card-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #7a6a28;
+  }
+  .option-card h3 {
+    font-family: 'Caprasimo', serif;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #1a1a1a;
+  }
+  .option-card .swatch-row {
+    display: flex;
+    gap: 0;
+    height: 28px;
+    margin: 6px 0 4px;
+  }
+  .option-card .swatch { flex: 1; }
+  .option-card p {
+    font-family: 'EB Garamond', serif;
+    font-size: 16px;
+    line-height: 1.55;
+    color: #3a3a3a;
+  }
+  .option-card .view-link {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a47808;
+    margin-top: auto;
+    padding-top: 12px;
+  }
+
+  @media (max-width: 900px) {
+    .proposal-nav { flex-direction: column; gap: 10px; padding: 14px 20px; }
+    .proposal-nav .nav-links { gap: 14px; font-size: 10.5px; }
+    .intro { padding: 60px 20px; }
+    .option-cards { grid-template-columns: 1fr; }
+  }
+
+  /* ============ DIRECTION DIVIDER ============ */
+  .direction-divider {
+    background: #1a1a1a;
+    color: #fdf8ec;
+    padding: 70px 40px;
+    font-family: 'JetBrains Mono', monospace;
+    position: relative;
+    border-top: 1px solid #ffd23f;
+    border-bottom: 4px solid #ffd23f;
+  }
+  .direction-divider::before {
+    content: '';
+    position: absolute;
+    top: 14px;
+    left: 40px;
+    right: 40px;
+    height: 1px;
+    background: rgba(255, 210, 63, 0.3);
+  }
+  .dd-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 60px;
+    align-items: end;
+  }
+  .dd-progress {
+    font-size: 11px;
+    letter-spacing: 0.42em;
+    color: #ffd23f;
+    font-weight: 600;
+    margin-bottom: 18px;
+    text-transform: uppercase;
+  }
+  .dd-name {
+    font-family: 'Caprasimo', serif;
+    font-weight: 400;
+    font-size: clamp(44px, 7vw, 92px);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    color: #fdf8ec;
+  }
+  .dd-name em {
+    font-style: italic;
+    color: #ffd23f;
+  }
+  .dd-sub {
+    font-family: 'EB Garamond', serif;
+    font-style: italic;
+    font-size: clamp(15px, 1.6vw, 19px);
+    color: rgba(253, 248, 236, 0.72);
+    max-width: 380px;
+    text-align: right;
+    line-height: 1.45;
+    padding-bottom: 12px;
+  }
+  @media (max-width: 900px) {
+    .direction-divider { padding: 44px 20px; border-bottom-width: 3px; }
+    .direction-divider::before { left: 20px; right: 20px; }
+    .dd-inner { grid-template-columns: 1fr; gap: 20px; align-items: start; }
+    .dd-sub { text-align: left; max-width: none; padding-bottom: 0; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="proposal-nav">
+  <div class="brand">LEMON DROP // DESIGN PROPOSALS</div>
+  <div class="nav-links">
+    <a href="#intro"><span class="num">00</span>INTRO</a>
+    <a href="#familiar"><span class="num">01</span>FAMILIAR</a>
+    <a href="#citrus"><span class="num">02</span>CITRUS</a>
+    <a href="#catalog"><span class="num">03</span>CATALOG</a>
+    <a href="#editorial"><span class="num">04</span>EDITORIAL</a>
+  </div>
+</nav>
+
+<section id="intro" class="intro">
+  <div class="intro-inner">
+    <p class="eyebrow">Four directions — one brand</p>
+    <h1>Lemon Drop, <em>four ways.</em></h1>
+    <p class="lead">Four different feels for the same site. Same sections, same inventory, same story — but each one carries a different mood. Scroll through all four, then tell me which one feels most like <em>you</em>. Mix-and-match also encouraged.</p>
+    <div class="placeholder-note">
+      <span class="note-label">Heads up</span>
+      <span class="note-body">Your current site is on Wix, which lazy-loads all photos in the browser — so I could only scrape a handful of your actual images. The rest are stock placeholders from Unsplash for event rentals, weddings, and décor. Testimonials, contact info, and inventory categories are all real. Focus on feel, color, and pacing — we'll swap in your full photo library once you've picked a direction.</span>
+    </div>
+    <div class="option-cards">
+      <a href="#familiar" class="option-card">
+        <div class="card-num">01 — Familiar</div>
+        <h3>Close to current</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#ffffff;border:1px solid #e6e3dc"></div>
+          <div class="swatch" style="background:#f4ecd8"></div>
+          <div class="swatch" style="background:#c4a15a"></div>
+          <div class="swatch" style="background:#2a2824"></div>
+        </div>
+        <p>Cream, warm tan, charcoal. Neutral, clean, elegant — no overt lemon branding. Just the current feel rebuilt off Wix.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#citrus" class="option-card">
+        <div class="card-num">02 — Citrus</div>
+        <h3>Own the name</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fdf8ec"></div>
+          <div class="swatch" style="background:#ffd23f"></div>
+          <div class="swatch" style="background:#2e4a2e"></div>
+          <div class="swatch" style="background:#1a1a1a"></div>
+        </div>
+        <p>Lemon yellow, cream, citrus-leaf green. Caprasimo display, round shapes, big personality. Really commits to the Lemon Drop brand.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#catalog" class="option-card">
+        <div class="card-num">03 — Catalog</div>
+        <h3>Inventory-first</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#fafafa"></div>
+          <div class="swatch" style="background:#e8e4da"></div>
+          <div class="swatch" style="background:#d4a015"></div>
+          <div class="swatch" style="background:#1a1a1a"></div>
+        </div>
+        <p>White, stone, ink. Grid-heavy, shoppable, organized by category. For browsing your 16 rental categories like a design catalog.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+      <a href="#editorial" class="option-card">
+        <div class="card-num">04 — Editorial</div>
+        <h3>Magazine &amp; refined</h3>
+        <div class="swatch-row">
+          <div class="swatch" style="background:#faf7f0"></div>
+          <div class="swatch" style="background:#d4b88a"></div>
+          <div class="swatch" style="background:#8a6a48"></div>
+          <div class="swatch" style="background:#1a1816"></div>
+        </div>
+        <p>Cream, warm gold, ink. Big Bodoni display, editorial grid, drop caps. Reads as a high-end event publication, not a rental shop.</p>
+        <span class="view-link">View direction →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 01 — of 04</div>
+      <h2 class="dd-name">Familiar<em>.</em></h2>
+    </div>
+    <p class="dd-sub">As close as possible to your current site — neutral, clean, sans-serif, restrained. For if you like the understated feel but want off Wix.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 01 — FAMILIAR ==============================
+     ========================================================= -->
+<style>
+.fam {
+  --white: #ffffff;
+  --cream: #faf6ed;
+  --stone: #f4ecd8;
+  --stone-deep: #e8ddc0;
+  --tan: #c4a15a;
+  --tan-deep: #9a7c3e;
+  --ink: #2a2824;
+  --ink-soft: #4a473f;
+  --muted: #8a8478;
+  --rule: #e6dec4;
+
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.005em;
+}
+.fam a { color: inherit; }
+
+.fam .site-nav {
+  padding: 28px 56px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+}
+.fam .site-nav .left-links,
+.fam .site-nav .right-links {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+  font-size: 12px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 400;
+}
+.fam .site-nav .left-links { grid-column: 1; }
+.fam .site-nav .right-links { grid-column: 3; justify-self: end; }
+.fam .site-nav .wordmark {
+  grid-column: 2;
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-align: center;
+}
+.fam .site-nav .wordmark em {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--tan-deep);
+  padding: 0 2px;
+}
+.fam .site-nav a { transition: color 0.25s; padding: 4px 0; }
+.fam .site-nav a:hover { color: var(--tan-deep); }
+
+.fam .hero {
+  padding: 100px 40px 80px;
+  text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.fam .hero .tagline {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+.fam .hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(42px, 6vw, 90px);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .hero h1 em { font-style: italic; color: var(--tan-deep); font-weight: 400; }
+.fam .hero .sub {
+  font-size: 18px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 auto 50px;
+  font-weight: 300;
+}
+.fam .hero-cta {
+  display: inline-block;
+  padding: 18px 42px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.fam .hero-cta:hover { background: var(--tan-deep); transform: translateY(-2px); }
+.fam .hero-img {
+  aspect-ratio: 21/9;
+  background-image: url('https://static.wixstatic.com/media/0ed686_d38eb249367747e78685f3454c453e0c~mv2.jpg/v1/fill/w_2000,h_858,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/IMG_6421.jpg');
+  background-size: cover;
+  background-position: center;
+  max-width: 1400px;
+  margin: 60px auto 0;
+}
+
+/* services (3 column) */
+.fam .services {
+  padding: 120px 40px;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+.fam .services-head {
+  text-align: center;
+  margin-bottom: 70px;
+}
+.fam .services-head .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.fam .services-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.05;
+  color: var(--ink);
+}
+.fam .services-head h2 em { font-style: italic; color: var(--tan-deep); }
+.fam .svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.fam .svc-card {
+  text-align: center;
+}
+.fam .svc-card .img {
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 26px;
+}
+.fam .svc-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: 28px;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+.fam .svc-card p {
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+  max-width: 360px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .svc-card a {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 4px;
+  font-weight: 500;
+  transition: all 0.25s;
+}
+.fam .svc-card a:hover { color: var(--tan-deep); border-color: var(--tan-deep); }
+
+/* about */
+.fam .about {
+  padding: 120px 40px;
+  background: var(--cream);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.fam .about-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.fam .about .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.fam .about h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4.2vw, 52px);
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 26px;
+}
+.fam .about h2 em { font-style: italic; color: var(--tan-deep); }
+.fam .about p {
+  font-size: 17px;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.fam .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/0ed686_3988bd08143c4932af3e00ce8967e49e~mv2.jpg/v1/fill/w_1200,h_1500,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+/* categories strip (inventory preview) */
+.fam .categories {
+  padding: 120px 40px;
+  text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.fam .categories-head { margin-bottom: 60px; }
+.fam .categories-head .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.fam .categories-head h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4.2vw, 52px);
+  color: var(--ink);
+}
+.fam .categories-head h2 em { font-style: italic; color: var(--tan-deep); }
+.fam .cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.fam .cat {
+  aspect-ratio: 1/1;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+}
+.fam .cat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(42, 40, 36, 0.55) 100%);
+  transition: opacity 0.3s;
+}
+.fam .cat:hover::after { background: linear-gradient(180deg, transparent 30%, rgba(42, 40, 36, 0.7) 100%); }
+.fam .cat-label {
+  position: absolute;
+  bottom: 16px;
+  left: 20px;
+  color: var(--white);
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 19px;
+  z-index: 1;
+}
+
+/* testimonials */
+.fam .testimonials {
+  padding: 120px 40px;
+  background: var(--cream);
+  text-align: center;
+}
+.fam .testimonials .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.fam .testimonials h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4.2vw, 52px);
+  color: var(--ink);
+  margin-bottom: 60px;
+}
+.fam .testimonials h2 em { font-style: italic; color: var(--tan-deep); }
+.fam .quote-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: left;
+}
+.fam .quote-card {
+  background: var(--white);
+  padding: 36px 30px;
+  border: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+}
+.fam .quote-card .stars {
+  color: var(--tan);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+.fam .quote-card q {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 22px;
+  quotes: none;
+  flex: 1;
+  font-weight: 400;
+}
+.fam .quote-card q::before, .fam .quote-card q::after { content: ''; }
+.fam .quote-card .attr {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  font-weight: 500;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+
+/* cta */
+.fam .cta {
+  padding: 130px 40px;
+  text-align: center;
+}
+.fam .cta .kicker {
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--tan-deep);
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+.fam .cta h2 {
+  font-family: 'Playfair Display', serif;
+  font-weight: 400;
+  font-size: clamp(36px, 4.8vw, 68px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 26px;
+  max-width: 820px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.fam .cta h2 em { font-style: italic; color: var(--tan-deep); }
+.fam .cta p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 auto 40px;
+}
+.fam .cta-btn {
+  display: inline-block;
+  padding: 20px 46px;
+  background: var(--ink);
+  color: var(--white);
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+.fam .cta-btn:hover { background: var(--tan-deep); transform: translateY(-2px); }
+
+/* footer */
+.fam .site-footer {
+  padding: 70px 40px 34px;
+  background: var(--ink);
+  color: var(--cream);
+}
+.fam .footer-inner {
+  max-width: 1300px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(250, 246, 237, 0.1);
+}
+.fam .footer-mark {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  font-weight: 400;
+  margin-bottom: 12px;
+}
+.fam .footer-mark em { font-style: italic; color: var(--tan); }
+.fam .footer-tag {
+  font-size: 15px;
+  line-height: 1.55;
+  color: rgba(250, 246, 237, 0.75);
+  max-width: 320px;
+}
+.fam .footer-col-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--tan);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.fam .footer-inner a,
+.fam .footer-inner p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(250, 246, 237, 0.8);
+  font-weight: 300;
+}
+.fam .footer-inner a:hover { color: var(--cream); }
+.fam .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(250, 246, 237, 0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .fam .site-nav { grid-template-columns: 1fr; gap: 12px; padding: 20px; text-align: center; }
+  .fam .site-nav .left-links, .fam .site-nav .right-links, .fam .site-nav .wordmark { grid-column: 1; justify-self: center; }
+  .fam .site-nav ul { gap: 14px; font-size: 10px; }
+  .fam .hero { padding: 60px 20px; }
+  .fam .services { padding: 70px 20px; }
+  .fam .svc-grid { grid-template-columns: 1fr; gap: 40px; }
+  .fam .about { padding: 70px 20px; }
+  .fam .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .fam .categories { padding: 70px 20px; }
+  .fam .cat-grid { grid-template-columns: 1fr 1fr; }
+  .fam .testimonials { padding: 80px 20px; }
+  .fam .quote-grid { grid-template-columns: 1fr; }
+  .fam .cta { padding: 80px 20px; }
+  .fam .site-footer { padding: 50px 20px 30px; }
+  .fam .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<section id="familiar" class="fam">
+  <nav class="site-nav">
+    <ul class="left-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">How It Works</a></li>
+      <li><a href="#">Rentals</a></li>
+    </ul>
+    <div class="wordmark">Lemon <em>Drop</em></div>
+    <ul class="right-links">
+      <li><a href="#">Services</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <p class="tagline">Event Rentals · Salt Lake City, UT</p>
+    <h1>Curated rentals<br>for the day <em>you'll remember.</em></h1>
+    <p class="sub">Arches, tables, neon signs, florals, yard games — the details that turn a venue into a celebration. Delivery, setup, and coordination available.</p>
+    <a href="#" class="hero-cta">Start an Inquiry</a>
+    <div class="hero-img"></div>
+  </section>
+
+  <section class="services">
+    <div class="services-head">
+      <div class="kicker">What we do</div>
+      <h2>Three ways <em>we help.</em></h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=85');"></div>
+        <h3>Event Rentals</h3>
+        <p>Over 200 pieces across 16 categories — arches, bars, tables, florals, neon, games. Delivery and setup available across Utah.</p>
+        <a href="#">Browse Inventory →</a>
+      </div>
+      <div class="svc-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=85');"></div>
+        <h3>Event Coordination</h3>
+        <p>Month-of or day-of coordination with a lead planner plus one to two team members. Includes a rental discount when bundled.</p>
+        <a href="#">Learn More →</a>
+      </div>
+      <div class="svc-card">
+        <div class="img" style="background-image:url('https://static.wixstatic.com/media/0ed686_3f4258979bc24ded91fd74c27cb1e2f8~mv2.jpg/v1/fill/w_1200,h_900,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/band.jpg');"></div>
+        <h3>Live Jazz Band</h3>
+        <p>Our in-house jazz trio — cocktails, first dance, dinner. Polished, adaptable, and always a crowd favorite.</p>
+        <a href="#">Hear Samples →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="about-inner">
+      <div class="about-img"></div>
+      <div class="about-text">
+        <div class="kicker">About</div>
+        <h2>Born from a <em>wedding of our own.</em></h2>
+        <p>Lemon Drop started the week after our owner's 2023 wedding. She'd spent months chasing down details — the right chair, the right arch, the right candleholder — and realized most couples needed a single trusted source for all of it.</p>
+        <p>Since launching in 2024, we've helped with over 1,500 events across Utah. Every booking comes with a human on the other end of the email who has been exactly where you are.</p>
+        <a href="#" class="hero-cta" style="margin-top: 20px;">Meet the Team</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="categories-head">
+      <div class="kicker">The Inventory</div>
+      <h2>A taste of <em>what we rent.</em></h2>
+    </div>
+    <div class="cat-grid">
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&q=85');"><div class="cat-label">Arches &amp; Backdrops</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=85');"><div class="cat-label">Tables &amp; Chairs</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=600&q=85');"><div class="cat-label">Florals &amp; Greenery</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&q=85');"><div class="cat-label">Candles &amp; Lighting</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=85');"><div class="cat-label">Neon Signs</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=600&q=85');"><div class="cat-label">Tableware</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1525772764200-be829a350797?w=600&q=85');"><div class="cat-label">Bars &amp; Walls</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=85');"><div class="cat-label">Yard Games</div></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <div class="kicker">Kind Words</div>
+    <h2>What couples <em>have told us.</em></h2>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>Working with Lemon Drop was the highlight of my wedding, outside of the wedding itself.</q>
+        <div class="attr">— Rahma</div>
+      </div>
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>Lemon Drop had such great service and they were quick with communication. Awesome awesome rental company.</q>
+        <div class="attr">— Justine</div>
+      </div>
+      <div class="quote-card">
+        <div class="stars">★★★★★</div>
+        <q>They were amazing to work with! The games were a big hit at our wedding. Everyone loved them.</q>
+        <div class="attr">— Alexandra</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="kicker">Inquire</div>
+    <h2>Let's make your <em>day easier.</em></h2>
+    <p>Tell us your date, venue, and what you're imagining — we'll follow up within two business days with availability and a quote.</p>
+    <a href="#" class="cta-btn">Start an Inquiry</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Lemon <em>Drop</em></div>
+        <p class="footer-tag">Event rentals &amp; coordination — Salt Lake City, Utah. 1,500+ events &amp; counting.</p>
+      </div>
+      <div>
+        <div class="footer-col-label">Contact</div>
+        <p><a href="tel:8012447346">801.244.7346</a></p>
+        <p><a href="mailto:lemondropeventrentals@gmail.com">lemondropeventrentals<br>@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="footer-col-label">Browse</div>
+        <p><a href="#">Rentals</a></p>
+        <p><a href="#">Coordination</a></p>
+        <p><a href="#">Live Music</a></p>
+      </div>
+      <div>
+        <div class="footer-col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">TikTok</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Lemon Drop Event Rentals</span>
+      <span>Salt Lake City, UT</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 02 — of 04</div>
+      <h2 class="dd-name">Citrus<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Own the name. Lemon yellow, citrus-leaf green, big personality. Caprasimo display, round shapes, friendly copy. Memorable.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 02 — CITRUS ================================
+     ========================================================= -->
+<style>
+.cit {
+  --cream: #fdf8ec;
+  --cream-deep: #f7eed5;
+  --lemon: #ffd23f;
+  --lemon-deep: #e8b81c;
+  --leaf: #2e4a2e;
+  --leaf-deep: #1a2e1a;
+  --peel: #f5a93d;
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --muted: #8a8272;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Epilogue', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+.cit a { color: inherit; }
+
+.cit .lemon-emoji {
+  position: absolute;
+  font-size: 120px;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+}
+
+/* nav */
+.cit .site-nav {
+  padding: 22px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  background: var(--cream);
+  border-bottom: 2px solid var(--lemon);
+}
+.cit .nav-logo {
+  font-family: 'Caprasimo', serif;
+  font-size: 32px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cit .nav-logo .dot {
+  width: 16px; height: 16px;
+  background: var(--lemon);
+  border-radius: 50%;
+  display: inline-block;
+  margin: 0 2px;
+  box-shadow: 0 0 0 4px rgba(255, 210, 63, 0.3);
+}
+.cit .nav-logo em { font-style: italic; color: var(--leaf); font-weight: 400; }
+.cit .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 28px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  color: var(--ink);
+  font-weight: 500;
+}
+.cit .site-nav ul a {
+  position: relative;
+  padding: 4px 2px;
+  transition: color 0.25s;
+}
+.cit .site-nav ul a:hover { color: var(--leaf); }
+.cit .nav-cta {
+  background: var(--ink);
+  color: var(--lemon);
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.25s;
+}
+.cit .nav-cta:hover { background: var(--leaf); transform: translateY(-2px); }
+
+/* hero */
+.cit .hero {
+  padding: 70px 48px 90px;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+}
+.cit .hero .lemon-emoji.lem-1 { top: 40px; left: 4%; transform: rotate(-16deg); font-size: 90px; }
+.cit .hero .lemon-emoji.lem-2 { top: 80px; right: 6%; transform: rotate(22deg); font-size: 70px; }
+.cit .hero .lemon-emoji.lem-3 { bottom: 80px; left: 6%; transform: rotate(36deg); font-size: 80px; opacity: 0.45; }
+.cit .hero .lemon-emoji.lem-4 { bottom: 60px; right: 4%; transform: rotate(-24deg); font-size: 100px; opacity: 0.5; }
+
+.cit .hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--lemon);
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 1;
+}
+.cit .hero-eyebrow::before { content: '✦'; color: var(--leaf); font-size: 12px; }
+.cit .hero h1 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(56px, 8.5vw, 144px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 32px;
+  position: relative;
+  z-index: 1;
+}
+.cit .hero h1 em {
+  font-style: italic;
+  color: var(--lemon-deep);
+  position: relative;
+}
+.cit .hero h1 em::after {
+  content: '';
+  position: absolute;
+  inset: auto -4px 6px -4px;
+  height: 18px;
+  background: var(--lemon);
+  z-index: -1;
+  border-radius: 4px;
+}
+.cit .hero .sub {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 620px;
+  margin: 0 auto 44px;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+.cit .hero-btn-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.cit .hero-btn {
+  padding: 18px 34px;
+  border-radius: 999px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.cit .btn-primary { background: var(--ink); color: var(--lemon); }
+.cit .btn-primary:hover { background: var(--leaf); transform: translateY(-3px); }
+.cit .btn-ghost { color: var(--ink); border: 2px solid var(--ink); }
+.cit .btn-ghost:hover { background: var(--ink); color: var(--lemon); }
+
+/* stats strip */
+.cit .stats {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 40px 48px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  border-top: 3px solid var(--lemon);
+  border-bottom: 3px solid var(--lemon);
+}
+.cit .stat .num {
+  font-family: 'Caprasimo', serif;
+  font-size: 48px;
+  color: var(--lemon);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.cit .stat .lbl {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(253, 248, 236, 0.75);
+  font-weight: 600;
+}
+
+/* services big cards */
+.cit .services {
+  padding: 120px 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+.cit .services .lemon-emoji.lem-5 { top: 40px; right: 8%; font-size: 100px; transform: rotate(16deg); opacity: 0.5; }
+.cit .services-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 70px;
+  position: relative;
+  z-index: 1;
+}
+.cit .services-head .kicker {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.cit .services-head h2 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(40px, 5.4vw, 76px);
+  line-height: 1;
+  color: var(--ink);
+}
+.cit .services-head h2 em {
+  font-style: italic;
+  color: var(--lemon-deep);
+}
+.cit .svc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+.cit .svc-card {
+  background: var(--cream-deep);
+  border-radius: 32px;
+  padding: 40px 32px 36px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+  border: 3px solid transparent;
+}
+.cit .svc-card:hover { transform: translateY(-6px) rotate(-0.5deg); border-color: var(--lemon); }
+.cit .svc-card .num-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px; height: 44px;
+  background: var(--lemon);
+  color: var(--ink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Caprasimo', serif;
+  font-size: 22px;
+}
+.cit .svc-card .svc-img {
+  aspect-ratio: 4/3;
+  background-size: cover;
+  background-position: center;
+  border-radius: 20px;
+  margin-bottom: 24px;
+}
+.cit .svc-card h3 {
+  font-family: 'Caprasimo', serif;
+  font-size: 30px;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.cit .svc-card p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+.cit .svc-card a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+  border-bottom: 2px solid var(--lemon);
+  padding-bottom: 2px;
+  transition: all 0.25s;
+}
+.cit .svc-card a:hover { color: var(--leaf); }
+
+/* about — dark leaf section with lemon accents */
+.cit .about {
+  padding: 130px 48px;
+  background: var(--leaf);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.cit .about .lemon-emoji.lem-6 { top: 40px; left: 6%; font-size: 100px; transform: rotate(-20deg); opacity: 0.55; }
+.cit .about .lemon-emoji.lem-7 { bottom: 40px; right: 6%; font-size: 120px; transform: rotate(30deg); opacity: 0.5; }
+.cit .about-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 70px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+.cit .about-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/0ed686_3988bd08143c4932af3e00ce8967e49e~mv2.jpg/v1/fill/w_1200,h_1500,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/image.jpg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 24px;
+  border: 4px solid var(--lemon);
+  transform: rotate(-2deg);
+}
+.cit .about-text .kicker {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--lemon);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.cit .about-text h2 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(40px, 5.4vw, 78px);
+  line-height: 1;
+  color: var(--cream);
+  margin-bottom: 30px;
+}
+.cit .about-text h2 em {
+  font-style: italic;
+  color: var(--lemon);
+}
+.cit .about-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(253, 248, 236, 0.88);
+  margin-bottom: 18px;
+}
+.cit .about-text .sig {
+  font-family: 'Caprasimo', serif;
+  font-size: 40px;
+  font-style: italic;
+  color: var(--lemon);
+  margin-top: 28px;
+}
+
+/* categories with big colored blocks */
+.cit .categories {
+  padding: 120px 48px;
+  position: relative;
+}
+.cit .categories-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 60px;
+}
+.cit .categories-head .kicker {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.cit .categories-head h2 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(40px, 5.4vw, 72px);
+  color: var(--ink);
+  line-height: 1;
+}
+.cit .categories-head h2 em { font-style: italic; color: var(--lemon-deep); }
+.cit .cat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.cit .cat {
+  aspect-ratio: 1/1;
+  background-size: cover;
+  background-position: center;
+  border-radius: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+.cit .cat:hover { transform: translateY(-6px); }
+.cit .cat::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 45%, rgba(26, 26, 26, 0.7) 100%);
+}
+.cit .cat-label {
+  position: absolute;
+  bottom: 18px;
+  left: 22px;
+  right: 22px;
+  color: var(--cream);
+  font-family: 'Caprasimo', serif;
+  font-size: 22px;
+  z-index: 1;
+}
+.cit .cat-label small {
+  display: block;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--lemon);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+/* testimonials — lemon cards */
+.cit .testimonials {
+  padding: 120px 48px;
+  background: var(--lemon);
+  position: relative;
+  overflow: hidden;
+}
+.cit .testimonials .lemon-emoji.lem-8 { top: 30px; left: 4%; font-size: 100px; transform: rotate(-30deg); opacity: 0.35; }
+.cit .testimonials .lemon-emoji.lem-9 { bottom: 30px; right: 4%; font-size: 120px; transform: rotate(40deg); opacity: 0.35; }
+.cit .testimonials-head {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 56px;
+  position: relative;
+  z-index: 1;
+}
+.cit .testimonials-head .kicker {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.cit .testimonials-head h2 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(40px, 5.4vw, 72px);
+  color: var(--ink);
+  line-height: 1;
+}
+.cit .testimonials-head h2 em { font-style: italic; color: var(--leaf); }
+.cit .quotes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.cit .quote-card {
+  background: var(--cream);
+  padding: 36px 30px;
+  border-radius: 28px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s;
+}
+.cit .quote-card:nth-child(even) { transform: translateY(20px); }
+.cit .quote-card:nth-child(even):hover,
+.cit .quote-card:hover { transform: translateY(-4px); }
+.cit .quote-card::before {
+  content: '"';
+  position: absolute;
+  top: -14px;
+  left: 22px;
+  font-family: 'Caprasimo', serif;
+  font-size: 90px;
+  color: var(--lemon-deep);
+  line-height: 1;
+}
+.cit .quote-card q {
+  font-family: 'Caprasimo', serif;
+  font-size: 20px;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 22px;
+  quotes: none;
+  flex: 1;
+}
+.cit .quote-card q::before, .cit .quote-card q::after { content: ''; }
+.cit .quote-card .attr {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 14px;
+  color: var(--leaf);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* cta */
+.cit .cta {
+  padding: 140px 48px;
+  text-align: center;
+  background: var(--cream);
+  position: relative;
+}
+.cit .cta .lemon-emoji.lem-10 { top: 30%; left: 8%; font-size: 110px; transform: rotate(-20deg); opacity: 0.45; }
+.cit .cta .lemon-emoji.lem-11 { bottom: 25%; right: 8%; font-size: 130px; transform: rotate(24deg); opacity: 0.45; }
+.cit .cta-inner { max-width: 800px; margin: 0 auto; position: relative; z-index: 1; }
+.cit .cta .kicker {
+  font-size: 13px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+.cit .cta h2 {
+  font-family: 'Caprasimo', serif;
+  font-size: clamp(48px, 6.4vw, 108px);
+  line-height: 0.95;
+  color: var(--ink);
+  margin-bottom: 28px;
+}
+.cit .cta h2 em { font-style: italic; color: var(--lemon-deep); }
+.cit .cta p {
+  font-size: 19px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 40px;
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.cit .cta .btn-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+/* footer */
+.cit .site-footer {
+  padding: 70px 48px 38px;
+  background: var(--ink);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.cit .site-footer .lemon-emoji.lem-12 { top: -30px; right: 10%; font-size: 140px; transform: rotate(30deg); opacity: 0.3; }
+.cit .footer-mark-row { text-align: center; margin-bottom: 42px; position: relative; z-index: 1; }
+.cit .footer-mark {
+  font-family: 'Caprasimo', serif;
+  font-size: 52px;
+  color: var(--lemon);
+  margin-bottom: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.cit .footer-mark .dot {
+  width: 14px; height: 14px;
+  background: var(--cream);
+  border-radius: 50%;
+  display: inline-block;
+  box-shadow: 0 0 0 4px rgba(253, 248, 236, 0.2);
+}
+.cit .footer-mark em { font-style: italic; color: var(--cream); }
+.cit .footer-tag {
+  font-size: 15px;
+  color: rgba(253, 248, 236, 0.75);
+  max-width: 480px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+.cit .footer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid rgba(253, 248, 236, 0.12);
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.cit .footer-cols .col-label {
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--lemon);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.cit .footer-cols a, .cit .footer-cols p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(253, 248, 236, 0.82);
+}
+.cit .footer-cols a:hover { color: var(--lemon); }
+.cit .footer-bottom {
+  text-align: center;
+  padding-top: 22px;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(253, 248, 236, 0.45);
+}
+
+@media (max-width: 960px) {
+  .cit .site-nav { flex-direction: column; padding: 18px 20px; gap: 14px; }
+  .cit .site-nav ul { gap: 18px; font-size: 14px; }
+  .cit .hero { padding: 40px 20px 60px; }
+  .cit .stats { grid-template-columns: repeat(2, 1fr); gap: 24px; padding: 30px 20px; }
+  .cit .services { padding: 70px 20px; }
+  .cit .svc-grid { grid-template-columns: 1fr; gap: 20px; }
+  .cit .about { padding: 80px 20px; }
+  .cit .about-inner { grid-template-columns: 1fr; gap: 40px; }
+  .cit .categories { padding: 70px 20px; }
+  .cit .cat-grid { grid-template-columns: 1fr 1fr; }
+  .cit .testimonials { padding: 70px 20px; }
+  .cit .quotes-grid { grid-template-columns: 1fr; gap: 20px; }
+  .cit .quote-card:nth-child(even) { transform: none; }
+  .cit .cta { padding: 80px 20px; }
+  .cit .site-footer { padding: 50px 20px 30px; }
+  .cit .footer-cols { grid-template-columns: 1fr; gap: 28px; }
+}
+</style>
+
+<section id="citrus" class="cit">
+  <nav class="site-nav">
+    <div class="nav-logo">Lemon<span class="dot"></span><em>Drop</em></div>
+    <ul>
+      <li><a href="#">home</a></li>
+      <li><a href="#">rentals</a></li>
+      <li><a href="#">services</a></li>
+      <li><a href="#">about</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Let's chat →</a>
+  </nav>
+
+  <section class="hero">
+    <span class="lemon-emoji lem-1">🍋</span>
+    <span class="lemon-emoji lem-2">🍋</span>
+    <span class="lemon-emoji lem-3">🍋</span>
+    <span class="lemon-emoji lem-4">🍋</span>
+    <div class="hero-eyebrow">Event Rentals · Salt Lake City</div>
+    <h1>Make your big<br>day a little<br><em>sweeter.</em></h1>
+    <p class="sub">Arches, tables, neon signs, yard games, florals, bars — the pieces that turn any venue into a celebration. All in one place.</p>
+    <div class="hero-btn-row">
+      <a href="#" class="hero-btn btn-primary">Start an Inquiry</a>
+      <a href="#" class="hero-btn btn-ghost">Browse the Inventory</a>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="num">1,500+</div>
+      <div class="lbl">Events</div>
+    </div>
+    <div class="stat">
+      <div class="num">200+</div>
+      <div class="lbl">Rental pieces</div>
+    </div>
+    <div class="stat">
+      <div class="num">16</div>
+      <div class="lbl">Categories</div>
+    </div>
+    <div class="stat">
+      <div class="num">5 ★</div>
+      <div class="lbl">Google rating</div>
+    </div>
+  </div>
+
+  <section class="services">
+    <span class="lemon-emoji lem-5">🍋</span>
+    <div class="services-head">
+      <div class="kicker">The Offering</div>
+      <h2>What we <em>do.</em></h2>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="num-badge">01</div>
+        <div class="svc-img" style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=85');"></div>
+        <h3>Rentals</h3>
+        <p>Over 200 pieces across 16 categories. From arches and neon signs to yard games and candle sets. Delivery, setup, and pickup available.</p>
+        <a href="#">Browse all →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num-badge">02</div>
+        <div class="svc-img" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=85');"></div>
+        <h3>Coordination</h3>
+        <p>Day-of and month-of planning with a lead coordinator plus a team of 1–2. Includes a discount when you bundle with rentals.</p>
+        <a href="#">How it works →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num-badge">03</div>
+        <div class="svc-img" style="background-image:url('https://static.wixstatic.com/media/0ed686_3f4258979bc24ded91fd74c27cb1e2f8~mv2.jpg/v1/fill/w_1200,h_900,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/band.jpg');"></div>
+        <h3>Live jazz</h3>
+        <p>Our house jazz trio — cocktails, first dance, dinner. The easiest way to make a room feel like something is happening.</p>
+        <a href="#">Hear them →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <span class="lemon-emoji lem-6">🍋</span>
+    <span class="lemon-emoji lem-7">🍋</span>
+    <div class="about-inner">
+      <div class="about-img"></div>
+      <div class="about-text">
+        <div class="kicker">About the Lemons</div>
+        <h2>From one bride to <em>another.</em></h2>
+        <p>The name comes from the cocktail our owner was holding at her own 2023 wedding — the moment she realized every couple deserved a single, trusted source for all the little details.</p>
+        <p>Since 2024 we've worked on 1,500+ events, grown to a team of coordinators, and built a rental inventory of 200+ pieces — but we still answer every email like it's the first.</p>
+        <div class="sig">— The Lemons</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories">
+    <div class="categories-head">
+      <div class="kicker">The Inventory</div>
+      <h2>A whole <em>cart</em> of details.</h2>
+    </div>
+    <div class="cat-grid">
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=600&q=85');"><div class="cat-label"><small>01</small>Arches</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=600&q=85');"><div class="cat-label"><small>02</small>Tables &amp; Chairs</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=600&q=85');"><div class="cat-label"><small>03</small>Florals</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?w=600&q=85');"><div class="cat-label"><small>04</small>Neon</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1525772764200-be829a350797?w=600&q=85');"><div class="cat-label"><small>05</small>Bars</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=600&q=85');"><div class="cat-label"><small>06</small>Candles</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=600&q=85');"><div class="cat-label"><small>07</small>Tableware</div></div>
+      <div class="cat" style="background-image:url('https://images.unsplash.com/photo-1529636798458-92182e662485?w=600&q=85');"><div class="cat-label"><small>08</small>Yard Games</div></div>
+    </div>
+  </section>
+
+  <section class="testimonials">
+    <span class="lemon-emoji lem-8">🍋</span>
+    <span class="lemon-emoji lem-9">🍋</span>
+    <div class="testimonials-head">
+      <div class="kicker">Kind Words</div>
+      <h2>What past couples <em>said.</em></h2>
+    </div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <q>Working with Lemon Drop was the highlight of my wedding, outside of the wedding itself.</q>
+        <div class="attr">— Rahma</div>
+      </div>
+      <div class="quote-card">
+        <q>Lemon Drop had such great service and they were quick with communication. Awesome awesome rental company.</q>
+        <div class="attr">— Justine</div>
+      </div>
+      <div class="quote-card">
+        <q>They were amazing to work with! The games were a big hit at our wedding. Everyone loved them.</q>
+        <div class="attr">— Alexandra</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <span class="lemon-emoji lem-10">🍋</span>
+    <span class="lemon-emoji lem-11">🍋</span>
+    <div class="cta-inner">
+      <div class="kicker">Let's chat</div>
+      <h2>When life gives you<br>a <em>wedding...</em></h2>
+      <p>Drop us a note about your date, venue, and the vibe. We'll follow up within two business days.</p>
+      <div class="btn-row">
+        <a href="#" class="hero-btn btn-primary">Start an Inquiry</a>
+        <a href="#" class="hero-btn btn-ghost">Browse Inventory</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span class="lemon-emoji lem-12">🍋</span>
+    <div class="footer-mark-row">
+      <div class="footer-mark">Lemon<span class="dot"></span><em>Drop</em></div>
+      <p class="footer-tag">Rentals, coordination, and jazz — Salt Lake City, Utah. 1,500 events and counting.</p>
+    </div>
+    <div class="footer-cols">
+      <div>
+        <div class="col-label">Reach out</div>
+        <p><a href="tel:8012447346">801.244.7346</a></p>
+        <p><a href="mailto:lemondropeventrentals@gmail.com">lemondropeventrentals@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="col-label">Browse</div>
+        <p><a href="#">Rentals</a></p>
+        <p><a href="#">Coordination</a></p>
+        <p><a href="#">Live Music</a></p>
+      </div>
+      <div>
+        <div class="col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">TikTok</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Lemon Drop Event Rentals · Salt Lake City
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 03 — of 04</div>
+      <h2 class="dd-name">Catalog<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Inventory-first — dense, shoppable, organized. Leans into the 16 rental categories as the main product. For couples who want to browse.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 03 — CATALOG ===============================
+     ========================================================= -->
+<style>
+.cat {
+  --white: #fafafa;
+  --paper: #f4f1ea;
+  --stone: #e8e4da;
+  --ink: #1a1a1a;
+  --ink-soft: #3a3a3a;
+  --muted: #8a867e;
+  --accent: #d4a015;
+  --accent-deep: #a47808;
+  --rule: #dfd9c9;
+}
+.cat { background: var(--white); color: var(--ink); font-family: 'Manrope', sans-serif; }
+.cat a { color: inherit; }
+
+/* nav — catalog style */
+.cat .site-nav {
+  padding: 18px 40px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 40px;
+  align-items: center;
+  background: var(--ink);
+  color: var(--white);
+}
+.cat .wordmark {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  color: var(--white);
+}
+.cat .wordmark em { font-style: normal; color: var(--accent); padding-left: 2px; }
+.cat .site-nav .search {
+  padding: 10px 16px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  justify-self: stretch;
+  max-width: 500px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.cat .site-nav .search::before { content: '⌕'; font-size: 16px; color: var(--accent); }
+.cat .site-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 24px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.cat .site-nav ul a { transition: color 0.25s; }
+.cat .site-nav ul a:hover { color: var(--accent); }
+.cat .nav-cta {
+  background: var(--accent);
+  color: var(--ink);
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: background 0.25s;
+}
+.cat .nav-cta:hover { background: var(--accent-deep); color: var(--white); }
+
+/* sub nav — category tabs */
+.cat .subnav {
+  padding: 14px 40px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  gap: 26px;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+  overflow-x: auto;
+}
+.cat .subnav a { white-space: nowrap; padding: 4px 0; transition: color 0.2s; position: relative; }
+.cat .subnav a.active { color: var(--ink); }
+.cat .subnav a.active::after {
+  content: '';
+  position: absolute;
+  bottom: -14px;
+  left: 0; right: 0;
+  height: 2px;
+  background: var(--accent);
+}
+
+/* hero banner (compact, photo-heavy) */
+.cat .hero {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  align-items: stretch;
+  min-height: 560px;
+}
+.cat .hero-left {
+  padding: 70px 56px;
+  background: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.cat .hero-left .breadcrumb {
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.cat .hero-left h1 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(42px, 5.4vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+.cat .hero-left h1 em { color: var(--accent-deep); font-style: normal; }
+.cat .hero-left p {
+  font-size: 17px;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  max-width: 460px;
+  margin-bottom: 34px;
+  font-weight: 400;
+}
+.cat .hero-btn-row { display: flex; gap: 14px; flex-wrap: wrap; }
+.cat .hero-btn {
+  padding: 16px 28px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 0.25s;
+}
+.cat .hero-btn.primary { background: var(--ink); color: var(--white); }
+.cat .hero-btn.primary:hover { background: var(--accent-deep); }
+.cat .hero-btn.ghost { color: var(--ink); border: 1.5px solid var(--ink); }
+.cat .hero-btn.ghost:hover { background: var(--ink); color: var(--white); }
+.cat .hero-right {
+  background-image: url('https://static.wixstatic.com/media/0ed686_d38eb249367747e78685f3454c453e0c~mv2.jpg/v1/fill/w_2000,h_1600,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.cat .hero-right::after {
+  content: 'IMG_6421 · Utah · 2025';
+  position: absolute;
+  bottom: 20px;
+  right: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: rgba(26, 26, 26, 0.75);
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* stats / metadata strip */
+.cat .metastrip {
+  background: var(--white);
+  padding: 24px 40px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.cat .meta .lbl {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.cat .meta .val {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--ink);
+}
+.cat .meta .val em { font-style: normal; color: var(--accent-deep); }
+
+/* inventory grid — main content */
+.cat .inventory {
+  padding: 80px 40px 100px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.cat .inv-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.cat .inv-head h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 44px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+}
+.cat .inv-head h2 em { font-style: normal; color: var(--accent-deep); }
+.cat .inv-head .filters {
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.cat .inv-head .filter {
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+.cat .inv-head .filter.active { background: var(--ink); color: var(--white); border-color: var(--ink); }
+.cat .inv-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.cat .inv-card {
+  display: block;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+  cursor: pointer;
+}
+.cat .inv-card:hover { transform: translateY(-4px); box-shadow: 0 18px 36px -22px rgba(26,26,26,0.2); border-color: var(--accent); }
+.cat .inv-card .img {
+  aspect-ratio: 4/5;
+  background-size: cover;
+  background-position: center;
+}
+.cat .inv-card .body { padding: 18px 20px 22px; }
+.cat .inv-card .sku {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+.cat .inv-card h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--ink);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+.cat .inv-card .count {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.cat .inv-card .count em { color: var(--accent-deep); font-style: normal; font-weight: 700; }
+
+/* services strip */
+.cat .services {
+  padding: 80px 40px;
+  background: var(--paper);
+}
+.cat .services-head {
+  max-width: 1400px;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+.cat .services-head h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 44px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  line-height: 1;
+}
+.cat .services-head h2 em { font-style: normal; color: var(--accent-deep); }
+.cat .services-head p {
+  font-size: 15px;
+  color: var(--ink-soft);
+  max-width: 420px;
+}
+.cat .svc-grid {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.cat .svc-card {
+  background: var(--white);
+  padding: 32px 28px;
+  border: 1px solid var(--rule);
+  transition: border-color 0.25s, transform 0.25s;
+}
+.cat .svc-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+.cat .svc-card .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.28em;
+  color: var(--accent-deep);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.cat .svc-card h3 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.cat .svc-card p {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin-bottom: 18px;
+}
+.cat .svc-card a {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-deep);
+  transition: color 0.25s;
+}
+.cat .svc-card a:hover { color: var(--ink); }
+
+/* testimonial — compact two-col */
+.cat .testimonial {
+  padding: 100px 40px;
+  background: var(--ink);
+  color: var(--white);
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 70px;
+  align-items: center;
+}
+.cat .testimonial-inner { max-width: 1400px; margin: 0 auto; display: contents; }
+.cat .testimonial .lbl-col .stars {
+  color: var(--accent);
+  font-size: 22px;
+  letter-spacing: 4px;
+  margin-bottom: 20px;
+}
+.cat .testimonial .lbl-col h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(28px, 3.4vw, 44px);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.cat .testimonial .lbl-col h2 em { font-style: normal; color: var(--accent); }
+.cat .testimonial .lbl-col p {
+  margin-top: 16px;
+  font-size: 14px;
+  color: rgba(255,255,255,0.7);
+  max-width: 280px;
+}
+.cat .testimonial .quote-col {
+  display: grid;
+  gap: 16px;
+}
+.cat .testimonial .quote-card {
+  padding: 22px 24px;
+  background: rgba(255,255,255,0.06);
+  border-left: 3px solid var(--accent);
+}
+.cat .testimonial q {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--white);
+  margin-bottom: 10px;
+  quotes: none;
+  font-weight: 400;
+}
+.cat .testimonial q::before, .cat .testimonial q::after { content: ''; }
+.cat .testimonial .attr {
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* cta banner */
+.cat .cta {
+  padding: 80px 40px;
+  background: var(--accent);
+  color: var(--ink);
+  text-align: center;
+}
+.cat .cta h2 {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 3.8vw, 52px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.cat .cta h2 em { font-style: normal; color: var(--white); }
+.cat .cta p {
+  font-size: 17px;
+  color: var(--ink-soft);
+  margin-bottom: 32px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 500;
+}
+.cat .cta-btn {
+  display: inline-block;
+  padding: 18px 36px;
+  background: var(--ink);
+  color: var(--white);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  transition: all 0.3s;
+}
+.cat .cta-btn:hover { background: var(--white); color: var(--ink); }
+
+/* footer */
+.cat .site-footer {
+  padding: 60px 40px 30px;
+  background: var(--ink);
+  color: var(--stone);
+}
+.cat .footer-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.cat .footer-mark {
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--white);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+.cat .footer-mark em { font-style: normal; color: var(--accent); }
+.cat .footer-tag {
+  font-size: 14px;
+  color: rgba(255,255,255,0.65);
+  max-width: 320px;
+  line-height: 1.55;
+}
+.cat .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.cat .footer-inner a,
+.cat .footer-inner p {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.75);
+}
+.cat .footer-inner a:hover { color: var(--accent); }
+.cat .footer-bottom {
+  padding-top: 22px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .cat .site-nav { grid-template-columns: 1fr; gap: 12px; padding: 18px 20px; }
+  .cat .site-nav .search { max-width: none; }
+  .cat .site-nav ul { flex-wrap: wrap; gap: 14px; font-size: 12px; }
+  .cat .subnav { padding: 12px 20px; }
+  .cat .hero { grid-template-columns: 1fr; min-height: auto; }
+  .cat .hero-left { padding: 50px 24px; }
+  .cat .hero-right { aspect-ratio: 4/3; }
+  .cat .metastrip { grid-template-columns: 1fr 1fr; padding: 20px 24px; }
+  .cat .inventory { padding: 60px 20px; }
+  .cat .inv-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+  .cat .services { padding: 60px 20px; }
+  .cat .svc-grid { grid-template-columns: 1fr; gap: 16px; }
+  .cat .testimonial { grid-template-columns: 1fr; gap: 30px; padding: 70px 20px; }
+  .cat .cta { padding: 70px 20px; }
+  .cat .site-footer { padding: 50px 20px 30px; }
+  .cat .footer-inner { grid-template-columns: 1fr; gap: 26px; }
+}
+</style>
+
+<section id="catalog" class="cat">
+  <nav class="site-nav">
+    <div class="wordmark">Lemon<em>Drop</em></div>
+    <div class="search">Search rentals — arches, neon, chairs...</div>
+    <ul>
+      <li><a href="#">Rentals</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">How it works</a></li>
+    </ul>
+    <a href="#" class="nav-cta">Inquire →</a>
+  </nav>
+
+  <nav class="subnav" aria-label="category tabs">
+    <a href="#" class="active">All</a>
+    <a href="#">Arches &amp; Backdrops</a>
+    <a href="#">Bars &amp; Walls</a>
+    <a href="#">Tables &amp; Chairs</a>
+    <a href="#">Neon Signs</a>
+    <a href="#">Florals</a>
+    <a href="#">Candles</a>
+    <a href="#">Tableware</a>
+    <a href="#">Yard Games</a>
+    <a href="#">Custom Décor</a>
+    <a href="#">Dance Floors</a>
+    <a href="#">Tents</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="breadcrumb">Lemon Drop · Rentals · 2026 Catalog</div>
+      <h1>Browse the <em>full inventory.</em></h1>
+      <p>200+ rental pieces across 16 categories. Delivery, setup, and coordination available anywhere in Utah. Filter by what your venue needs.</p>
+      <div class="hero-btn-row">
+        <a href="#" class="hero-btn primary">Start an Inquiry</a>
+        <a href="#" class="hero-btn ghost">How It Works</a>
+      </div>
+    </div>
+    <div class="hero-right"></div>
+  </section>
+
+  <div class="metastrip">
+    <div class="meta"><div class="lbl">Inventory</div><div class="val"><em>200+</em> pieces</div></div>
+    <div class="meta"><div class="lbl">Categories</div><div class="val"><em>16</em> total</div></div>
+    <div class="meta"><div class="lbl">Service Area</div><div class="val">Utah statewide</div></div>
+    <div class="meta"><div class="lbl">Events Since '24</div><div class="val"><em>1,500+</em></div></div>
+  </div>
+
+  <section class="inventory">
+    <div class="inv-head">
+      <h2>Featured <em>rentals.</em></h2>
+      <div class="filters">
+        <span class="filter active">All</span>
+        <span class="filter">Most Booked</span>
+        <span class="filter">New</span>
+        <span class="filter">Under $100</span>
+      </div>
+    </div>
+    <div class="inv-grid">
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · ARC-001</div>
+          <h3>White Hex Ceremony Arch</h3>
+          <div class="count"><em>In stock</em> — 4 available</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · NEO-003</div>
+          <h3>"Better Together" Neon Sign</h3>
+          <div class="count"><em>In stock</em> — 2 available</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1525772764200-be829a350797?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · BAR-012</div>
+          <h3>Wood Plank Bar, 8ft</h3>
+          <div class="count"><em>In stock</em> — 3 available</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · TBL-007</div>
+          <h3>Chiavari Chair, Gold</h3>
+          <div class="count"><em>In stock</em> — 120 available</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · CND-004</div>
+          <h3>Pillar Candle Set, Brass</h3>
+          <div class="count"><em>In stock</em> — 40 sets</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1478146896981-b80fe463b330?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · FLO-021</div>
+          <h3>Faux Garland, Eucalyptus</h3>
+          <div class="count"><em>In stock</em> — 18 yards</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · TBW-009</div>
+          <h3>Gold Rim Charger, Set of 10</h3>
+          <div class="count"><em>In stock</em> — 12 sets</div>
+        </div>
+      </a>
+      <a class="inv-card">
+        <div class="img" style="background-image:url('https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=85');"></div>
+        <div class="body">
+          <div class="sku">SKU · GME-002</div>
+          <h3>Giant Jenga Set</h3>
+          <div class="count"><em>In stock</em> — 6 sets</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="services">
+    <div class="services-head">
+      <div>
+        <h2>Beyond the <em>rentals.</em></h2>
+      </div>
+      <p>The two add-ons couples ask for most — coordination and music. Both pair with any rental booking at a discount.</p>
+    </div>
+    <div class="svc-grid">
+      <div class="svc-card">
+        <div class="num">Service 01</div>
+        <h3>Event Coordination</h3>
+        <p>Day-of or month-of with a lead coordinator plus 1–2 team members. Includes a rental discount when bundled.</p>
+        <a href="#">Learn more →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num">Service 02</div>
+        <h3>Live Jazz Band</h3>
+        <p>In-house jazz trio for cocktails, dinner, and dancing. Polished, adaptable, and unmistakably live.</p>
+        <a href="#">Hear samples →</a>
+      </div>
+      <div class="svc-card">
+        <div class="num">Service 03</div>
+        <h3>Delivery &amp; Setup</h3>
+        <p>We handle it all — delivery, setup, teardown, pickup. You show up on your wedding day and enjoy it.</p>
+        <a href="#">Pricing →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="lbl-col">
+        <div class="stars">★★★★★</div>
+        <h2>Reviews<br>that <em>matter.</em></h2>
+        <p>Every review is from a real couple we've worked with since 2024. No prompts, no bribes, just the actual notes they sent.</p>
+      </div>
+      <div class="quote-col">
+        <div class="quote-card">
+          <q>Working with Lemon Drop was the highlight of my wedding, outside of the wedding itself.</q>
+          <div class="attr">— Rahma · Google</div>
+        </div>
+        <div class="quote-card">
+          <q>Lemon Drop had such great service and they were quick with communication. Awesome awesome rental company.</q>
+          <div class="attr">— Justine · Google</div>
+        </div>
+        <div class="quote-card">
+          <q>They were amazing to work with! The games were a big hit at our wedding. Everyone loved them.</q>
+          <div class="attr">— Alexandra · Google</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Find something. <em>Reserve it.</em></h2>
+    <p>Send us your date and what you're after — we'll hold items for 48 hours while you decide.</p>
+    <a href="#" class="cta-btn">Start an Inquiry</a>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Lemon<em>Drop</em></div>
+        <p class="footer-tag">Event rentals, coordination, and live music — Salt Lake City, Utah. 1,500+ events since 2024.</p>
+      </div>
+      <div>
+        <div class="col-label">Contact</div>
+        <p><a href="tel:8012447346">801.244.7346</a></p>
+        <p><a href="mailto:lemondropeventrentals@gmail.com">lemondropeventrentals<br>@gmail.com</a></p>
+      </div>
+      <div>
+        <div class="col-label">Categories</div>
+        <p><a href="#">Arches &amp; Backdrops</a></p>
+        <p><a href="#">Neon Signs</a></p>
+        <p><a href="#">Tableware</a></p>
+      </div>
+      <div>
+        <div class="col-label">Follow</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">TikTok</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Lemon Drop Event Rentals</span>
+      <span>Salt Lake City, UT</span>
+    </div>
+  </footer>
+</section>
+
+<section class="direction-divider">
+  <div class="dd-inner">
+    <div>
+      <div class="dd-progress">Direction 04 — of 04</div>
+      <h2 class="dd-name">Editorial<em>.</em></h2>
+    </div>
+    <p class="dd-sub">Wedding magazine cover-story — Bodoni display, drop caps, big photos, visible grid. Elevated, photo-forward, reads like print.</p>
+  </div>
+</section>
+
+<!-- =========================================================
+     ============ 04 — EDITORIAL =============================
+     ========================================================= -->
+<style>
+.ed {
+  --cream: #faf7f0;
+  --cream-warm: #f3ece0;
+  --ink: #1a1816;
+  --ink-soft: #3a3632;
+  --gold: #d4b88a;
+  --gold-deep: #a68752;
+  --rule: #d8d0c0;
+  --muted: #8a7e6a;
+
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+}
+.ed a { color: inherit; }
+
+.ed .masthead {
+  padding: 18px 56px;
+  border-bottom: 1px solid var(--ink);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: var(--cream);
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+}
+.ed .masthead .issue { grid-column: 1; }
+.ed .masthead .wordmark {
+  grid-column: 2;
+  font-family: 'Bodoni Moda', serif;
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--ink);
+}
+.ed .masthead .wordmark em { font-style: italic; font-weight: 400; color: var(--gold-deep); padding: 0 4px; }
+.ed .masthead .dateline { grid-column: 3; justify-self: end; }
+.ed .masthead ul {
+  grid-column: 1 / 4;
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-top: 16px;
+  margin-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 11px;
+  letter-spacing: 0.3em;
+}
+.ed .masthead ul a { transition: color 0.25s; font-weight: 500; }
+.ed .masthead ul a:hover { color: var(--gold-deep); }
+
+.ed .hero {
+  padding: 90px 56px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+}
+.ed .hero .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+.ed .hero h1 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(60px, 8vw, 136px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.ed .hero h1 em { font-style: italic; font-weight: 300; color: var(--gold-deep); }
+.ed .hero-sub {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--ink-soft);
+  max-width: 440px;
+  margin-bottom: 40px;
+  line-height: 1.4;
+}
+.ed .hero-cta-row { display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
+.ed .hero-cta {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream);
+  background: var(--ink);
+  padding: 20px 40px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+.ed .hero-cta:hover { background: var(--gold-deep); }
+.ed .hero-meta {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--muted);
+}
+.ed .hero-img {
+  aspect-ratio: 4/5;
+  background-image: url('https://static.wixstatic.com/media/0ed686_d38eb249367747e78685f3454c453e0c~mv2.jpg/v1/fill/w_1600,h_2000,al_c,q_90,usm_0.66_1.00_0.01,enc_avif,quality_auto/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.ed .hero-img::after {
+  content: 'Lemon Drop · No. 01';
+  position: absolute;
+  bottom: -18px;
+  right: -18px;
+  background: var(--cream);
+  padding: 10px 22px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 600;
+  border: 1px solid var(--ink);
+}
+
+.ed .feature-strip {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 22px 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+  border-top: 4px solid var(--gold);
+}
+.ed .feature-strip .item .lbl {
+  font-size: 9px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.ed .feature-strip .item .val {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--cream);
+  line-height: 1.15;
+}
+.ed .feature-strip .item .val em { font-style: italic; color: var(--gold); }
+
+.ed .feature {
+  padding: 140px 56px 120px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.ed .feature-head {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 64px;
+}
+.ed .feature-head::before,
+.ed .feature-head::after {
+  content: '';
+  height: 1px;
+  background: var(--ink);
+}
+.ed .feature-head .label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.ed .feature-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+.ed .feature-body h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5.2vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.ed .feature-body h2 em { font-style: italic; font-weight: 300; color: var(--gold-deep); }
+.ed .feature-body p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 19px;
+  font-weight: 300;
+  line-height: 1.65;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.ed .feature-body p:first-child:first-letter {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: 5em;
+  float: left;
+  line-height: 0.85;
+  margin: 8px 12px 0 0;
+  color: var(--gold-deep);
+}
+.ed .feature-body .byline {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 600;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+  margin-top: 10px;
+}
+.ed .feature-body .byline strong { color: var(--ink); }
+
+.ed .portfolio {
+  background: var(--cream-warm);
+  padding: 140px 56px 140px;
+  position: relative;
+}
+.ed .portfolio::before {
+  content: 'INVENTORY';
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(60px, 14vw, 220px);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--ink);
+  opacity: 0.12;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.ed .portfolio-head {
+  text-align: center;
+  margin-bottom: 80px;
+  position: relative;
+  z-index: 1;
+}
+.ed .portfolio-head .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 18px;
+}
+.ed .portfolio-head h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(40px, 5vw, 72px);
+  color: var(--ink);
+  line-height: 1;
+}
+.ed .portfolio-head h2 em { font-style: italic; color: var(--gold-deep); font-weight: 300; }
+.ed .pf-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.ed .pf-item { position: relative; overflow: hidden; }
+.ed .pf-item .pf-img {
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.6s;
+}
+.ed .pf-item:hover .pf-img { transform: scale(1.03); }
+.ed .pf-item-1 { grid-column: 1 / span 7; }
+.ed .pf-item-1 .pf-img { aspect-ratio: 5/4; background-image: url('https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=1400&q=85'); }
+.ed .pf-item-2 { grid-column: 8 / span 5; }
+.ed .pf-item-2 .pf-img { aspect-ratio: 4/5; background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1000&q=85'); }
+.ed .pf-item-3 { grid-column: 1 / span 4; }
+.ed .pf-item-3 .pf-img { aspect-ratio: 4/5; background-image: url('https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=1000&q=85'); }
+.ed .pf-item-4 { grid-column: 5 / span 4; }
+.ed .pf-item-4 .pf-img { aspect-ratio: 4/5; background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1000&q=85'); }
+.ed .pf-item-5 { grid-column: 9 / span 4; }
+.ed .pf-item-5 .pf-img { aspect-ratio: 4/5; background-image: url('https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1000&q=85'); }
+.ed .pf-caption {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ed .pf-caption .title { color: var(--ink); font-weight: 600; }
+.ed .pf-caption em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--gold-deep);
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.ed .testimonial {
+  padding: 160px 56px;
+  text-align: center;
+  background: var(--ink);
+  color: var(--cream);
+  position: relative;
+}
+.ed .testimonial::before {
+  content: '"';
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Bodoni Moda', serif;
+  font-size: 400px;
+  font-style: italic;
+  color: var(--gold-deep);
+  opacity: 0.25;
+  line-height: 1;
+  pointer-events: none;
+}
+.ed .testimonial-inner { max-width: 960px; margin: 0 auto; position: relative; z-index: 1; }
+.ed .testimonial .label {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 36px;
+}
+.ed .testimonial q {
+  display: block;
+  font-family: 'Bodoni Moda', serif;
+  font-size: clamp(30px, 3.6vw, 52px);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.2;
+  color: var(--cream);
+  quotes: none;
+  margin-bottom: 44px;
+}
+.ed .testimonial q::before, .ed .testimonial q::after { content: ''; }
+.ed .testimonial .attribution {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+}
+.ed .testimonial .attribution em {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 22px;
+  color: var(--cream);
+  text-transform: none;
+  letter-spacing: 0.01em;
+  display: block;
+  margin-top: 6px;
+  font-weight: 400;
+}
+
+.ed .cta {
+  padding: 160px 56px 140px;
+  text-align: center;
+  background: var(--cream);
+}
+.ed .cta-inner { max-width: 880px; margin: 0 auto; }
+.ed .cta .kicker {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.ed .cta h2 {
+  font-family: 'Bodoni Moda', serif;
+  font-weight: 400;
+  font-size: clamp(48px, 6vw, 96px);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 32px;
+}
+.ed .cta h2 em { font-style: italic; color: var(--gold-deep); font-weight: 300; }
+.ed .cta p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 560px;
+  margin: 0 auto 44px;
+}
+.ed .cta .btn-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+.ed .cta-btn {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  padding: 20px 42px;
+  transition: all 0.3s;
+  font-weight: 600;
+}
+.ed .cta .primary { background: var(--ink); color: var(--cream); }
+.ed .cta .primary:hover { background: var(--gold-deep); }
+.ed .cta .ghost { color: var(--ink); border: 1px solid var(--ink); }
+.ed .cta .ghost:hover { background: var(--ink); color: var(--cream); }
+
+.ed .site-footer {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 60px 56px 32px;
+  font-family: 'Archivo', sans-serif;
+}
+.ed .footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 36px;
+  border-bottom: 1px solid rgba(250, 247, 240, 0.1);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.ed .footer-mark {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: 8px;
+}
+.ed .footer-mark em { font-style: italic; color: var(--gold); }
+.ed .footer-tag {
+  font-family: 'Bodoni Moda', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(250, 247, 240, 0.7);
+  line-height: 1.5;
+  max-width: 320px;
+}
+.ed .footer-inner .col-label {
+  font-size: 10px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+.ed .footer-inner a,
+.ed .footer-inner p {
+  font-family: 'Bodoni Moda', serif;
+  font-size: 15px;
+  line-height: 1.85;
+  color: rgba(250, 247, 240, 0.8);
+}
+.ed .footer-inner a:hover { color: var(--gold); }
+.ed .footer-bottom {
+  padding-top: 22px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 240, 0.45);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+@media (max-width: 960px) {
+  .ed .masthead { padding: 16px 20px; grid-template-columns: 1fr; text-align: center; }
+  .ed .masthead .issue, .ed .masthead .dateline { display: none; }
+  .ed .masthead ul { grid-column: 1; font-size: 10px; gap: 18px; }
+  .ed .hero { padding: 50px 24px; grid-template-columns: 1fr; gap: 40px; }
+  .ed .feature-strip { grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 22px 24px; }
+  .ed .feature { padding: 70px 24px; }
+  .ed .feature-head { grid-template-columns: 1fr; gap: 20px; }
+  .ed .feature-head::before, .ed .feature-head::after { display: none; }
+  .ed .feature-body { grid-template-columns: 1fr; gap: 30px; }
+  .ed .portfolio { padding: 80px 20px; }
+  .ed .portfolio::before { font-size: 80px; top: 24px; }
+  .ed .pf-grid { grid-template-columns: 1fr; gap: 16px; }
+  .ed .pf-item { grid-column: 1 / -1 !important; }
+  .ed .testimonial { padding: 90px 20px; }
+  .ed .testimonial::before { font-size: 200px; top: -10px; }
+  .ed .cta { padding: 80px 20px; }
+  .ed .site-footer { padding: 50px 20px 30px; }
+  .ed .footer-inner { grid-template-columns: 1fr; gap: 24px; }
+}
+</style>
+
+<section id="editorial" class="ed">
+  <nav class="masthead">
+    <div class="issue">Vol. III · No. 01</div>
+    <div class="wordmark">Lemon <em>Drop</em></div>
+    <div class="dateline">Utah · MMXXVI</div>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Rentals</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="kicker">The Wedding Issue · Cover Story</div>
+      <h1>The details that <em>make the day.</em></h1>
+      <p class="hero-sub">Curated event rentals, coordination, and live music — for the couples who know the small things are what people remember.</p>
+      <div class="hero-cta-row">
+        <a href="#" class="hero-cta">Begin Inquiry</a>
+        <div class="hero-meta">Booking through 2026</div>
+      </div>
+    </div>
+    <div class="hero-img"></div>
+  </section>
+
+  <div class="feature-strip">
+    <div class="item"><div class="lbl">Est.</div><div class="val">Two <em>thousand</em> twenty-four</div></div>
+    <div class="item"><div class="lbl">Region</div><div class="val">Salt Lake <em>City</em></div></div>
+    <div class="item"><div class="lbl">Events</div><div class="val"><em>1,500+</em> &amp; counting</div></div>
+    <div class="item"><div class="lbl">Inventory</div><div class="val"><em>200+</em> pieces</div></div>
+  </div>
+
+  <section class="feature">
+    <div class="feature-head">
+      <span></span>
+      <span class="label">§ 01 — The Studio</span>
+      <span></span>
+    </div>
+    <div class="feature-body">
+      <h2>Born from a <em>bride's</em> best idea.</h2>
+      <div>
+        <p>Lemon Drop Event Rentals began the week after its founder's own 2023 wedding. The details — the arches, the candleholders, the perfect bar setup — had been pieced together from a dozen suppliers. She set out to build the single trusted source she'd wished for.</p>
+        <p>The studio now holds over 200 rental pieces across 16 carefully curated categories, a coordination team, and an in-house jazz band. Every booking starts with a human on the other end of the email.</p>
+        <div class="byline"><strong>Studio</strong> · Salt Lake City · <strong>Founded</strong> 2024</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="portfolio">
+    <div class="portfolio-head">
+      <div class="kicker">The Inventory</div>
+      <h2>A few recent <em>details.</em></h2>
+    </div>
+    <div class="pf-grid">
+      <div class="pf-item pf-item-1">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Arch — The Hexagon</span><em>Spring '25</em></div>
+      </div>
+      <div class="pf-item pf-item-2">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Table — Reception</span><em>Summer '25</em></div>
+      </div>
+      <div class="pf-item pf-item-3">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Charger — Gold Rim</span><em>Tableware</em></div>
+      </div>
+      <div class="pf-item pf-item-4">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Neon — Custom</span><em>Signage</em></div>
+      </div>
+      <div class="pf-item pf-item-5">
+        <div class="pf-img"></div>
+        <div class="pf-caption"><span class="title">Candle — Pillar Set</span><em>Lighting</em></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonial">
+    <div class="testimonial-inner">
+      <div class="label">Cover Endorsement</div>
+      <q>Working with Lemon Drop was the highlight of my wedding, outside of the wedding itself.</q>
+      <div class="attribution">From a bride<em>Rahma</em></div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="cta-inner">
+      <div class="kicker">Next Issue · Your Wedding</div>
+      <h2>Make it the <em>cover story.</em></h2>
+      <p>Share your date, venue, and guest count. We respond to inquiries within two business days.</p>
+      <div class="btn-row">
+        <a href="#" class="cta-btn primary">Begin Inquiry</a>
+        <a href="#" class="cta-btn ghost">Browse Inventory</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-mark">Lemon <em>Drop</em></div>
+        <p class="footer-tag">Event rentals, coordination, &amp; live music — Salt Lake City, Utah. 1,500+ events since 2024.</p>
+      </div>
+      <div>
+        <div class="col-label">Studio</div>
+        <p>Salt Lake City, UT</p>
+        <p><a href="tel:8012447346">801.244.7346</a></p>
+      </div>
+      <div>
+        <div class="col-label">Sections</div>
+        <p><a href="#">Rentals</a></p>
+        <p><a href="#">Coordination</a></p>
+        <p><a href="#">Live Music</a></p>
+      </div>
+      <div>
+        <div class="col-label">Subscribe</div>
+        <p><a href="#">Instagram</a></p>
+        <p><a href="#">Pinterest</a></p>
+        <p><a href="#">Inquire</a></p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Lemon Drop Event Rentals</span>
+      <span>Vol. III · No. 01</span>
+    </div>
+  </footer>
+</section>
+
+</body>
+</html>
