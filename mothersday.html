@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Mom · Mother's Day 2026</title>
+<meta name="description" content="A letter from all five of us, for the road.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://itunes.apple.com">
+<link rel="preconnect" href="https://audio-ssl.itunes.apple.com" crossorigin>
+<link rel="preconnect" href="https://is1-ssl.mzstatic.com" crossorigin>
+<link rel="preconnect" href="https://is2-ssl.mzstatic.com" crossorigin>
+<link rel="preconnect" href="https://is3-ssl.mzstatic.com" crossorigin>
+<link rel="preconnect" href="https://is4-ssl.mzstatic.com" crossorigin>
+<link rel="preconnect" href="https://is5-ssl.mzstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=Lora:ital,wght@0,400;0,500;1,400&family=Italianno&family=Caveat:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f3e8ce;
+  --paper-warm: #ecdcb6;
+  --paper-light: #faf3dc;
+  --paper-shadow: #d9c498;
+  --ink: #3a2418;
+  --ink-soft: #6e4d36;
+  --ink-faded: #8d6e54;
+  --rose: #b25749;
+  --rose-deep: #8b3326;
+  --sage: #748a64;
+  --sage-deep: #4f6644;
+  --gold: #c69434;
+  --gold-soft: #d9b264;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Lora', Georgia, serif;
+  font-size: 1.12rem;
+  line-height: 1.65;
+  color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    radial-gradient(ellipse 80% 50% at 15% 0%, rgba(232, 198, 145, 0.55), transparent 60%),
+    radial-gradient(ellipse 90% 60% at 90% 110%, rgba(178, 87, 73, 0.18), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 50%, rgba(116, 138, 100, 0.08), transparent 70%);
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Paper grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.25 0 0 0 0 0.15 0 0 0 0 0.08 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  opacity: 0.22;
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+/* Soft vignette */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(80, 50, 25, 0.18) 100%);
+  z-index: 1;
+}
+
+main, header, footer { position: relative; z-index: 2; }
+
+.display { font-family: 'Fraunces', serif; }
+.script  { font-family: 'Italianno', cursive; }
+.hand    { font-family: 'Caveat', cursive; }
+
+/* ---------------- HERO ---------------- */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 1.5rem;
+  position: relative;
+}
+
+.hero-overline {
+  font-family: 'Fraunces', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  animation: fadeUp 1.2s 0.2s ease-out backwards;
+}
+.hero-overline::before, .hero-overline::after {
+  content: '';
+  width: 36px; height: 1px; background: var(--ink-faded);
+}
+
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 0.9;
+  margin-bottom: 2rem;
+}
+
+.hero-title .script {
+  font-size: clamp(4rem, 10vw, 8.5rem);
+  color: var(--rose);
+  font-style: italic;
+  margin-bottom: -0.05em;
+  transform: rotate(-3deg);
+  animation: scriptIn 1.2s 0.5s ease-out backwards;
+  text-shadow: 0 2px 0 rgba(178, 87, 73, 0.18);
+}
+
+.hero-title .display {
+  font-size: clamp(2.5rem, 7vw, 5.6rem);
+  font-weight: 350;
+  font-style: italic;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  font-variation-settings: "SOFT" 80;
+  animation: fadeUp 1.2s 0.8s ease-out backwards;
+}
+
+.hero-rule {
+  width: 80px; height: 1px;
+  background: var(--ink-faded);
+  margin: 2.5rem 0 2rem;
+  position: relative;
+  animation: scaleX 1.2s 1.1s ease-out backwards;
+}
+.hero-rule::before {
+  content: '✿';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper);
+  padding: 0 0.6rem;
+  color: var(--rose);
+  font-size: 0.85rem;
+}
+
+.hero-byline {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.3rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.9rem;
+  animation: fadeUp 1.2s 1.3s ease-out backwards;
+}
+
+.hero-signatures {
+  font-family: 'Italianno', cursive;
+  font-size: 2.1rem;
+  color: var(--ink);
+  letter-spacing: 0.04em;
+  animation: fadeUp 1.2s 1.5s ease-out backwards;
+}
+.hero-signatures span { color: var(--rose); margin: 0 0.35em; }
+
+.hero-postmark {
+  position: absolute;
+  top: 2rem; right: 2rem;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  border: 2px dashed var(--rose-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rose-deep);
+  transform: rotate(12deg);
+  opacity: 0.65;
+  padding: 1rem;
+  line-height: 1.4;
+}
+.hero-postmark span { font-size: 0.95rem; letter-spacing: 0.02em; }
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  animation: scrollIn 1.2s 2s ease-out backwards, bob 2.5s 3s ease-in-out infinite;
+  opacity: 0.75;
+}
+.scroll-indicator::after {
+  content: '';
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, var(--ink-soft), transparent);
+}
+
+/* ---------------- FLORAL DECORATIONS ---------------- */
+.decoration {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.55;
+  z-index: 1;
+}
+.decoration svg { display: block; width: 100%; height: auto; }
+
+.hero .decoration.tl { top: 0; left: 0; width: 280px; transform: rotate(-8deg) translate(-15%, -10%); }
+.hero .decoration.br { bottom: 0; right: 0; width: 320px; transform: rotate(170deg) translate(-15%, -10%); }
+
+/* ---------------- INTRO ---------------- */
+.intro {
+  max-width: 620px;
+  margin: 4rem auto 6rem;
+  padding: 0 2rem;
+  text-align: center;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.35rem;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+.intro .opener {
+  font-family: 'Italianno', cursive;
+  font-size: 2.6rem;
+  color: var(--rose);
+  display: block;
+  margin-bottom: 0.6rem;
+  font-style: normal;
+}
+
+/* ---------------- QUESTION SECTIONS ---------------- */
+.section {
+  min-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 7rem 1.5rem 6rem;
+  max-width: 920px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.section-divider {
+  display: flex; align-items: center; justify-content: center;
+  gap: 1.5rem;
+  margin: 2rem auto 5rem;
+  max-width: 920px;
+  padding: 0 1.5rem;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(to right, transparent, var(--ink-faded), transparent);
+}
+.section-divider .ornament {
+  color: var(--rose);
+  font-size: 1.1rem;
+  letter-spacing: 0.4em;
+}
+
+.q-number {
+  font-family: 'Fraunces', serif;
+  font-size: 0.8rem;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: var(--rose);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.q-number::after {
+  content: '';
+  flex: 1; max-width: 90px;
+  height: 1px; background: var(--rose);
+  opacity: 0.4;
+}
+
+.question {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: clamp(2rem, 5.2vw, 3.6rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  color: var(--ink);
+  margin-bottom: 4rem;
+  font-variation-settings: "SOFT" 100;
+  max-width: 16ch;
+}
+.question .quote-mark {
+  color: var(--rose);
+  font-size: 1.2em;
+  vertical-align: -0.1em;
+  font-style: normal;
+  margin-right: 0.05em;
+}
+
+/* ---------------- CAROUSEL ---------------- */
+.carousel {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.cards-wrap {
+  position: relative;
+  min-height: 280px;
+  margin-bottom: 2.5rem;
+}
+
+.song-section .cards-wrap { margin-bottom: 0; min-height: 0; }
+.song-section .card { padding-bottom: 1.4rem; }
+.song-section .card::after {
+  content: '';
+  position: absolute;
+  left: 12%; right: 12%;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(139, 51, 38, 0.2), transparent);
+}
+
+.card {
+  background: var(--paper-light);
+  border-radius: 4px;
+  padding: 3rem 3rem 2.5rem;
+  box-shadow:
+    0 1px 1px rgba(70, 40, 20, 0.06),
+    0 8px 25px rgba(70, 40, 20, 0.12),
+    0 30px 60px rgba(70, 40, 20, 0.08);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(20px) rotate(-0.4deg);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+  pointer-events: none;
+  border: 1px solid rgba(217, 196, 152, 0.6);
+}
+
+.card.active {
+  opacity: 1;
+  transform: translateY(0) rotate(-0.4deg);
+  pointer-events: auto;
+  position: relative;
+}
+
+.card:nth-child(2n).active { transform: translateY(0) rotate(0.6deg); }
+.card:nth-child(3n).active { transform: translateY(0) rotate(-0.8deg); }
+.card:nth-child(5n).active { transform: translateY(0) rotate(0.4deg); }
+
+/* Tape decoration */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 90px;
+  height: 22px;
+  background: rgba(178, 87, 73, 0.18);
+  border-left: 1px dashed rgba(178, 87, 73, 0.3);
+  border-right: 1px dashed rgba(178, 87, 73, 0.3);
+  box-shadow: 0 1px 2px rgba(70, 40, 20, 0.08);
+}
+
+.answer-text {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  line-height: 1.65;
+  color: var(--ink);
+  margin-bottom: 2rem;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.005em;
+}
+
+.answer-text.short {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  text-align: center;
+  margin: 1rem 0 2rem;
+  font-style: italic;
+  font-weight: 400;
+  font-variation-settings: "SOFT" 100;
+  letter-spacing: -0.01em;
+  color: var(--rose-deep);
+  line-height: 1.2;
+}
+
+.answer-text.message {
+  font-size: clamp(1.1rem, 2vw, 1.32rem);
+  line-height: 1.8;
+}
+
+.signature {
+  text-align: right;
+  margin-top: 1.5rem;
+  font-family: 'Italianno', cursive;
+  font-size: 2.6rem;
+  color: var(--rose);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4em;
+}
+.signature::before {
+  content: '—';
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  color: var(--ink-faded);
+  font-style: italic;
+}
+
+/* Carousel controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.nav-btn {
+  background: transparent;
+  border: 1px solid var(--ink-faded);
+  color: var(--ink-soft);
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-family: 'Fraunces', serif;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+.nav-btn:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+  transform: scale(1.08);
+}
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dot {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: 'Fraunces', serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  padding: 0.5rem 0.85rem;
+  border-radius: 999px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.dot:hover { color: var(--ink); }
+.dot.active {
+  color: var(--paper);
+  background: var(--rose);
+}
+
+/* ---------------- SONG SECTION ---------------- */
+.song-section .question { color: var(--rose-deep); }
+
+.player-wrap {
+  margin-top: -0.4rem;
+  position: relative;
+  display: grid;
+  grid-template-areas: "stack";
+  min-height: 124px;
+}
+.player-slot {
+  grid-area: stack;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.player-slot.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.audio-card {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+  background: linear-gradient(135deg, #2a1a14, #3a2418 55%, #4a2c1c);
+  color: #f6e9c8;
+  border-radius: 14px;
+  padding: 1rem 1.1rem 1rem 1rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 180, 0.12),
+    0 12px 32px rgba(60, 30, 15, 0.28);
+  position: relative;
+  overflow: hidden;
+}
+.audio-cover {
+  width: 92px; height: 92px;
+  border-radius: 8px;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #5a3a28, #2a1a14);
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: rgba(246, 233, 200, 0.45);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.audio-cover.loaded { color: transparent; }
+.audio-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.audio-label {
+  font-family: 'Fraunces', serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.36em;
+  text-transform: uppercase;
+  color: rgba(246, 233, 200, 0.55);
+  margin-bottom: 0.1rem;
+}
+.audio-title {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1.18rem;
+  font-weight: 400;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #f9eecf;
+}
+.audio-artist {
+  font-family: 'Lora', serif;
+  font-size: 0.92rem;
+  color: rgba(246, 233, 200, 0.65);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.audio-play-btn {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: var(--rose);
+  color: #faf3dc;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.25s, transform 0.2s;
+  box-shadow: 0 4px 14px rgba(178, 87, 73, 0.4);
+}
+.audio-play-btn:hover { background: var(--rose-deep); transform: scale(1.06); }
+.audio-play-btn:active { transform: scale(0.96); }
+.audio-play-btn svg { display: block; }
+.audio-play-btn .icon-pause { display: none; }
+.audio-play-btn.playing .icon-play { display: none; }
+.audio-play-btn.playing .icon-pause { display: block; }
+
+.audio-progress {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: rgba(255, 220, 180, 0.08);
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+}
+.audio-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--rose);
+  transition: width 0.15s linear;
+}
+
+.audio-error {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 0.82rem;
+  color: rgba(246, 233, 200, 0.55);
+  margin-top: 0.4rem;
+}
+
+/* ---------------- THREE WORDS SECTION ---------------- */
+.three-words .answer-text { text-align: center; }
+
+/* ---------------- MESSAGE SECTION ---------------- */
+.message-section .card { padding: 3.5rem 3.2rem 2.8rem; }
+
+/* ---------------- FOOTER ---------------- */
+.footer {
+  text-align: center;
+  padding: 8rem 2rem 5rem;
+  position: relative;
+  margin-top: 4rem;
+}
+
+.footer-rule {
+  width: 110px; height: 1px;
+  background: var(--ink-faded);
+  margin: 0 auto 3rem;
+  position: relative;
+}
+.footer-rule::before {
+  content: '✿';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--paper);
+  padding: 0 0.6rem;
+  color: var(--rose);
+}
+
+.footer-message {
+  font-family: 'Italianno', cursive;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  color: var(--rose);
+  line-height: 1.05;
+  margin-bottom: 1rem;
+  transform: rotate(-1.5deg);
+}
+
+.footer-sub {
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.heart {
+  color: var(--rose);
+  display: inline-block;
+  animation: pulse 2.4s ease-in-out infinite;
+  font-size: 1.2em;
+}
+
+.footer-stamp {
+  font-family: 'Fraunces', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-top: 4rem;
+}
+
+/* ---------------- ANIMATIONS ---------------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes scriptIn {
+  from { opacity: 0; transform: rotate(-3deg) translateY(30px); }
+  to { opacity: 1; transform: rotate(-3deg) translateY(0); }
+}
+@keyframes scrollIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(30px); }
+  to { opacity: 0.75; transform: translateX(-50%) translateY(0); }
+}
+@keyframes scaleX {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+/* Reveal-on-scroll */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+.reveal.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Side progress indicator */
+.progress {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 50;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.progress.visible { opacity: 1; }
+.progress button {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-faded);
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.progress button:hover { background: var(--ink-faded); }
+.progress button.active {
+  background: var(--rose);
+  border-color: var(--rose);
+  transform: scale(1.4);
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+@media (max-width: 720px) {
+  body { font-size: 1.06rem; }
+  .hero-postmark { width: 92px; height: 92px; top: 1rem; right: 1rem; font-size: 0.5rem; padding: 0.6rem; }
+  .hero-postmark span { font-size: 0.75rem; }
+  .hero-overline { font-size: 0.65rem; letter-spacing: 0.32em; }
+  .hero-overline::before, .hero-overline::after { width: 22px; }
+  .hero-signatures { font-size: 1.65rem; }
+  .section { padding: 5rem 1.2rem 4rem; }
+  .question { margin-bottom: 2.5rem; }
+  .card { padding: 2.2rem 1.7rem 2rem; }
+  .answer-text { font-size: 1.18rem; }
+  .signature { font-size: 2.1rem; }
+  .controls { gap: 0.7rem; }
+  .nav-btn { width: 38px; height: 38px; font-size: 0.95rem; }
+  .dot { padding: 0.4rem 0.6rem; font-size: 0.7rem; letter-spacing: 0.14em; }
+  .progress { right: 0.7rem; }
+  .decoration { display: none; }
+  .footer { padding: 5rem 1.5rem 4rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.2s !important;
+  }
+}
+
+</style>
+</head>
+<body>
+
+<!-- Side progress indicator -->
+<nav class="progress" aria-label="Page navigation"></nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="decoration tl">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#b25749" stroke-width="1.4" opacity="0.7">
+        <path d="M20 180 Q 40 120, 80 100 T 160 40" />
+        <circle cx="80" cy="100" r="10" fill="#b25749" opacity="0.4"/>
+        <circle cx="120" cy="70" r="7" fill="#b25749" opacity="0.4"/>
+        <circle cx="160" cy="40" r="12" fill="#b25749" opacity="0.4"/>
+        <circle cx="50" cy="140" r="6" fill="#b25749" opacity="0.4"/>
+        <path d="M75 100 Q 78 95, 85 100 Q 88 105, 85 110 Q 80 115, 75 110 Q 72 105, 75 100" fill="#b25749" opacity="0.6"/>
+        <path d="M115 70 Q 118 65, 125 70 Q 128 75, 125 80 Q 120 85, 115 80 Q 112 75, 115 70" fill="#b25749" opacity="0.6"/>
+        <path d="M155 40 Q 158 33, 168 40 Q 172 47, 168 54 Q 161 60, 155 54 Q 151 47, 155 40" fill="#b25749" opacity="0.55"/>
+        <ellipse cx="60" cy="125" rx="3" ry="8" fill="#748a64" opacity="0.6" transform="rotate(-30 60 125)"/>
+        <ellipse cx="100" cy="92" rx="3" ry="9" fill="#748a64" opacity="0.6" transform="rotate(20 100 92)"/>
+        <ellipse cx="140" cy="58" rx="3" ry="8" fill="#748a64" opacity="0.6" transform="rotate(-10 140 58)"/>
+      </g>
+    </svg>
+  </div>
+  <div class="decoration br">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <g fill="none" stroke="#b25749" stroke-width="1.4" opacity="0.7">
+        <path d="M20 180 Q 40 120, 80 100 T 160 40" />
+        <circle cx="80" cy="100" r="10" fill="#b25749" opacity="0.4"/>
+        <circle cx="120" cy="70" r="7" fill="#b25749" opacity="0.4"/>
+        <circle cx="160" cy="40" r="12" fill="#b25749" opacity="0.4"/>
+        <circle cx="50" cy="140" r="6" fill="#b25749" opacity="0.4"/>
+        <path d="M75 100 Q 78 95, 85 100 Q 88 105, 85 110 Q 80 115, 75 110 Q 72 105, 75 100" fill="#b25749" opacity="0.6"/>
+        <path d="M115 70 Q 118 65, 125 70 Q 128 75, 125 80 Q 120 85, 115 80 Q 112 75, 115 70" fill="#b25749" opacity="0.6"/>
+        <path d="M155 40 Q 158 33, 168 40 Q 172 47, 168 54 Q 161 60, 155 54 Q 151 47, 155 40" fill="#b25749" opacity="0.55"/>
+        <ellipse cx="60" cy="125" rx="3" ry="8" fill="#748a64" opacity="0.6" transform="rotate(-30 60 125)"/>
+        <ellipse cx="100" cy="92" rx="3" ry="9" fill="#748a64" opacity="0.6" transform="rotate(20 100 92)"/>
+        <ellipse cx="140" cy="58" rx="3" ry="8" fill="#748a64" opacity="0.6" transform="rotate(-10 140 58)"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="hero-postmark">
+    <span>May</span>
+    Mother's<br>Day<br>2026
+  </div>
+
+  <p class="hero-overline">A letter for the road</p>
+
+  <h1 class="hero-title">
+    <span class="script">Happy</span>
+    <span class="display">Mother's Day</span>
+  </h1>
+
+  <div class="hero-rule"></div>
+
+  <p class="hero-byline">For the woman who raised us all</p>
+  <p class="hero-signatures">Jake <span>·</span> Sam <span>·</span> Kate <span>·</span> Libby <span>·</span> Jess</p>
+
+  <div class="scroll-indicator">turn the page</div>
+</header>
+
+<!-- ========== INTRO ========== -->
+<section class="intro reveal">
+  <span class="opener">Mom,</span>
+  We can't all be in one room with you this year — so we wrote you something instead.
+  Ten questions, five voices. Read it slow. Read it twice.
+  Pretend we're sitting around the kitchen island talking over each other.
+</section>
+
+<!-- ========== QUESTIONS ========== -->
+<main id="questions"></main>
+
+<!-- ========== FOOTER ========== -->
+<footer class="footer reveal">
+  <div class="footer-rule"></div>
+  <p class="footer-message">All our love,<br>always.</p>
+  <p class="footer-sub">— from your five <span class="heart">♥</span></p>
+  <p class="footer-stamp">Sealed with love · May 2026</p>
+</footer>
+
+<script>
+/* =========================================================
+   🎵 SONG EMBEDS — please verify these YouTube IDs!
+   Open each in a browser to confirm the video matches the
+   intended song. To replace, search YouTube for the song
+   and copy the v= value from the URL (e.g. youtu.be/XXXXXXX).
+   ========================================================= */
+const SONGS = {
+  Jake:  { title: "Put Your Records On",         artist: "Corinne Bailey Rae", spotify: "2nGFzvICaeEWjIrBrL2RAx" },
+  Sam:   { title: "You Shook Me All Night Long", artist: "AC/DC",              spotify: "2SiXAy7TuUkycRVbbWDEpo" },
+  Kate:  { title: "Love on Top",                 artist: "Beyoncé",            spotify: "1z6WtY7X4HQJvzxC4UgkSf" },
+  Libby: { title: "Rock of Ages",                artist: "Def Leppard",        spotify: "2AmEv442DGwSxMGZ9XEvBA" },
+  Jess:  { title: "The Safety Dance",            artist: "Men Without Hats",   spotify: "49gncM4nMG84k14p2Y7FH0" },
+};
+
+const SIBLINGS = ["Jake", "Sam", "Kate", "Libby", "Jess"];
+
+const QUESTIONS = [
+  {
+    q: "Something about her that always makes you smile",
+    answers: {
+      Jake:  "Her hugs.",
+      Sam:   "Her insistence that she has never taken any of my fidget toys ever for any reason.",
+      Kate:  "A hug from mom always makes me smile.",
+      Libby: "Her amazing never-out-of-style dance moves.",
+      Jess:  "It always makes me smile when we get to do something fun together — going on a trip, reading, watching something — and definitely the jokes she makes when siblings are around."
+    }
+  },
+  {
+    q: "Your favorite meal she makes",
+    answers: {
+      Jake:  "Sunday pot roast.",
+      Sam:   "Pot roast. And also burgers.",
+      Kate:  "Mississippi pot roast. All day.",
+      Libby: "Anything with homemade tortillas.",
+      Jess:  "There are a ton of things she cooks that are amazing. I'd have to say my favorites are pot roast and porcupine meatballs."
+    }
+  },
+  {
+    q: "The most important lesson she taught you",
+    answers: {
+      Jake:  "Be kind to everyone — no matter who they are or what they believe.",
+      Sam:   "Everyone is going through something, and it has nothing to do with you. So just don't let their actions bother you.",
+      Kate:  "Mom taught me to always put in my absolute best — and then also let that be enough, even if it wasn't the result I was hoping for.",
+      Libby: "Christ comes first in your life. Then you figure everything else out.",
+      Jess:  "One of the most important things she's taught me is that the Savior is there to shoulder my burdens. Having faith can make every problem and trial easier to carry and overcome."
+    }
+  },
+  {
+    q: "A song that instantly reminds you of her",
+    type: "song",
+    answers: {
+      Jake:  "She used to play this on CD a lot when we were younger. I remember this one specifically, for some reason.",
+      Sam:   "You Shook Me All Night Long — AC/DC.",
+      Kate:  "Love on Top by Beyoncé.",
+      Libby: "Rock of Ages — \"it's better to burn out than fade away.\"",
+      Jess:  "\"Safety Dance,\" by Men Without Hats. :)"
+    }
+  },
+  {
+    q: "A time she showed up for you when it mattered",
+    answers: {
+      Jake:  "When we were trying to move into a new house and I was stressed out beyond belief. Mom was always there to talk.",
+      Sam:   "When I was really upset about some comments Coach Marsing had said to me after I quit swim team. I remember her being really understanding and supporting me.",
+      Kate:  "I had food poisoning one night, and mom was there the next day with Coke Zero, Gatorade, and saltines to take care of me.",
+      Libby: "Mom has always shown up for me — literally any time I have needed anything. I remember when I moved out of the house for the very first time, I got so anxious and nervous on my first night that the only thing I could think to do was call my mom. She immediately knew what to say and helped me calm down and focus on all of the good things that were going to come from living away from home and growing up.",
+      Jess:  "It's hard to pick one single time, because she always shows up for me when it matters. It's the thousands of little things — answering homework questions, saying a prayer with me, helping me throw together a lunch, giving me advice when I need it. She always shows up."
+    }
+  },
+  {
+    q: "Something you didn't appreciate as a kid but get now",
+    answers: {
+      Jake:  "How much it can matter to people to ask little questions like \"how are you doing?\" — when they might not be willing or able to reach out to you on their own.",
+      Sam:   "Picky eaters are just… so hard to deal with. Sorry, mom.",
+      Kate:  "Not having Instagram as early as everyone else did. One of many things mom was right about.",
+      Libby: "As a kid I didn't really appreciate why we needed to not rub Vaseline on our heads and carpet. Now I get it.",
+      Jess:  "I'm always grateful when she stops me from doing stupid things — getting a dog, joining JROTC. And she's taught me the joy of just relaxing and reading on a vacation (which I absolutely didn't appreciate as a kid)."
+    }
+  },
+  {
+    q: "Something of hers you hope to pass on",
+    answers: {
+      Jake:  "Her empathy.",
+      Sam:   "Her discernment.",
+      Kate:  "I want to pass on her sewing talent!",
+      Libby: "Her ability to see things through the Spirit, and with faith.",
+      Jess:  "I hope I can pass on the talents she's taught me — cooking, embroidery — and the skills she has that make her a great mom. The kind of mom I want to be someday."
+    }
+  },
+  {
+    q: "A thank-you you've never quite said out loud",
+    answers: {
+      Jake:  "Thanks for teaching me how to respect and love my wife. Thanks for putting up with me when it wasn't easy.",
+      Sam:   "Thanks for always being on my side. I know I'm not right nearly as often as I think I am. :)",
+      Kate:  "Thank you for not letting me get away with too much, and for teaching me kindness and compassion. I've seen a lot of my peers and my students not getting those lessons, and I'm so thankful for my mom — who taught me how to treat others.",
+      Libby: "Thank you for putting up with all of my shenanigans, and for all of my mood swings and worries and crazy thoughts. I love always having you there to ground me.",
+      Jess:  "Thank you for putting up with my obstinate and stubborn behavior — I can be pretty frustrating sometimes, I guess. And thank you for teaching me the importance of hard work, and dedicating yourself to the things you want."
+    }
+  },
+  {
+    q: "Mom in three words",
+    type: "short",
+    answers: {
+      Jake:  "Home.",
+      Sam:   "Happy. Safe. Welcoming.",
+      Kate:  "Loving. Steady. Kind.",
+      Libby: "Lovely. Christlike. Selfless.",
+      Jess:  "Ninja-kick. Pineapple-baby. Superstar."
+    }
+  },
+  {
+    q: "A special message, just for her",
+    type: "message",
+    answers: {
+      Jake:  "Love you, mom! I hope one day to be as good a parent to my kids as you were to me.",
+      Sam:   "Happy Mother's Day, mom! You are amazing — such a wonderful support and example. I love you so much!",
+      Kate:  "Happy Mother's Day, mom!! I love you so much, and I'm so thankful for you. What a blessing it is to have you as my mom. 🫶🏼❤️",
+      Libby: "This week in CFM we've talked a lot about sacrifice. As I was reading in Moses 5:7 — where it talks about how all of these things are done in the similitude of the sacrifice of the Only Begotten — I realized that we often think about the things we can sacrifice, while the Savior sacrificed His whole being. Not only to give of Himself completely, but because His life is filled with people that matter so much more to Him. It had to be done, because of the love He has for each of us. Doesn't that sound like mom? You gave your body for us. You gave up dreams and opportunities for us. You put yourself last, for each of us. You advocate for each of us. You are a symbol of Christ in my life. I hope to be the kind of mother that you are to my children.",
+      Jess:  "Hi mama! Happy Mother's Day — you're my favorite, don't tell the others. I hope you know how much I love, look up to, and appreciate you. You do so much, not only for me, but for our whole family. When I have kids someday, I want to be the kind of mom you are: kind, a good teacher, loves to have fun, knows how to work hard, and is dedicated to the gospel. It's still a year from now, but I am going to miss you when I move out — even though I'm excited to. I think you're pretty swell, and I'm unbelievably grateful that, out of all the mamas in the world, you're mine. Love you! — Your favorite child, Jess <3"
+    }
+  }
+];
+
+/* ---------------- RENDER ---------------- */
+const main = document.getElementById('questions');
+const progress = document.querySelector('.progress');
+
+const numWord = (n) => String(n).padStart(2, '0');
+const orn = '<div class="section-divider"><span class="ornament">✿ ✿ ✿</span></div>';
+
+QUESTIONS.forEach((Q, i) => {
+  const isSong = Q.type === 'song';
+  const isShort = Q.type === 'short';
+  const isMessage = Q.type === 'message';
+
+  const sectionClasses = ['section', 'reveal'];
+  if (isSong) sectionClasses.push('song-section');
+  if (isShort) sectionClasses.push('three-words');
+  if (isMessage) sectionClasses.push('message-section');
+
+  const cardsHtml = SIBLINGS.map((name, idx) => {
+    const text = Q.answers[name];
+    let textClass = 'answer-text';
+    if (isShort) textClass += ' short';
+    if (isMessage) textClass += ' message';
+    return `
+      <article class="card ${idx === 0 ? 'active' : ''}" data-sibling="${name}">
+        <p class="${textClass}">${text}</p>
+        <p class="signature">${name}</p>
+      </article>`;
+  }).join('');
+
+  const dotsHtml = SIBLINGS.map((name, idx) => `
+    <button class="dot ${idx === 0 ? 'active' : ''}" data-index="${idx}" aria-label="${name}'s answer">${name}</button>
+  `).join('');
+
+  const songHtml = isSong ? `
+    <div class="player-wrap">
+      ${SIBLINGS.map((name, sIdx) => `
+        <div class="player-slot ${sIdx === 0 ? 'active' : ''}" data-sibling="${name}">
+          <div class="audio-card">
+            <div class="audio-cover" data-audio-cover="${name}"><span>♫</span></div>
+            <div class="audio-info">
+              <p class="audio-label">Track</p>
+              <p class="audio-title" data-audio-title="${name}">${SONGS[name].title}</p>
+              <p class="audio-artist" data-audio-artist="${name}">${SONGS[name].artist}</p>
+            </div>
+            <button class="audio-play-btn" data-audio-btn="${name}" type="button" aria-label="Play ${SONGS[name].title}">
+              <svg class="icon-play" viewBox="0 0 24 24" width="22" height="22"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              <svg class="icon-pause" viewBox="0 0 24 24" width="22" height="22"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
+            </button>
+            <div class="audio-progress"><div class="audio-progress-fill" data-audio-fill="${name}"></div></div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  ` : '';
+
+  const html = `
+    ${i > 0 ? orn : ''}
+    <section class="${sectionClasses.join(' ')}" data-section-index="${i}">
+      <p class="q-number">No. ${numWord(i + 1)}</p>
+      <h2 class="question"><span class="quote-mark">"</span>${Q.q}<span class="quote-mark">"</span></h2>
+      <div class="carousel" data-carousel${isSong ? ' data-song-carousel' : ''}>
+        <div class="cards-wrap">${cardsHtml}</div>
+        ${songHtml}
+        <div class="controls">
+          <button class="nav-btn prev" aria-label="Previous">‹</button>
+          <div class="dots">${dotsHtml}</div>
+          <button class="nav-btn next" aria-label="Next">›</button>
+        </div>
+      </div>
+    </section>
+  `;
+  main.insertAdjacentHTML('beforeend', html);
+
+  // progress dot
+  const pBtn = document.createElement('button');
+  pBtn.setAttribute('aria-label', `Question ${i + 1}`);
+  pBtn.dataset.target = i;
+  progress.appendChild(pBtn);
+});
+
+/* ---------------- CAROUSEL LOGIC ---------------- */
+document.querySelectorAll('[data-carousel]').forEach(carousel => {
+  const cards = [...carousel.querySelectorAll('.card')];
+  const dots  = [...carousel.querySelectorAll('.dot')];
+  const prev  = carousel.querySelector('.prev');
+  const next  = carousel.querySelector('.next');
+  const isSong = carousel.hasAttribute('data-song-carousel');
+
+  let idx = 0;
+  let userInteracted = false;
+
+  function setActive(newIdx) {
+    idx = (newIdx + cards.length) % cards.length;
+    cards.forEach((c, i) => c.classList.toggle('active', i === idx));
+    dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+
+    if (isSong) {
+      const sibling = SIBLINGS[idx];
+      carousel._activeSibling = sibling;
+
+      carousel.querySelectorAll('.player-slot').forEach(slot => {
+        slot.classList.toggle('active', slot.dataset.sibling === sibling);
+      });
+
+      // Pause every other audio, then play the active one (if unlocked).
+      Object.entries(window._audios || {}).forEach(([name, audio]) => {
+        if (!audio) return;
+        if (name === sibling) {
+          if (window._userActivated) {
+            audio.currentTime = 0;
+            audio.play().catch(() => {});
+          }
+        } else {
+          audio.pause();
+        }
+      });
+    }
+  }
+
+  prev.addEventListener('click', () => { userInteracted = true; setActive(idx - 1); });
+  next.addEventListener('click', () => { userInteracted = true; setActive(idx + 1); });
+  dots.forEach((d, i) => d.addEventListener('click', () => { userInteracted = true; setActive(i); }));
+
+  // Touch / swipe
+  let startX = null;
+  carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  carousel.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) {
+      userInteracted = true;
+      setActive(dx < 0 ? idx + 1 : idx - 1);
+    }
+    startX = null;
+  });
+
+  // Scroll-into-view auto-play is handled in the audio setup block below.
+});
+
+/* ---------------- SCROLL REVEAL + PROGRESS ---------------- */
+const sections = [...document.querySelectorAll('main .section')];
+const progressBtns = [...progress.querySelectorAll('button')];
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('in-view');
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+const progressObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const i = parseInt(e.target.dataset.sectionIndex);
+      progressBtns.forEach((b, j) => b.classList.toggle('active', j === i));
+    }
+  });
+}, { threshold: 0.4 });
+
+sections.forEach(s => progressObserver.observe(s));
+
+// Show progress dots after hero
+window.addEventListener('scroll', () => {
+  if (window.scrollY > window.innerHeight * 0.6) progress.classList.add('visible');
+  else progress.classList.remove('visible');
+});
+
+progressBtns.forEach((btn, i) => {
+  btn.addEventListener('click', () => {
+    sections[i]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+/* ---------------- KEYBOARD ---------------- */
+document.addEventListener('keydown', (e) => {
+  if (!['ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+  // find the carousel currently in view
+  const visible = [...document.querySelectorAll('[data-carousel]')].find(c => {
+    const r = c.getBoundingClientRect();
+    return r.top < window.innerHeight * 0.6 && r.bottom > window.innerHeight * 0.3;
+  });
+  if (!visible) return;
+  const btn = visible.querySelector(e.key === 'ArrowLeft' ? '.prev' : '.next');
+  btn?.click();
+});
+
+/* ---------------- USER-GESTURE GATE ---------------- */
+window._userActivated = false;
+window._audios = {}; // { siblingName: HTMLAudioElement }
+
+// Any tap, click or key press anywhere on the page satisfies the browser's
+// autoplay policy for the rest of the session.
+function unlockAudio() {
+  if (window._userActivated) return;
+  window._userActivated = true;
+  // If a song section is already in view, kick it off now.
+  document.querySelectorAll('[data-song-carousel]').forEach(c => {
+    if (c._inView) playActiveAudio(c);
+  });
+}
+window.addEventListener('pointerdown', unlockAudio, { once: false });
+window.addEventListener('keydown', unlockAudio, { once: false });
+
+/* ---------------- iTunes preview fetch + audio pre-load ---------------- */
+async function fetchITunes(song) {
+  const q = encodeURIComponent(`${song.title} ${song.artist}`);
+  const url = `https://itunes.apple.com/search?term=${q}&entity=song&limit=5&media=music`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!data.results || !data.results.length) return null;
+  // Prefer a result whose artist matches; iTunes returns a few possible matches.
+  const want = song.artist.toLowerCase();
+  const hit = data.results.find(r => (r.artistName || '').toLowerCase().includes(want.split(' ')[0])) || data.results[0];
+  return {
+    previewUrl: hit.previewUrl,
+    artworkUrl: (hit.artworkUrl100 || '').replace('100x100', '600x600'),
+    trackName: hit.trackName,
+    artistName: hit.artistName,
+  };
+}
+
+function updateAudioCard(sibling, info) {
+  document.querySelectorAll(`[data-audio-cover="${sibling}"]`).forEach(el => {
+    if (info.artworkUrl) {
+      el.style.backgroundImage = `url("${info.artworkUrl}")`;
+      el.classList.add('loaded');
+    }
+  });
+  if (info.trackName) {
+    document.querySelectorAll(`[data-audio-title="${sibling}"]`).forEach(el => {
+      el.textContent = info.trackName;
+    });
+  }
+  if (info.artistName) {
+    document.querySelectorAll(`[data-audio-artist="${sibling}"]`).forEach(el => {
+      el.textContent = info.artistName;
+    });
+  }
+}
+
+function attachAudioBehavior(sibling, audio) {
+  const fill = document.querySelector(`[data-audio-fill="${sibling}"]`);
+  const btns = [...document.querySelectorAll(`[data-audio-btn="${sibling}"]`)];
+
+  audio.addEventListener('timeupdate', () => {
+    if (!fill || !audio.duration) return;
+    fill.style.width = `${(audio.currentTime / audio.duration) * 100}%`;
+  });
+  audio.addEventListener('play', () => btns.forEach(b => b.classList.add('playing')));
+  audio.addEventListener('pause', () => btns.forEach(b => b.classList.remove('playing')));
+  audio.addEventListener('ended', () => {
+    btns.forEach(b => b.classList.remove('playing'));
+    if (fill) fill.style.width = '0%';
+  });
+
+  btns.forEach(b => b.addEventListener('click', (e) => {
+    e.stopPropagation();
+    window._userActivated = true;
+    if (audio.paused) {
+      Object.values(window._audios).forEach(a => { if (a !== audio) a.pause(); });
+      audio.play().catch(() => {});
+    } else {
+      audio.pause();
+    }
+  }));
+}
+
+function playActiveAudio(carousel) {
+  const sib = carousel._activeSibling || SIBLINGS[0];
+  const audio = window._audios[sib];
+  if (!audio || !window._userActivated) return;
+  // Pause others
+  Object.entries(window._audios).forEach(([n, a]) => { if (n !== sib && a) a.pause(); });
+  audio.currentTime = 0;
+  audio.play().catch(() => {});
+}
+
+// Kick everything off
+(async () => {
+  await Promise.all(SIBLINGS.map(async (sib) => {
+    try {
+      const info = await fetchITunes(SONGS[sib]);
+      if (!info || !info.previewUrl) {
+        document.querySelectorAll(`[data-audio-btn="${sib}"]`).forEach(b => {
+          b.disabled = true;
+          b.style.opacity = 0.4;
+          b.style.cursor = 'not-allowed';
+        });
+        return;
+      }
+      updateAudioCard(sib, info);
+      const audio = new Audio(info.previewUrl);
+      audio.preload = 'auto';
+      audio.volume = 0.85;
+      window._audios[sib] = audio;
+      attachAudioBehavior(sib, audio);
+    } catch (e) {
+      console.warn(`Failed to load preview for ${sib}:`, e);
+    }
+  }));
+})();
+
+/* Scroll-into-view auto-play for each song carousel */
+document.querySelectorAll('[data-song-carousel]').forEach(carousel => {
+  carousel._activeSibling = SIBLINGS[0];
+  const section = carousel.closest('.section');
+  let played = false;
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      carousel._inView = e.isIntersecting;
+      if (e.isIntersecting && !played && window._userActivated) {
+        played = true;
+        playActiveAudio(carousel);
+      }
+    });
+  }, { threshold: 0.4 });
+  obs.observe(section);
+});
+</script>
+</body>
+</html>
