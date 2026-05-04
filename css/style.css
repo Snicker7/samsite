@@ -938,6 +938,22 @@ img {
   background: var(--color-surface);
 }
 
+.field-note {
+  font-size: 0.85rem;
+  color: var(--color-mid);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+.hp-field {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
 .form-submit {
   width: 100%;
   margin-top: 8px;

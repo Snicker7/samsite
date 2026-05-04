@@ -118,16 +118,6 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label for="budget">Budget Range</label>
-            <select id="budget" name="budget">
-              <option value="" disabled selected>Select a range...</option>
-              <option value="under-500">Under $500</option>
-              <option value="500-1000">$500 — $1,000</option>
-              <option value="1000-2500">$1,000 — $2,500</option>
-              <option value="2500-plus">$2,500+</option>
-            </select>
-          </div>
-          <div class="form-group">
             <label for="timeline">Timeline</label>
             <select id="timeline" name="timeline">
               <option value="" disabled selected>Select a timeline...</option>
@@ -137,11 +127,26 @@
               <option value="flexible">Flexible</option>
             </select>
           </div>
+          <div class="form-group">
+            <label for="style-pref">Preferred Design Style</label>
+            <input type="text" id="style-pref" name="style_preference" placeholder="Click a style above, or type your own">
+          </div>
         </div>
 
         <div class="form-group">
-          <label for="style-pref">Preferred Design Style</label>
-          <input type="text" id="style-pref" name="style_preference" placeholder="Click a style above, or type your own">
+          <label for="sites-like">Sites You Like</label>
+          <textarea id="sites-like" name="sites_like" rows="2" placeholder="Links or names of sites whose look or feel you'd love to capture"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="sites-dislike">Sites You Don't Like</label>
+          <textarea id="sites-dislike" name="sites_dislike" rows="2" placeholder="Anything you want to steer clear of"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="brand-words">Three Words to Describe Your Brand</label>
+          <input type="text" id="brand-words" name="brand_words" placeholder="e.g. warm, modern, trustworthy">
+          <p class="field-note">Not sure where to start? We offer a free basic brand consultation.</p>
         </div>
 
         <div class="form-group">
@@ -152,6 +157,11 @@
         <div class="form-group">
           <label for="message">Message / Additional Details</label>
           <textarea id="message" name="message" rows="5" placeholder="Tell me about your business and what you're looking for..."></textarea>
+        </div>
+
+        <div class="hp-field" aria-hidden="true">
+          <label for="company-website">Leave this field empty</label>
+          <input type="text" id="company-website" name="company_website" tabindex="-1" autocomplete="off">
         </div>
 
         <button type="submit" class="btn btn-primary form-submit">Send Request</button>
@@ -178,7 +188,7 @@
     <p>&copy; 2026 Sam Nichols</p>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS" crossorigin="anonymous"></script>
   <script src="js/main.js"></script>
 </body>
 </html>

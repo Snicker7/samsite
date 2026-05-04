@@ -160,6 +160,16 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
 
       var submitBtn = form.querySelector('.form-submit');
+
+      var honeypot = form.querySelector('[name="company_website"]');
+      if (honeypot && honeypot.value) {
+        form.hidden = true;
+        formHeading.hidden = true;
+        formSubtitle.hidden = true;
+        formSuccess.hidden = false;
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = 'Sending...';
 
