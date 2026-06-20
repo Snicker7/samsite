@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="dark light" />
+    <title>Sleep Streak</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>" />
+  </head>
+  <body>
+    <main class="wrap">
+      <header class="topbar">
+        <h1>🌙 Sleep Streak</h1>
+        <div class="who">
+          <span id="whoami" class="muted"></span>
+          <button id="logoutBtn" class="link-btn" hidden>Log out</button>
+        </div>
+      </header>
+
+      <!-- Global status / errors -->
+      <p id="banner" class="banner" hidden></p>
+
+      <!-- LOGIN -->
+      <section id="loginView" class="card" hidden>
+        <h2>Log in</h2>
+        <p class="muted">Enter your email and we'll send you a one-tap link.</p>
+        <form id="loginForm" class="row">
+          <input id="loginEmail" type="email" placeholder="you@example.com" required />
+          <button type="submit">Send link</button>
+        </form>
+        <p id="loginMsg" class="muted" hidden></p>
+      </section>
+
+      <!-- MORNING CHECK-IN (from email link) -->
+      <section id="checkinView" class="card accent" hidden>
+        <h2 id="checkinTitle">Last night</h2>
+        <p id="checkinBody" class="muted"></p>
+        <div id="freezeChoice" hidden>
+          <p>You missed bedtime. Use your weekly <b>streak freeze</b> to protect your
+            <b id="freezeStreak">0</b>-night streak? (You won't earn tonight, but the streak survives.)</p>
+          <div class="row">
+            <button id="useFreezeBtn" class="ok">❄️ Use freeze</button>
+            <button id="noFreezeBtn" class="danger">Let it reset</button>
+          </div>
+        </div>
+        <p id="checkinResult" class="result" hidden></p>
+        <button id="checkinDoneBtn" class="link-btn" hidden>Go to dashboard →</button>
+      </section>
+
+      <!-- DASHBOARD -->
+      <section id="dashView" hidden>
+        <div class="stats">
+          <div class="stat big">
+            <span class="label">Your balance</span>
+            <span id="balance" class="value">$0.00</span>
+          </div>
+          <div class="stat">
+            <span class="label">Streak</span>
+            <span id="streak" class="value">0</span>
+            <span class="sub">nights</span>
+          </div>
+          <div class="stat">
+            <span class="label">If you make it tonight</span>
+            <span id="potential" class="value">$0.00</span>
+          </div>
+          <div class="stat">
+            <span class="label">Freeze this week</span>
+            <span id="freeze" class="value">—</span>
+          </div>
+        </div>
+
+        <div class="card partner" id="partnerCard" hidden>
+          <h2>👀 <span id="partnerName">Partner</span></h2>
+          <div class="prow">
+            <div><span class="label">Balance</span><span id="partnerBalance" class="pval">$0.00</span></div>
+            <div><span class="label">Streak</span><span id="partnerStreak" class="pval">0</span></div>
+            <div><span class="label">Freeze</span><span id="partnerFreeze" class="pval">—</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Record a night</h2>
+          <div class="row">
+            <label for="nightDate" class="muted">Night of</label>
+            <input id="nightDate" type="date" />
+          </div>
+          <div class="row">
+            <button id="onTimeBtn" class="ok">✅ On time</button>
+            <button id="missedBtn" class="danger">❌ Missed</button>
+          </div>
+          <label class="check"><input id="useFreezeChk" type="checkbox" /> Use streak freeze if missed</label>
+        </div>
+
+        <div class="card">
+          <h2>Spend</h2>
+          <form id="spendForm" class="row">
+            <input id="spendAmount" type="number" min="0.01" step="0.01" placeholder="Amount" required />
+            <input id="spendNote" type="text" placeholder="What for?" />
+            <button type="submit">Spend</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2>Recent activity</h2>
+          <table id="ledger" class="ledger">
+            <tbody></tbody>
+          </table>
+          <p id="ledgerEmpty" class="muted" hidden>Nothing yet.</p>
+        </div>
+      </section>
+
+      <footer class="foot muted">In bed, screens off by 9:30&nbsp;PM 💤</footer>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
