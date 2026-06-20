@@ -169,7 +169,6 @@ async function showDashboard() {
 async function recordDash(result) {
   const nightDate = $('nightDate').value || yesterdayIso();
   const params = { action: 'record', nightDate, result, token: getToken() };
-  if (result === 'missed' && $('useFreezeChk').checked) params.useFreeze = 'true';
   banner('Saving…', false);
   try {
     const r = await jsonp(params);
@@ -190,47 +189,15 @@ async function recordDash(result) {
 async function checkinFlow(person, nightDate, result, sig) {
   setView('checkin');
   $('checkinTitle').textContent = 'Night of ' + nightDate;
-
-  if (result === 'on_time') {
-    $('checkinBody').textContent = 'Recording your on-time night…';
-    await recordViaSig(person, nightDate, 'on_time', false, sig);
-    return;
-  }
-
-  // Missed: show freeze availability/streak if we're logged in as this same person.
-  $('checkinBody').textContent = 'You marked last night as missed.';
-  let streakNum = null;
-  let freezeAvail = null;
-  if (getToken()) {
-    try {
-      const s = await api('state');
-      if (s.ok && (s.user || '').toLowerCase() === person.toLowerCase()) {
-        streakNum = s.state.streak;
-        freezeAvail = s.state.freezeAvailable;
-      }
-    } catch (e) {
-      /* ignore — fall back to generic prompt */
-    }
-  }
-  if (streakNum !== null) $('freezeStreak').textContent = streakNum;
-  $('freezeChoice').hidden = false;
-
-  if (freezeAvail === false) {
-    // No freeze to use this week.
-    $('freezeChoice').querySelector('p').textContent =
-      'No streak freeze left this week — recording this miss will reset your streak.';
-    $('useFreezeBtn').hidden = true;
-    $('noFreezeBtn').textContent = 'OK, record the miss';
-  }
-
-  $('useFreezeBtn').onclick = () => recordViaSig(person, nightDate, 'missed', true, sig);
-  $('noFreezeBtn').onclick = () => recordViaSig(person, nightDate, 'missed', false, sig);
+  $('checkinBody').textContent =
+    result === 'on_time'
+      ? 'Recording your on-time night…'
+      : 'Recording your missed night…';
+  await recordViaSig(person, nightDate, result, sig);
 }
 
-async function recordViaSig(person, nightDate, result, useFreeze, sig) {
+async function recordViaSig(person, nightDate, result, sig) {
   const params = { action: 'record', person, nightDate, result, sig };
-  if (useFreeze) params.useFreeze = 'true';
-  $('freezeChoice').hidden = true;
   $('checkinResult').hidden = false;
   $('checkinResult').textContent = 'Saving…';
   try {

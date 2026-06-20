@@ -37,14 +37,6 @@
       <section id="checkinView" class="card accent" hidden>
         <h2 id="checkinTitle">Last night</h2>
         <p id="checkinBody" class="muted"></p>
-        <div id="freezeChoice" hidden>
-          <p>You missed bedtime. Use your weekly <b>streak freeze</b> to protect your
-            <b id="freezeStreak">0</b>-night streak? (You won't earn tonight, but the streak survives.)</p>
-          <div class="row">
-            <button id="useFreezeBtn" class="ok">❄️ Use freeze</button>
-            <button id="noFreezeBtn" class="danger">Let it reset</button>
-          </div>
-        </div>
         <p id="checkinResult" class="result" hidden></p>
         <button id="checkinDoneBtn" class="link-btn" hidden>Go to dashboard →</button>
       </section>
@@ -90,7 +82,7 @@
             <button id="onTimeBtn" class="ok">✅ On time</button>
             <button id="missedBtn" class="danger">❌ Missed</button>
           </div>
-          <label class="check"><input id="useFreezeChk" type="checkbox" /> Use streak freeze if missed</label>
+          <p class="muted">If you miss and still have your weekly freeze, it's used automatically to protect your streak.</p>
         </div>
 
         <div class="card">
