@@ -395,6 +395,10 @@ main, header, footer { position: relative; z-index: 2; }
   position: relative;
 }
 
+/* Inactive cards are pinned to the container height; clip their (taller) hidden
+   text so it can't inflate the page's scroll height and create empty gaps. */
+.card:not(.active) { overflow: hidden; }
+
 .card:nth-child(2n).active { transform: translateY(0) rotate(0.6deg); }
 .card:nth-child(3n).active { transform: translateY(0) rotate(-0.8deg); }
 .card:nth-child(5n).active { transform: translateY(0) rotate(0.4deg); }
@@ -807,6 +811,10 @@ main, header, footer { position: relative; z-index: 2; }
   .progress { right: 0.7rem; }
   .footer { padding: 5rem 1.5rem 4rem; }
 
+  /* The fixed, screen-blended grain overlay forces a full-screen recomposite on
+     every scroll frame — drop it on mobile for smoother scrolling. */
+  body::before { display: none; }
+
   /* Audio player: stack vertically on mobile so it stops overflowing */
   .audio-card {
     flex-direction: column;
@@ -1130,18 +1138,24 @@ document.querySelectorAll('[data-carousel]').forEach(carousel => {
   next.addEventListener('click', () => { userInteracted = true; setActive(idx + 1); });
   dots.forEach((d, i) => d.addEventListener('click', () => { userInteracted = true; setActive(i); }));
 
-  // Touch / swipe
-  let startX = null;
-  carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+  // Touch / swipe — only act on a clearly horizontal gesture, so vertical
+  // scrolling through the page never flips cards or restarts a song.
+  let startX = null, startY = null;
+  carousel.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, { passive: true });
   carousel.addEventListener('touchend', e => {
     if (startX === null) return;
     const dx = e.changedTouches[0].clientX - startX;
-    if (Math.abs(dx) > 50) {
+    const dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       userInteracted = true;
       setActive(dx < 0 ? idx + 1 : idx - 1);
     }
     startX = null;
-  });
+    startY = null;
+  }, { passive: true });
 
   // Scroll-into-view auto-play is handled in the audio setup block below.
 });
@@ -1262,21 +1276,34 @@ window.addEventListener('pointerdown', unlockAudio, { once: false });
 window.addEventListener('keydown', unlockAudio, { once: false });
 
 /* ---------------- iTunes preview fetch + audio pre-load ---------------- */
-async function fetchITunes(song) {
+async function fetchITunes(song, attempt = 0) {
   const q = encodeURIComponent(`${song.title} ${song.artist}`);
   const url = `https://itunes.apple.com/search?term=${q}&entity=song&limit=5&media=music`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (!data.results || !data.results.length) return null;
-  // Prefer a result whose artist matches; iTunes returns a few possible matches.
-  const want = song.artist.toLowerCase();
-  const hit = data.results.find(r => (r.artistName || '').toLowerCase().includes(want.split(' ')[0])) || data.results[0];
-  return {
-    previewUrl: hit.previewUrl,
-    artworkUrl: (hit.artworkUrl100 || '').replace('100x100', '600x600'),
-    trackName: hit.trackName,
-    artistName: hit.artistName,
-  };
+  try {
+    const res = await fetch(url);
+    // iTunes rate-limits bursts with a 403/429 — treat any non-OK as retryable.
+    if (!res.ok) throw new Error(`iTunes HTTP ${res.status}`);
+    const data = await res.json();
+    if (!data.results || !data.results.length) return null;
+    // Prefer a result whose artist matches AND has a playable preview; iTunes
+    // returns a few possible matches, and the top one sometimes lacks a preview.
+    const want = song.artist.toLowerCase().split(' ')[0];
+    const hit = data.results.find(r => (r.artistName || '').toLowerCase().includes(want) && r.previewUrl)
+             || data.results.find(r => r.previewUrl)
+             || data.results[0];
+    return {
+      previewUrl: hit.previewUrl,
+      artworkUrl: (hit.artworkUrl100 || '').replace('100x100', '600x600'),
+      trackName: hit.trackName,
+      artistName: hit.artistName,
+    };
+  } catch (e) {
+    if (attempt < 3) {
+      await new Promise(r => setTimeout(r, 400 * (attempt + 1)));
+      return fetchITunes(song, attempt + 1);
+    }
+    throw e;
+  }
 }
 
 function updateAudioCard(sibling, info) {
@@ -1337,7 +1364,10 @@ function playActiveAudio(carousel) {
 
 // Kick everything off
 (async () => {
-  await Promise.all(SIBLINGS.map(async (sib) => {
+  await Promise.all(SIBLINGS.map(async (sib, i) => {
+    // Stagger the requests so Apple doesn't rate-limit the burst (which used to
+    // make whichever songs lost the race — Jake/Kate/Libby — silently not load).
+    await new Promise(r => setTimeout(r, i * 180));
     try {
       const info = await fetchITunes(SONGS[sib]);
       if (!info || !info.previewUrl) {
