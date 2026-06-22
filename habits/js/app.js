@@ -3,6 +3,8 @@
 /* ── tiny helpers ───────────────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
 const money = (n) => '$' + Number(n || 0).toFixed(2);
+// Mirrors the backend's slugify so the UI can detect duplicate category ids.
+const slugify = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const getToken = () => localStorage.getItem('ss_token') || '';
 const setToken = (t) => localStorage.setItem('ss_token', t);
 const clearToken = () => localStorage.removeItem('ss_token');
@@ -101,6 +103,8 @@ function isoWeekClient(d) {
 }
 // Cadence per category id, cached from the last render so recordCat can pick day vs week.
 let CAT_CADENCE = {};
+// Last-rendered category list, so the admin form can guard against duplicate ids.
+let CAT_LIST = [];
 function lastPeriodKey(categoryId) {
   const d = new Date(Date.now() - 24 * 3600 * 1000); // yesterday
   return CAT_CADENCE[categoryId] === 'weekly' ? isoWeekClient(d) : isoDate(d);
@@ -273,6 +277,7 @@ async function showAdmin() {
 }
 
 function renderCatList(cats) {
+  CAT_LIST = cats;
   const body = $('catList').querySelector('tbody');
   body.innerHTML = '';
   cats.forEach((c) => {
@@ -296,8 +301,18 @@ function editCat(c) {
   $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
   $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
   $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
-  $('catFormTitle').textContent = 'Edit ' + c.name;
+  $('catFormTitle').textContent = 'Editing: ' + c.name;
+  $('cancelEditBtn').hidden = false;
   $('catForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Return the form to "add a new category" mode.
+function resetCatForm() {
+  $('catForm').reset();
+  $('catId').value = '';
+  $('catFormTitle').textContent = 'Add a category';
+  $('cancelEditBtn').hidden = true;
+  $('catFormMsg').hidden = true;
 }
 
 async function archiveCat(id) {
@@ -364,6 +379,7 @@ function wire() {
 
   $('manageBtn').addEventListener('click', showAdmin);
   $('backToDashBtn').addEventListener('click', showDashboard);
+  $('cancelEditBtn').addEventListener('click', resetCatForm);
 
   $('catForm').addEventListener('submit', async (ev) => {
     ev.preventDefault();
@@ -377,13 +393,20 @@ function wire() {
       active: true,
     };
     $('catFormMsg').hidden = true;
+    // Adding (no id) but a category with this name already exists → would silently
+    // overwrite it. Stop and tell the user to edit it instead.
+    if (!category.id && CAT_LIST.some((c) => c.id === slugify(category.name))) {
+      $('catFormMsg').hidden = false;
+      $('catFormMsg').textContent =
+        '⚠️ A category named "' + category.name + '" already exists. Tap “edit” on it in the list above, or pick a different name.';
+      return;
+    }
     try {
       const r = await api('saveCategory', { category: JSON.stringify(category) });
       if (!r.ok) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = '⚠️ ' + r.error; return; }
       if (!Array.isArray(r.categories)) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = STALE_BACKEND_MSG; return; }
-      $('catForm').reset(); $('catId').value = '';
-      $('catFormTitle').textContent = 'Add a category';
       renderCatList(r.categories);
+      resetCatForm();
       banner('Category saved.', false);
     } catch (err) { banner(err.message, true); }
   });
