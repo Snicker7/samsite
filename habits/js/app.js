@@ -11,6 +11,11 @@ const configured = () =>
   CONFIG.WEB_APP_URL &&
   CONFIG.WEB_APP_URL.indexOf('PASTE') === -1;
 
+// Shown when a category call returns ok but no categories array — the tell-tale
+// of the frontend talking to an old/wrong Apps Script deployment.
+const STALE_BACKEND_MSG =
+  '⚠️ The backend didn\'t return category data — the app may be pointed at an old deployment. Check WEB_APP_URL in js/config.js and redeploy.';
+
 function banner(msg, isError) {
   const b = $('banner');
   b.textContent = msg;
@@ -262,7 +267,8 @@ async function showAdmin() {
   try {
     const r = await api('listCategories');
     if (!r.ok) { banner(r.error || 'Could not load categories', true); return; }
-    renderCatList(r.categories || []);
+    if (!Array.isArray(r.categories)) { banner(STALE_BACKEND_MSG, true); return; }
+    renderCatList(r.categories);
   } catch (err) { banner(err.message, true); }
 }
 
@@ -298,7 +304,8 @@ async function archiveCat(id) {
   try {
     const r = await api('archiveCategory', { categoryId: id });
     if (!r.ok) { banner(r.error || 'Could not archive', true); return; }
-    renderCatList(r.categories || []);
+    if (!Array.isArray(r.categories)) { banner(STALE_BACKEND_MSG, true); return; }
+    renderCatList(r.categories);
   } catch (err) { banner(err.message, true); }
 }
 
@@ -373,9 +380,10 @@ function wire() {
     try {
       const r = await api('saveCategory', { category: JSON.stringify(category) });
       if (!r.ok) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = '⚠️ ' + r.error; return; }
+      if (!Array.isArray(r.categories)) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = STALE_BACKEND_MSG; return; }
       $('catForm').reset(); $('catId').value = '';
       $('catFormTitle').textContent = 'Add a category';
-      renderCatList(r.categories || []);
+      renderCatList(r.categories);
       banner('Category saved.', false);
     } catch (err) { banner(err.message, true); }
   });
