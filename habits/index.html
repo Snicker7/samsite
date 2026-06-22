@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="robots" content="noindex, nofollow" />
     <meta name="color-scheme" content="dark light" />
-    <title>Sleep Streak</title>
+    <title>Habit Builder</title>
     <link rel="stylesheet" href="css/style.css" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌙</text></svg>" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>" />
   </head>
   <body>
     <main class="wrap">
       <header class="topbar">
-        <h1>🌙 Sleep Streak</h1>
+        <h1>🌱 Habit Builder</h1>
         <div class="who">
           <span id="whoami" class="muted"></span>
           <button id="manageBtn" class="link-btn" hidden>Categories</button>
@@ -94,37 +94,73 @@
         </div>
         <table id="catList" class="ledger"><tbody></tbody></table>
 
-        <h3>Add / edit a category</h3>
+        <h3 id="catFormTitle">Add a category</h3>
         <form id="catForm">
           <input type="hidden" id="catId" />
-          <div class="row"><input id="catName" placeholder="Name (e.g. Exercise)" required />
-            <input id="catEmoji" placeholder="Emoji 🏋️" maxlength="4" /></div>
-          <div class="row">
-            <label class="muted">Cadence
-              <select id="catCadence"><option value="daily">daily</option><option value="weekly">weekly</option></select>
-            </label>
-            <label class="muted">Freeze refresh
-              <select id="catRefresh"><option value="weekly">weekly</option><option value="daily">daily</option></select>
-            </label>
+
+          <div class="field">
+            <label class="field-label" for="catName">Name</label>
+            <input id="catName" type="text" placeholder="Exercise, Chores, Sleep…" required />
           </div>
-          <div class="row">
-            <input id="catIncrement" type="number" step="0.01" min="0.01" placeholder="Reward per streak ($)" required />
-            <input id="catMax" type="number" step="0.01" min="0.01" placeholder="Max per instance ($)" required />
+
+          <div class="field">
+            <label class="field-label" for="catCadence">How often you record it</label>
+            <select id="catCadence">
+              <option value="daily">Every day</option>
+              <option value="weekly">Once a week</option>
+            </select>
           </div>
-          <div class="row">
-            <input id="catFreezes" type="number" step="1" min="0" placeholder="Freezes per period" required />
-            <input id="catBonus" type="number" step="0.01" min="0" placeholder="Unused-freeze bonus ($) — 0 = none" />
+
+          <div class="grid2">
+            <div class="field">
+              <label class="field-label" for="catIncrement">Reward per streak step ($)</label>
+              <input id="catIncrement" type="number" step="0.01" min="0.01" inputmode="decimal" placeholder="0.25" required />
+            </div>
+            <div class="field">
+              <label class="field-label" for="catMax">Most you can earn at once ($)</label>
+              <input id="catMax" type="number" step="0.01" min="0.01" inputmode="decimal" placeholder="5.00" required />
+            </div>
           </div>
-          <div class="row">
-            <label class="muted">Reminder <select id="catReminder"></select></label>
-            <label class="muted">Check-up <select id="catCheckup"></select></label>
+          <p class="hint">An on-time mark pays <b>reward × current streak</b>, up to the cap.</p>
+
+          <div class="field">
+            <label class="field-label">Freezes</label>
+            <div class="inline-field">
+              <input id="catFreezes" type="number" step="1" min="0" inputmode="numeric" value="1" required aria-label="Number of freezes" />
+              <span class="txt">per</span>
+              <select id="catRefresh" aria-label="Freeze refresh period">
+                <option value="weekly">week</option>
+                <option value="daily">day</option>
+                <option value="monthly">month</option>
+              </select>
+            </div>
+            <p class="hint">A missed entry auto-uses a freeze to protect your streak. A daily task can still refresh its freezes weekly.</p>
           </div>
+
+          <div class="field">
+            <label class="field-label" for="catBonus">Bonus for an unused freeze ($)</label>
+            <input id="catBonus" type="number" step="0.01" min="0" inputmode="decimal" placeholder="0 = no bonus" />
+            <p class="hint">Paid at each freeze refresh if you didn't need a freeze.</p>
+          </div>
+
+          <div class="grid2">
+            <div class="field">
+              <label class="field-label" for="catReminder">Reminder email</label>
+              <select id="catReminder"></select>
+            </div>
+            <div class="field">
+              <label class="field-label" for="catCheckup">Check-up email</label>
+              <select id="catCheckup"></select>
+            </div>
+          </div>
+          <p class="hint">Sent on the hour, in your timezone. Leave “off” to skip.</p>
+
           <button type="submit">Save category</button>
         </form>
         <p id="catFormMsg" class="muted" hidden></p>
       </section>
 
-      <footer class="foot muted">In bed, screens off by 9:30&nbsp;PM 💤</footer>
+      <footer class="foot muted">Build the habit, bank the reward 🌱</footer>
     </main>
 
     <script src="js/config.js"></script>

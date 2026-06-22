@@ -131,7 +131,7 @@ function renderCatCards(cats) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML =
-      '<h2>' + (c.emoji || '🔥') + ' ' + c.name + '</h2>' +
+      '<h2>' + c.name + '</h2>' +
       '<div class="prow">' +
       '<div><span class="label">Streak</span><span class="pval">' + c.streak + '</span></div>' +
       '<div><span class="label">If you do it</span><span class="pval">' + money(c.potential) + '</span></div>' +
@@ -272,7 +272,7 @@ function renderCatList(cats) {
   cats.forEach((c) => {
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td>' + (c.emoji || '') + ' ' + c.name + (c.active ? '' : ' (archived)') + '</td>' +
+      '<td>' + c.name + (c.active ? '' : ' (archived)') + '</td>' +
       '<td>' + c.cadence + '</td>' +
       '<td><button class="link-btn" data-edit="' + c.id + '">edit</button>' +
       (c.active ? ' <button class="link-btn" data-arch="' + c.id + '">archive</button>' : '') + '</td>';
@@ -285,11 +285,13 @@ function renderCatList(cats) {
 }
 
 function editCat(c) {
-  $('catId').value = c.id; $('catName').value = c.name; $('catEmoji').value = c.emoji || '';
+  $('catId').value = c.id; $('catName').value = c.name;
   $('catCadence').value = c.cadence; $('catRefresh').value = c.freezeRefresh;
   $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
   $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
   $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
+  $('catFormTitle').textContent = 'Edit ' + c.name;
+  $('catForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 async function archiveCat(id) {
@@ -360,7 +362,7 @@ function wire() {
     ev.preventDefault();
     const category = {
       id: $('catId').value || undefined,
-      name: $('catName').value, emoji: $('catEmoji').value,
+      name: $('catName').value,
       cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
       rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
       freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
@@ -372,6 +374,7 @@ function wire() {
       const r = await api('saveCategory', { category: JSON.stringify(category) });
       if (!r.ok) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = '⚠️ ' + r.error; return; }
       $('catForm').reset(); $('catId').value = '';
+      $('catFormTitle').textContent = 'Add a category';
       renderCatList(r.categories || []);
       banner('Category saved.', false);
     } catch (err) { banner(err.message, true); }
