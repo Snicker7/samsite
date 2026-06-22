@@ -19,8 +19,8 @@ function banner(msg, isError) {
 }
 
 function setView(name) {
-  ['loginView', 'checkinView', 'dashView'].forEach((v) => ($(v).hidden = true));
-  $({ login: 'loginView', checkin: 'checkinView', dash: 'dashView' }[name]).hidden = false;
+  ['loginView', 'checkinView', 'dashView', 'adminView'].forEach((v) => ($(v).hidden = true));
+  $({ login: 'loginView', checkin: 'checkinView', dash: 'dashView', admin: 'adminView' }[name]).hidden = false;
   $('logoutBtn').hidden = !getToken();
 }
 
@@ -86,40 +86,78 @@ function isoDate(d) {
 function yesterdayIso() {
   return isoDate(new Date(Date.now() - 24 * 3600 * 1000));
 }
+function isoWeekClient(d) {
+  const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = dt.getUTCDay() || 7;
+  dt.setUTCDate(dt.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((dt - yearStart) / 86400000 + 1) / 7);
+  return dt.getUTCFullYear() + '-W' + ('0' + weekNo).slice(-2);
+}
+// Cadence per category id, cached from the last render so recordCat can pick day vs week.
+let CAT_CADENCE = {};
+function lastPeriodKey(categoryId) {
+  const d = new Date(Date.now() - 24 * 3600 * 1000); // yesterday
+  return CAT_CADENCE[categoryId] === 'weekly' ? isoWeekClient(d) : isoDate(d);
+}
 
 /* ── rendering ──────────────────────────────────────────────────────────────*/
 function render(r) {
   $('whoami').textContent = r.name || r.user || '';
-  $('balance').textContent = money(r.state.balance);
-  $('streak').textContent = r.state.streak;
-  $('potential').textContent = money(r.potentialTonight);
-  $('freeze').textContent = r.state.freezeAvailable ? '❄️ ready' : '— used';
-  if (!$('nightDate').value) $('nightDate').value = yesterdayIso();
+  $('wallet').textContent = money(r.wallet);
+  $('manageBtn').hidden = false;
   renderPartner(r.partner);
+  renderCatCards(r.cats || []);
   renderLedger(r.ledger || []);
 }
 
 function renderPartner(p) {
   const card = $('partnerCard');
-  if (!p) {
-    card.hidden = true;
+  if (!p) { card.hidden = true; return; }
+  card.hidden = false;
+  $('partnerName').textContent = (p.name || 'Partner') + "'s wallet";
+  $('partnerWallet').textContent = money(p.wallet);
+}
+
+function renderCatCards(cats) {
+  const wrap = $('catCards');
+  wrap.innerHTML = '';
+  if (!cats.length) {
+    wrap.innerHTML = '<div class="card"><p class="muted">No categories yet. Tap "Categories" to add one.</p></div>';
     return;
   }
-  card.hidden = false;
-  $('partnerName').textContent = (p.name || 'Partner') + "'s status";
-  $('partnerBalance').textContent = money(p.balance);
-  $('partnerStreak').textContent =
-    p.streak + ' night' + (p.streak === 1 ? '' : 's');
-  $('partnerFreeze').textContent = p.freezeAvailable ? '❄️ ready' : '— used';
+  cats.forEach((c) => {
+    CAT_CADENCE[c.id] = c.cadence;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<h2>' + (c.emoji || '🔥') + ' ' + c.name + '</h2>' +
+      '<div class="prow">' +
+      '<div><span class="label">Streak</span><span class="pval">' + c.streak + '</span></div>' +
+      '<div><span class="label">If you do it</span><span class="pval">' + money(c.potential) + '</span></div>' +
+      '<div><span class="label">Freezes</span><span class="pval">' + c.freezeAvailable + '</span></div>' +
+      '</div>' +
+      '<div class="row" style="margin-top:8px">' +
+      '<button class="ok" data-cat="' + c.id + '" data-result="on_time">✅ Did it</button>' +
+      '<button class="danger" data-cat="' + c.id + '" data-result="missed">❌ Missed</button>' +
+      '</div>' +
+      '<p class="muted">' + (c.cadence === 'weekly' ? 'Weekly' : 'Daily') + ' • last: ' + (c.lastRecordedKey || '—') + '</p>';
+    wrap.appendChild(card);
+  });
+  wrap.querySelectorAll('button[data-cat]').forEach((b) => {
+    b.addEventListener('click', () => recordCat(b.getAttribute('data-cat'), b.getAttribute('data-result'), b.closest('.card').querySelector('h2').textContent));
+  });
 }
 
 function describe(e) {
   if (e.type === 'spend') return '🛒 ' + (e.note || 'Spent');
-  if (e.type === 'weekly_bonus') return '🎁 Unused-freeze bonus';
-  if (e.type === 'night') {
-    if (e.result === 'on_time') return '✅ On time';
-    if (e.freezeUsed) return '❄️ Freeze used';
-    return '❌ Missed';
+  if (e.type === 'deposit') return '💵 ' + (e.note || 'Added money');
+  if (e.type === 'bonus') return '🎁 ' + (e.note || 'Bonus') + ' (' + (e.category || '') + ')';
+  if (e.type === 'entry') {
+    const tag = e.category ? ' (' + e.category + ')' : '';
+    if (e.result === 'on_time') return '✅ On time' + tag;
+    if (e.freezeUsed) return '❄️ Freeze used' + tag;
+    return '❌ Missed' + tag;
   }
   return e.type;
 }
@@ -134,7 +172,7 @@ function renderLedger(rows) {
   $('ledgerEmpty').hidden = rows.length > 0;
   rows.forEach((e) => {
     const tr = document.createElement('tr');
-    const when = (e.nightDate || (e.timestamp || '').slice(0, 10) || '').toString();
+    const when = (e.periodKey || (e.timestamp || '').slice(0, 10) || '').toString();
     tr.innerHTML =
       '<td>' + when + '</td>' +
       '<td>' + describe(e) + '</td>' +
@@ -166,67 +204,100 @@ async function showDashboard() {
   }
 }
 
-async function recordDash(result) {
-  const nightDate = $('nightDate').value || yesterdayIso();
-  const params = { action: 'record', nightDate, result, token: getToken() };
+async function recordCat(categoryId, result, label) {
   banner('Saving…', false);
   try {
-    const r = await jsonp(params);
-    if (!r.ok) {
-      banner(r.error || 'Could not save', true);
-      return;
-    }
+    // Record the just-closed period: yesterday for daily, last ISO week for weekly.
+    const r = await api('record', { categoryId, periodKey: lastPeriodKey(categoryId), result });
+    if (!r.ok) { banner(r.error || 'Could not save', true); return; }
     const e = r.event;
-    if (e.result === 'on_time') banner('🎉 Nice! Earned ' + money(e.amount) + '.', false);
+    if (e.result === 'on_time') banner('🎉 ' + (label || 'Done') + ' — earned ' + money(e.amount) + '.', false);
     else if (e.freezeUsed) banner('❄️ Freeze used — streak protected.', false);
-    else banner('Streak reset. Fresh start tonight 💪', false);
-    render(r);
-  } catch (err) {
-    banner(err.message, true);
-  }
+    else banner('Streak reset. Fresh start 💪', false);
+    showDashboard();
+  } catch (err) { banner(err.message, true); }
 }
 
-async function checkinFlow(person, nightDate, result, sig) {
+async function checkinFlow(person, categoryId, periodKey, result, sig) {
   setView('checkin');
-  $('checkinTitle').textContent = 'Night of ' + nightDate;
-  $('checkinBody').textContent =
-    result === 'on_time'
-      ? 'Recording your on-time night…'
-      : 'Recording your missed night…';
-  await recordViaSig(person, nightDate, result, sig);
+  $('checkinTitle').textContent = 'Check-in: ' + periodKey;
+  $('checkinBody').textContent = result === 'on_time' ? 'Recording your on-time entry…' : 'Recording your missed entry…';
+  await recordViaSig(person, categoryId, periodKey, result, sig);
 }
 
-async function recordViaSig(person, nightDate, result, sig) {
-  const params = { action: 'record', person, nightDate, result, sig };
+async function recordViaSig(person, categoryId, periodKey, result, sig) {
+  const params = { action: 'record', person, categoryId, periodKey, result, sig };
   $('checkinResult').hidden = false;
   $('checkinResult').textContent = 'Saving…';
   try {
     const r = await jsonp(params);
     const res = $('checkinResult');
     if (!r.ok) {
-      if (/already recorded/i.test(r.error || '')) {
-        res.textContent = '✅ This night was already recorded.';
-      } else {
-        res.textContent = '⚠️ ' + (r.error || 'Could not save');
-      }
+      res.textContent = /already recorded/i.test(r.error || '') ? '✅ Already recorded.' : '⚠️ ' + (r.error || 'Could not save');
     } else {
       const e = r.event;
-      if (e.result === 'on_time') {
-        res.textContent =
-          '🎉 Recorded! Earned ' + money(e.amount) + '. Streak: ' + r.state.streak +
-          ' nights. Pot: ' + money(r.state.balance) + '.';
-      } else if (e.freezeUsed) {
-        res.textContent =
-          '❄️ Freeze used — streak protected at ' + r.state.streak + ' nights.';
-      } else {
-        res.textContent =
-          'Streak reset to 0. Fresh start tonight 💪 Pot: ' + money(r.state.balance) + '.';
-      }
+      if (e.result === 'on_time') res.textContent = '🎉 Recorded! Earned ' + money(e.amount) + '. Wallet: ' + money(r.wallet) + '.';
+      else if (e.freezeUsed) res.textContent = '❄️ Freeze used — streak protected.';
+      else res.textContent = 'Streak reset. Fresh start 💪 Wallet: ' + money(r.wallet) + '.';
     }
   } catch (err) {
     $('checkinResult').textContent = '⚠️ ' + err.message;
   }
-  $('checkinDoneBtn').hidden = false; // always offer a way forward
+  $('checkinDoneBtn').hidden = false;
+}
+
+/* ── admin ──────────────────────────────────────────────────────────────────*/
+function fillHourOptions(sel) {
+  sel.innerHTML = '<option value="">off</option>';
+  for (let h = 0; h < 24; h++) {
+    const hh = ('0' + h).slice(-2) + ':00';
+    sel.innerHTML += '<option value="' + hh + '">' + hh + '</option>';
+  }
+}
+
+async function showAdmin() {
+  setView('admin');
+  fillHourOptions($('catReminder'));
+  fillHourOptions($('catCheckup'));
+  try {
+    const r = await api('listCategories');
+    if (!r.ok) { banner(r.error || 'Could not load categories', true); return; }
+    renderCatList(r.categories || []);
+  } catch (err) { banner(err.message, true); }
+}
+
+function renderCatList(cats) {
+  const body = $('catList').querySelector('tbody');
+  body.innerHTML = '';
+  cats.forEach((c) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + (c.emoji || '') + ' ' + c.name + (c.active ? '' : ' (archived)') + '</td>' +
+      '<td>' + c.cadence + '</td>' +
+      '<td><button class="link-btn" data-edit="' + c.id + '">edit</button>' +
+      (c.active ? ' <button class="link-btn" data-arch="' + c.id + '">archive</button>' : '') + '</td>';
+    body.appendChild(tr);
+  });
+  body.querySelectorAll('button[data-edit]').forEach((b) =>
+    b.addEventListener('click', () => editCat(cats.find((x) => x.id === b.getAttribute('data-edit')))));
+  body.querySelectorAll('button[data-arch]').forEach((b) =>
+    b.addEventListener('click', () => archiveCat(b.getAttribute('data-arch'))));
+}
+
+function editCat(c) {
+  $('catId').value = c.id; $('catName').value = c.name; $('catEmoji').value = c.emoji || '';
+  $('catCadence').value = c.cadence; $('catRefresh').value = c.freezeRefresh;
+  $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
+  $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
+  $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
+}
+
+async function archiveCat(id) {
+  try {
+    const r = await api('archiveCategory', { categoryId: id });
+    if (!r.ok) { banner(r.error || 'Could not archive', true); return; }
+    renderCatList(r.categories || []);
+  } catch (err) { banner(err.message, true); }
 }
 
 /* ── wiring ─────────────────────────────────────────────────────────────────*/
@@ -251,32 +322,59 @@ function wire() {
     banner('Logged out.', false);
   });
 
-  $('onTimeBtn').addEventListener('click', () => recordDash('on_time'));
-  $('missedBtn').addEventListener('click', () => recordDash('missed'));
-
   $('spendForm').addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const amount = $('spendAmount').value;
-    const note = $('spendNote').value;
+    const amount = $('spendAmount').value, note = $('spendNote').value;
     banner('Saving…', false);
     try {
       const r = await api('spend', { amount, note });
-      if (!r.ok) {
-        banner(r.error || 'Could not save', true);
-        return;
-      }
-      $('spendAmount').value = '';
-      $('spendNote').value = '';
+      if (!r.ok) { banner(r.error || 'Could not save', true); return; }
+      $('spendAmount').value = ''; $('spendNote').value = '';
       banner('Spent ' + money(amount) + '.', false);
-      render(r);
-    } catch (err) {
-      banner(err.message, true);
-    }
+      showDashboard();
+    } catch (err) { banner(err.message, true); }
+  });
+
+  $('addForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const amount = $('addAmount').value, note = $('addNote').value;
+    banner('Saving…', false);
+    try {
+      const r = await api('deposit', { amount, note });
+      if (!r.ok) { banner(r.error || 'Could not add', true); return; }
+      $('addAmount').value = ''; $('addNote').value = '';
+      banner('Added ' + money(amount) + ' to both wallets.', false);
+      showDashboard();
+    } catch (err) { banner(err.message, true); }
   });
 
   $('checkinDoneBtn').addEventListener('click', () => {
     if (getToken()) showDashboard();
     else setView('login');
+  });
+
+  $('manageBtn').addEventListener('click', showAdmin);
+  $('backToDashBtn').addEventListener('click', showDashboard);
+
+  $('catForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const category = {
+      id: $('catId').value || undefined,
+      name: $('catName').value, emoji: $('catEmoji').value,
+      cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
+      rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
+      freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
+      reminderTime: $('catReminder').value, checkupTime: $('catCheckup').value,
+      active: true,
+    };
+    $('catFormMsg').hidden = true;
+    try {
+      const r = await api('saveCategory', { category: JSON.stringify(category) });
+      if (!r.ok) { $('catFormMsg').hidden = false; $('catFormMsg').textContent = '⚠️ ' + r.error; return; }
+      $('catForm').reset(); $('catId').value = '';
+      renderCatList(r.categories || []);
+      banner('Category saved.', false);
+    } catch (err) { banner(err.message, true); }
   });
 }
 
@@ -292,14 +390,14 @@ function boot() {
     setToken(tokenParam);
     history.replaceState({}, '', location.origin + location.pathname);
   }
-  const nightDate = qp.get('nightDate');
+  const periodKey = qp.get('periodKey');
   const result = qp.get('result');
   const sig = qp.get('sig');
   const person = qp.get('person');
-  if (person && nightDate && result && sig) {
-    // clean the action params from the URL bar but keep them for the flow
+  const categoryId = qp.get('categoryId');
+  if (person && categoryId && periodKey && result && sig) {
     history.replaceState({}, '', location.origin + location.pathname);
-    checkinFlow(person, nightDate, result, sig);
+    checkinFlow(person, categoryId, periodKey, result, sig);
     return;
   }
   if (getToken()) {

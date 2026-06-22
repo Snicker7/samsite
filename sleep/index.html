@@ -15,6 +15,7 @@
         <h1>🌙 Sleep Streak</h1>
         <div class="who">
           <span id="whoami" class="muted"></span>
+          <button id="manageBtn" class="link-btn" hidden>Categories</button>
           <button id="logoutBtn" class="link-btn" hidden>Log out</button>
         </div>
       </header>
@@ -45,45 +46,19 @@
       <section id="dashView" hidden>
         <div class="stats">
           <div class="stat big">
-            <span class="label">Your balance</span>
-            <span id="balance" class="value">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="label">Streak</span>
-            <span id="streak" class="value">0</span>
-            <span class="sub">nights</span>
-          </div>
-          <div class="stat">
-            <span class="label">If you make it tonight</span>
-            <span id="potential" class="value">$0.00</span>
-          </div>
-          <div class="stat">
-            <span class="label">Freeze this week</span>
-            <span id="freeze" class="value">—</span>
+            <span class="label">Your wallet</span>
+            <span id="wallet" class="value">$0.00</span>
           </div>
         </div>
 
         <div class="card partner" id="partnerCard" hidden>
           <h2>👀 <span id="partnerName">Partner</span></h2>
           <div class="prow">
-            <div><span class="label">Balance</span><span id="partnerBalance" class="pval">$0.00</span></div>
-            <div><span class="label">Streak</span><span id="partnerStreak" class="pval">0</span></div>
-            <div><span class="label">Freeze</span><span id="partnerFreeze" class="pval">—</span></div>
+            <div><span class="label">Wallet</span><span id="partnerWallet" class="pval">$0.00</span></div>
           </div>
         </div>
 
-        <div class="card">
-          <h2>Record a night</h2>
-          <div class="row">
-            <label for="nightDate" class="muted">Night of</label>
-            <input id="nightDate" type="date" />
-          </div>
-          <div class="row">
-            <button id="onTimeBtn" class="ok">✅ On time</button>
-            <button id="missedBtn" class="danger">❌ Missed</button>
-          </div>
-          <p class="muted">If you miss and still have your weekly freeze, it's used automatically to protect your streak.</p>
-        </div>
+        <div id="catCards"></div>
 
         <div class="card">
           <h2>Spend</h2>
@@ -95,12 +70,58 @@
         </div>
 
         <div class="card">
+          <h2>Add money</h2>
+          <p class="muted">Adds the full amount to <b>both</b> wallets (mad money).</p>
+          <form id="addForm" class="row">
+            <input id="addAmount" type="number" min="0.01" step="0.01" placeholder="Amount" required />
+            <input id="addNote" type="text" placeholder="Note (optional)" />
+            <button type="submit">Add money</button>
+          </form>
+        </div>
+
+        <div class="card">
           <h2>Recent activity</h2>
-          <table id="ledger" class="ledger">
-            <tbody></tbody>
-          </table>
+          <table id="ledger" class="ledger"><tbody></tbody></table>
           <p id="ledgerEmpty" class="muted" hidden>Nothing yet.</p>
         </div>
+      </section>
+
+      <!-- ADMIN -->
+      <section id="adminView" class="card" hidden>
+        <div class="row" style="justify-content:space-between">
+          <h2>Categories</h2>
+          <button id="backToDashBtn" class="link-btn">← Dashboard</button>
+        </div>
+        <table id="catList" class="ledger"><tbody></tbody></table>
+
+        <h3>Add / edit a category</h3>
+        <form id="catForm">
+          <input type="hidden" id="catId" />
+          <div class="row"><input id="catName" placeholder="Name (e.g. Exercise)" required />
+            <input id="catEmoji" placeholder="Emoji 🏋️" maxlength="4" /></div>
+          <div class="row">
+            <label class="muted">Cadence
+              <select id="catCadence"><option value="daily">daily</option><option value="weekly">weekly</option></select>
+            </label>
+            <label class="muted">Freeze refresh
+              <select id="catRefresh"><option value="weekly">weekly</option><option value="daily">daily</option></select>
+            </label>
+          </div>
+          <div class="row">
+            <input id="catIncrement" type="number" step="0.01" min="0.01" placeholder="Reward per streak ($)" required />
+            <input id="catMax" type="number" step="0.01" min="0.01" placeholder="Max per instance ($)" required />
+          </div>
+          <div class="row">
+            <input id="catFreezes" type="number" step="1" min="0" placeholder="Freezes per period" required />
+            <input id="catBonus" type="number" step="0.01" min="0" placeholder="Unused-freeze bonus ($) — 0 = none" />
+          </div>
+          <div class="row">
+            <label class="muted">Reminder <select id="catReminder"></select></label>
+            <label class="muted">Check-up <select id="catCheckup"></select></label>
+          </div>
+          <button type="submit">Save category</button>
+        </form>
+        <p id="catFormMsg" class="muted" hidden></p>
       </section>
 
       <footer class="foot muted">In bed, screens off by 9:30&nbsp;PM 💤</footer>

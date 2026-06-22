@@ -256,6 +256,8 @@ button.danger {
   white-space: nowrap;
 }
 
+#catCards .card .prow { margin-top: 4px; }
+
 .foot {
   text-align: center;
   margin-top: 24px;
