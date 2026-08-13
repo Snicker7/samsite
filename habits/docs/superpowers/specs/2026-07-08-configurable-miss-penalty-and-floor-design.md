@@ -1,7 +1,7 @@
 # Configurable Miss Penalty & Payout Floor — Design
 
 **Date:** 2026-07-08
-**Status:** Approved, ready for implementation plan
+**Status:** Implemented 2026-08-13
 
 ## Problem
 

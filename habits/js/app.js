@@ -301,6 +301,8 @@ function editCat(c) {
   $('catCadence').value = c.cadence; $('catRefresh').value = c.freezeRefresh;
   $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
   $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
+  $('catMinPayout').value = c.minPayout || '';
+  $('catMissPenalty').value = c.missPenaltyPercent == null ? '' : c.missPenaltyPercent;
   $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
   $('catFormTitle').textContent = 'Editing: ' + c.name;
   $('cancelEditBtn').hidden = false;
@@ -392,6 +394,7 @@ function wire() {
       cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
       rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
       freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
+      minPayout: $('catMinPayout').value, missPenaltyPercent: $('catMissPenalty').value,
       reminderTime: $('catReminder').value, checkupTime: $('catCheckup').value,
       active: true,
     };

@@ -628,6 +628,13 @@ function runTests() {
   var cat = { id: 'sleep', rewardIncrement: 0.25, maxPerInstance: 5.0, freezesPerPeriod: 1, unusedFreezeBonus: 3.5 };
   eq(payout(cat, 1), 0.25, 'payout d1');
   eq(payout(cat, 20), 5.0, 'payout cap');
+  var floored = { rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 1.0 };
+  eq(payout(floored, 1), 1.0, 'payout floor start');
+  eq(payout(floored, 3), 1.5, 'payout floor growth');
+  var missState = { streak: 10, periodStart: 'P', freezeAvailable: 0, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  eq(applyEntry(missState, 0, cat, { periodKey: 'K', result: 'missed' }).state.streak, 0, 'miss default resets');
+  eq(applyEntry(missState, 0, { id: 'sleep', rewardIncrement: 0.25, maxPerInstance: 5.0, freezesPerPeriod: 1, missPenaltyPercent: 50 },
+    { periodKey: 'K', result: 'missed' }).state.streak, 5, 'miss penalty halves');
   eq(periodKeyFor('weekly', '2026-06-22'), '2026-W26', 'iso week');
   eq(lastClosedPeriodKey('daily', '2026-06-25', 4), '2026-06-24', 'daily records yesterday');
   eq(lastClosedPeriodKey('weekly', '2026-06-25', 4), '2026-W25', 'weekly records last week');
@@ -664,9 +671,15 @@ function round2(n) {
   return Math.round((n + Number.EPSILON) * 100) / 100;
 }
 
-/** On-time payout for a given streak under a category's rules. */
+/**
+ * On-time payout for a given streak under a category's rules.
+ * `minPayout` starts the curve (streak 1 pays it); each further step adds one
+ * increment. Blank/0 means "start at the increment", i.e. the original curve.
+ */
 function payout(cat, streak) {
-  return round2(Math.min(cat.rewardIncrement * streak, cat.maxPerInstance));
+  if (streak <= 0) return 0;
+  var start = cat.minPayout > 0 ? cat.minPayout : cat.rewardIncrement;
+  return round2(Math.min(start + (streak - 1) * cat.rewardIncrement, cat.maxPerInstance));
 }
 
 /** ISO-8601 week string, e.g. "2026-W26", for a "YYYY-MM-DD" date. */
@@ -761,7 +774,9 @@ function applyEntry(state, balance, cat, input) {
     s.freezeUsedThisPeriod = true;
     freezeUsed = true;
   } else {
-    s.streak = 0;
+    // No freeze left: the penalty decides how much of the streak survives.
+    var pct = cat.missPenaltyPercent == null ? 100 : cat.missPenaltyPercent;
+    s.streak = Math.max(0, Math.round(state.streak * (1 - pct / 100)));
   }
   s.lastRecordedKey = periodKey;
   var event = {
@@ -888,6 +903,8 @@ function normalizeCategory(raw) {
     freezesPerPeriod: num(raw.freezesPerPeriod, NaN),
     freezeRefresh: raw.freezeRefresh === 'daily' || raw.freezeRefresh === 'monthly' ? raw.freezeRefresh : 'weekly',
     unusedFreezeBonus: raw.unusedFreezeBonus === '' || raw.unusedFreezeBonus == null ? 0 : num(raw.unusedFreezeBonus, 0),
+    missPenaltyPercent: raw.missPenaltyPercent === '' || raw.missPenaltyPercent == null ? 100 : num(raw.missPenaltyPercent, 100),
+    minPayout: raw.minPayout === '' || raw.minPayout == null ? 0 : num(raw.minPayout, 0),
     reminderTime: String(raw.reminderTime || '').trim(),
     checkupTime: String(raw.checkupTime || '').trim(),
     active: raw.active !== false,
@@ -903,6 +920,9 @@ function validateCategory(cat) {
   if (!(cat.maxPerInstance > 0)) errs.push('Max per instance must be a positive number.');
   if (!(cat.freezesPerPeriod >= 0) || cat.freezesPerPeriod % 1 !== 0) errs.push('Freezes per period must be a whole number (0 or more).');
   if (!(cat.unusedFreezeBonus >= 0)) errs.push('Unused-freeze bonus must be 0 or more.');
+  if (!(cat.missPenaltyPercent >= 0 && cat.missPenaltyPercent <= 100)) errs.push('Miss penalty must be between 0 and 100 percent.');
+  if (!(cat.minPayout >= 0)) errs.push('Minimum payout must be 0 or more.');
+  else if (cat.minPayout > cat.maxPerInstance) errs.push('Minimum payout cannot exceed the max per instance.');
   if (!isWholeHour(cat.reminderTime)) errs.push('Reminder time must be a whole hour like 21:00, or blank.');
   if (!isWholeHour(cat.checkupTime)) errs.push('Check-up time must be a whole hour like 09:00, or blank.');
   return errs;
