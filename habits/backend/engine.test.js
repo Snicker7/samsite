@@ -290,3 +290,64 @@ test('applyEntry rejects a result that is neither on_time nor missed', () => {
     /result must be "on_time" or "missed"/
   );
 });
+
+// Configurable miss penalty & payout floor (spec 2026-07-08)
+
+test('payout starts the curve at minPayout and grows by the increment', () => {
+  const cat = { rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 1.0 };
+  assert.strictEqual(E.payout(cat, 0), 0);
+  assert.strictEqual(E.payout(cat, 1), 1.0);
+  assert.strictEqual(E.payout(cat, 2), 1.25);
+  assert.strictEqual(E.payout(cat, 3), 1.5);
+  assert.strictEqual(E.payout(cat, 100), 5.0); // cap still wins
+});
+
+test('payout with no minPayout keeps the increment-only curve', () => {
+  const cat = { rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 0 };
+  assert.strictEqual(E.payout(cat, 1), 0.25);
+  assert.strictEqual(E.payout(cat, 4), 1.0);
+});
+
+test('missed with no freeze applies missPenaltyPercent to the streak', () => {
+  const s = { streak: 10, periodStart: '2026-06-22', freezeAvailable: 0, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  const at = (pct) => E.applyEntry(s, 0, Object.assign({}, CAT, { missPenaltyPercent: pct }),
+    { periodKey: '2026-06-23', result: 'missed', actor: 'a' }).state.streak;
+  assert.strictEqual(at(100), 0);
+  assert.strictEqual(at(50), 5);
+  assert.strictEqual(at(0), 10);
+});
+
+test('miss penalty rounds an odd streak up to the larger half', () => {
+  const s = { streak: 5, periodStart: '2026-06-22', freezeAvailable: 0, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  const r = E.applyEntry(s, 0, Object.assign({}, CAT, { missPenaltyPercent: 50 }),
+    { periodKey: '2026-06-23', result: 'missed', actor: 'a' });
+  assert.strictEqual(r.state.streak, 3);
+});
+
+test('a freeze preserves the streak whatever the miss penalty is', () => {
+  const s = { streak: 7, periodStart: '2026-06-22', freezeAvailable: 1, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  const r = E.applyEntry(s, 0, Object.assign({}, CAT, { missPenaltyPercent: 50 }),
+    { periodKey: '2026-06-23', result: 'missed', actor: 'a' });
+  assert.strictEqual(r.state.streak, 7);
+  assert.strictEqual(r.event.freezeUsed, true);
+});
+
+test('normalizeCategory defaults missPenaltyPercent to 100 and minPayout to 0', () => {
+  const c = E.normalizeCategory({ name: 'Sleep', cadence: 'daily', rewardIncrement: '0.25', maxPerInstance: '5', freezesPerPeriod: '1' });
+  assert.strictEqual(c.missPenaltyPercent, 100);
+  assert.strictEqual(c.minPayout, 0);
+  const set = E.normalizeCategory({ name: 'Sleep', cadence: 'daily', rewardIncrement: '0.25', maxPerInstance: '5', freezesPerPeriod: '1', missPenaltyPercent: '50', minPayout: '1.00' });
+  assert.strictEqual(set.missPenaltyPercent, 50);
+  assert.strictEqual(set.minPayout, 1);
+});
+
+test('validateCategory rejects an out-of-range penalty and a floor above the cap', () => {
+  const base = { name: 'Sleep', cadence: 'daily', rewardIncrement: '0.25', maxPerInstance: '5', freezesPerPeriod: '1', reminderTime: '', checkupTime: '' };
+  const errsOf = (extra) => E.validateCategory(E.normalizeCategory(Object.assign({}, base, extra)));
+  assert.strictEqual(errsOf({}).length, 0);
+  assert.strictEqual(errsOf({ missPenaltyPercent: '', minPayout: '' }).length, 0);
+  assert.ok(errsOf({ missPenaltyPercent: '101' }).some((e) => /penalty/i.test(e)));
+  assert.ok(errsOf({ missPenaltyPercent: '-1' }).some((e) => /penalty/i.test(e)));
+  assert.ok(errsOf({ minPayout: '-1' }).some((e) => /minimum payout/i.test(e)));
+  assert.ok(errsOf({ minPayout: '6' }).some((e) => /minimum payout/i.test(e)));
+});

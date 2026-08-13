@@ -13,17 +13,23 @@ Each category defines:
 
 - **streak** — consecutive on-time entries
 - **freeze count** — how many misses you can absorb before your streak breaks
-- **reward increment** — the per-entry payout multiplier (`rewardIncrement × streak`)
+- **reward increment** — what each streak step adds to the payout
+- **minimum payout** — what a streak of 1 pays; blank means "start at the reward increment"
 - **max per instance** — the payout cap for a single entry
+- **miss penalty percent** — how much of the streak a freeze-less miss costs (default 100 = full reset)
 - **cadence** — `daily` or `weekly` (how often you record one entry)
 - **freeze-refresh cadence** — `daily`, `weekly`, or `monthly` (when freezes reset; independent of how often you record, so a daily task can refresh its freezes weekly or monthly)
 - **unused-freeze bonus** — set to 0 for none
 
 How entries work:
 
-- On-time entry pays `rewardIncrement × streak`, capped at `maxPerInstance`.
+- On-time entry pays `minPayout + rewardIncrement × (streak − 1)`, capped at
+  `maxPerInstance`. With no `minPayout` set that is the original
+  `rewardIncrement × streak`.
 - On a miss, a freeze is **auto-used** if you have one (streak preserved, $0 earned
-  that period). With no freeze left, a miss **resets your streak to 0**.
+  that period). With no freeze left, the streak drops to
+  `round(streak × (1 − missPenaltyPercent / 100))` — at the default 100% that is a
+  full reset to 0.
 - At freeze-refresh, freezes reset; if no freeze was used and the bonus is > 0,
   the bonus is paid.
 

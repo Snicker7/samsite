@@ -619,6 +619,13 @@ function runTests() {
   var cat = { id: 'sleep', rewardIncrement: 0.25, maxPerInstance: 5.0, freezesPerPeriod: 1, unusedFreezeBonus: 3.5 };
   eq(payout(cat, 1), 0.25, 'payout d1');
   eq(payout(cat, 20), 5.0, 'payout cap');
+  var floored = { rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 1.0 };
+  eq(payout(floored, 1), 1.0, 'payout floor start');
+  eq(payout(floored, 3), 1.5, 'payout floor growth');
+  var missState = { streak: 10, periodStart: 'P', freezeAvailable: 0, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  eq(applyEntry(missState, 0, cat, { periodKey: 'K', result: 'missed' }).state.streak, 0, 'miss default resets');
+  eq(applyEntry(missState, 0, { id: 'sleep', rewardIncrement: 0.25, maxPerInstance: 5.0, freezesPerPeriod: 1, missPenaltyPercent: 50 },
+    { periodKey: 'K', result: 'missed' }).state.streak, 5, 'miss penalty halves');
   eq(periodKeyFor('weekly', '2026-06-22'), '2026-W26', 'iso week');
   eq(lastClosedPeriodKey('daily', '2026-06-25', 4), '2026-06-24', 'daily records yesterday');
   eq(lastClosedPeriodKey('weekly', '2026-06-25', 4), '2026-W25', 'weekly records last week');
