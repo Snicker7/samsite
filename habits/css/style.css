@@ -343,6 +343,13 @@ button.danger {
   color: var(--muted);
   white-space: nowrap;
 }
+.ledger th {
+  padding: 6px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
 .ledger .amt {
   text-align: right;
   font-variant-numeric: tabular-nums;

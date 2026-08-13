@@ -1,45 +1,28 @@
-// ===== Legislink Availability Check =====
-function checkLegislink(e) {
-  var now = new Date();
-  var month = now.getMonth(); // 0-indexed: 0=Jan, 1=Feb, 2=Mar
-  var inSession = month >= 0 && month <= 2; // January through March
-
-  if (inSession) {
-    return true; // let the link open normally
-  }
-
-  e.preventDefault();
-  showToast('Legislink is not currently live. The Utah legislative session runs January through March.');
-  return false;
-}
-
-function showToast(message) {
-  var existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-
-  var toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  setTimeout(function () {
-    toast.classList.add('toast-visible');
-  }, 10);
-
-  setTimeout(function () {
-    toast.classList.remove('toast-visible');
-    setTimeout(function () { toast.remove(); }, 300);
-  }, 4000);
-}
-
 // ===== Mobile Nav Toggle =====
 document.addEventListener('DOMContentLoaded', function () {
   var hamburger = document.querySelector('.nav-hamburger');
   var navLinks = document.querySelector('.nav-links');
 
   if (hamburger && navLinks) {
+    var setMenu = function (open) {
+      navLinks.classList.toggle('open', open);
+      hamburger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
+
     hamburger.addEventListener('click', function () {
-      navLinks.classList.toggle('open');
+      setMenu(!navLinks.classList.contains('open'));
+    });
+
+    // Tapping a link navigates; leaving the menu open makes it flash on the next page.
+    navLinks.addEventListener('click', function (e) {
+      if (e.target.closest('a')) setMenu(false);
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+        setMenu(false);
+        hamburger.focus();
+      }
     });
   }
 

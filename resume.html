@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resume — Sam Nichols</title>
   <meta name="description" content="Resume of Sam Nichols — software engineer and bioinformatician.">
+  <link rel="canonical" href="https://samnichols.dev/resume.html">
+  <meta name="theme-color" content="#1a2f3d">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:type" content="profile">
+  <meta property="og:site_name" content="Sam Nichols">
+  <meta property="og:url" content="https://samnichols.dev/resume.html">
+  <meta property="og:title" content="Resume — Sam Nichols">
+  <meta property="og:description" content="Resume of Sam Nichols — software engineer and bioinformatician.">
+  <meta property="og:image" content="https://samnichols.dev/assets/og-image.png">
+  <meta property="og:image:alt" content="Sam Nichols — building tools for science, building sites for business">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,10 +25,10 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">Sam Nichols</a>
-      <button class="nav-hamburger" aria-label="Toggle menu">
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="resume.html">Resume</a></li>
@@ -43,13 +56,17 @@
                 <h3>Senior Software Engineer</h3>
                 <span class="timeline-date">Jan 2022 — Present</span>
               </div>
-              <p class="timeline-company">Edilytics — Lehi, UT</p>
+              <p class="timeline-company">Edilytics — Lehi, UT (remote)</p>
+              <p class="timeline-summary">One of two engineers at a self-funded company; report directly to the CEO and own assigned product areas from architecture through customer support. CRISPResso is a commercial genome-editing analysis platform — Flask, Postgres, and a Python analysis engine — used by roughly 40 corporate labs and a large academic user base, whose method paper has been cited over 1,300 times.</p>
               <ul class="timeline-bullets">
-                <li>Led end-to-end development of CRISPResso, a production genome-editing analysis platform</li>
-                <li>Architected scalable Python data pipelines processing large genomic datasets (SAM/BAM)</li>
-                <li>Designed and deployed cloud-native AWS infrastructure (Lambda, Fargate, EFS, S3, ECR) supporting distributed scientific compute workloads</li>
-                <li>Built CI/CD pipelines and automated test suites with GitHub Actions</li>
-                <li>Redesigned the platform frontend and implemented user management (signup, login, team admin roles) with Stripe-powered payments and subscription billing</li>
+                <li>Built the Stripe subscription billing system end to end: Checkout sessions, signature-verified webhooks, and a subscription state machine moving accounts through active, past-due grace, and expired, with a route-level entitlement gate and regression tests covering every transition</li>
+                <li>Designed and shipped team accounts with role-based access control, letting labs share runs and results across members while keeping each organization's data isolated</li>
+                <li>Own the ingestion path that normalizes third-party sequencing data (FASTQ, SAM/BAM) from instruments and pipelines producing inconsistent, poorly documented, and frequently malformed output — the reliability boundary between external systems and the product</li>
+                <li>Rebuilt platform error handling after analyzing failure distributions across real production runs, so a failed job now reports a specific, actionable cause instead of a generic error</li>
+                <li>Built a plot configuration builder that lets customers compose and save custom visualizations without engineering involvement</li>
+                <li>Re-architected compute onto AWS Lambda and Fargate provisioned with CDK, moved releases to containerized Kamal deploys behind Caddy, and put every pull request behind GitHub Actions CI running pytest and Jest</li>
+                <li>Introduced Ruff to a legacy Python codebase with an incremental rule-adoption process, and reduced memory usage in the Pro analysis path so larger customer runs complete on existing infrastructure</li>
+                <li>Join customer calls to scope features and diagnose production issues, then set priorities directly with the CEO — currently shipping CRISPRessoPro to a waitlist of 60 labs</li>
               </ul>
             </div>
           </div>
@@ -58,13 +75,16 @@
             <div class="timeline-marker"></div>
             <div class="timeline-content">
               <div class="timeline-header">
-                <h3>Freelance Web Designer</h3>
+                <h3>Full-Stack Developer &amp; Web Designer</h3>
                 <span class="timeline-date">2023 — Present</span>
               </div>
-              <p class="timeline-company">Self-employed</p>
+              <p class="timeline-company">Independent — Remote</p>
               <ul class="timeline-bullets">
-                <li>Design and build responsive websites for small businesses, handling the full lifecycle from client discovery to deployment</li>
-                <li>Focus on performance, clean design, and maintainable code with zero-dependency static sites</li>
+                <li>Serve as technical owner for recurring clients: feature development, third-party integrations, hosting, performance, and SEO</li>
+                <li>Migrated a hotel booking engine integration across a vendor domain change on a live reservations site, with zero booking downtime</li>
+                <li>Built a client intake system in Google Apps Script that generates structured questionnaires and automates downstream document delivery</li>
+                <li>Design and build responsive sites end to end, favoring performance, clean design, and maintainable zero-dependency static builds</li>
+                <li>Scope, price, and deliver fixed-bid projects directly with non-technical clients — requirements, communication, and delivery are all mine</li>
               </ul>
             </div>
           </div>
@@ -96,6 +116,48 @@
               <ul class="timeline-bullets">
                 <li>Isolated and fully sequenced a novel Salmonella enterica bacteriophage</li>
                 <li>Performed genomic analysis to identify conserved domains and novel proteins</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <h2>Selected Project</h2>
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3>LegisLink — <a href="https://legislink.us" target="_blank" rel="noopener">legislink.us</a></h3>
+                <span class="timeline-date">Mar 2025 — Present</span>
+              </div>
+              <p class="timeline-company">Founder and sole developer</p>
+              <ul class="timeline-bullets">
+                <li>Built a multi-tenant legislative tracking platform used by lobbyists, legislators, and interns through Utah's legislative session — a PostgreSQL schema of 16+ models with role-based access control, delegated permissions, and organization-scoped data isolation</li>
+                <li>Scrapers pull live bill text, committee schedules, and fiscal notes from state legislative sources with staleness detection</li>
+                <li>Notification system alerts users to bill amendments, vote results, and hearing location changes across tracked legislation</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <section class="resume-section">
+        <h2>AI-Assisted Development</h2>
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-marker"></div>
+            <div class="timeline-content">
+              <p class="timeline-summary">Workflows in active daily use, not experiments.</p>
+              <ul class="timeline-bullets">
+                <li>Built a code review agent that runs tests and lint, then analyzes a branch diff for logic errors, edge cases, coverage gaps, and complexity — producing a severity-sorted report with fix recommendations and a plain-language brief for the human reviewer. Runs before every pull request</li>
+                <li>Built a synthetic sequencing-data generator producing FASTQ and VCF fixtures with known ground-truth edits, plus alignment verification, so new analysis features get regression coverage without hand-curating test genomes</li>
+                <li>Built an incremental cleanup agent that retires one suppressed lint rule at a time from a legacy codebase — branch, fix every violation, review — turning a stalled migration into steady weekly progress</li>
               </ul>
             </div>
           </div>
@@ -139,21 +201,70 @@
             <h3>Languages</h3>
             <div class="skills-list">
               <span class="pill">Python</span>
-              <span class="pill">Go</span>
-              <span class="pill">Java</span>
               <span class="pill">JavaScript</span>
               <span class="pill">SQL</span>
+              <span class="pill">Bash</span>
+              <span class="pill">Go</span>
+              <span class="pill">Java</span>
+              <span class="pill">C/C++</span>
+            </div>
+          </div>
+          <div class="skills-group">
+            <h3>Web</h3>
+            <div class="skills-list">
+              <span class="pill">Flask</span>
+              <span class="pill">Jinja</span>
+              <span class="pill">REST API Design</span>
               <span class="pill">HTML/CSS</span>
+              <span class="pill">Bootstrap</span>
+              <span class="pill">Plotly</span>
+              <span class="pill">Jest</span>
+              <span class="pill">Google Apps Script</span>
+              <span class="pill">WordPress/PHP</span>
+            </div>
+          </div>
+          <div class="skills-group">
+            <h3>Data</h3>
+            <div class="skills-list">
+              <span class="pill">PostgreSQL</span>
+              <span class="pill">SQLAlchemy</span>
+              <span class="pill">Alembic</span>
+              <span class="pill">Redis/RQ</span>
+              <span class="pill">SQLite</span>
+              <span class="pill">MongoDB</span>
+              <span class="pill">Schema Design</span>
             </div>
           </div>
           <div class="skills-group">
             <h3>Cloud & Infrastructure</h3>
             <div class="skills-list">
-              <span class="pill">AWS</span>
-              <span class="pill">Docker</span>
+              <span class="pill">AWS Lambda</span>
+              <span class="pill">Fargate</span>
+              <span class="pill">S3</span>
               <span class="pill">AWS CDK</span>
-              <span class="pill">CI/CD</span>
+              <span class="pill">Docker</span>
+              <span class="pill">Kamal</span>
+              <span class="pill">Caddy</span>
+              <span class="pill">Linux</span>
               <span class="pill">GitHub Actions</span>
+            </div>
+          </div>
+          <div class="skills-group">
+            <h3>Payments</h3>
+            <div class="skills-list">
+              <span class="pill">Stripe Checkout</span>
+              <span class="pill">Subscriptions</span>
+              <span class="pill">Webhooks</span>
+              <span class="pill">Dunning & Grace Periods</span>
+            </div>
+          </div>
+          <div class="skills-group">
+            <h3>AI Tooling</h3>
+            <div class="skills-list">
+              <span class="pill">Claude Code</span>
+              <span class="pill">Custom Agent Skills</span>
+              <span class="pill">Automated Code Review</span>
+              <span class="pill">LLM-Assisted Testing</span>
             </div>
           </div>
           <div class="skills-group">
@@ -163,17 +274,6 @@
               <span class="pill">SAM/BAM Processing</span>
               <span class="pill">samtools</span>
               <span class="pill">CRISPResso</span>
-            </div>
-          </div>
-          <div class="skills-group">
-            <h3>Frameworks & Tools</h3>
-            <div class="skills-list">
-              <span class="pill">Flask</span>
-              <span class="pill">Plotly</span>
-              <span class="pill">Scikit-learn</span>
-              <span class="pill">MongoDB</span>
-              <span class="pill">Jinja</span>
-              <span class="pill">Stripe</span>
             </div>
           </div>
         </div>

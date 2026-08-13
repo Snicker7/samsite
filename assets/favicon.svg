@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Sam Nichols">
+  <rect width="64" height="64" rx="14" fill="#1a2f3d"/>
+  <path d="M4 44 C16 34 24 52 34 44 C42 37.6 50 46 60 41 L60 64 L4 64 Z" fill="#2d6476"/>
+  <path d="M4 51 C14 45 22 57 32 51 C41 45.6 50 53 60 49 L60 64 L4 64 Z" fill="#7fbcc8"/>
+  <text x="32" y="34" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="30" font-weight="700" fill="#f3f8f8" text-anchor="middle">SN</text>
+</svg>

@@ -266,30 +266,6 @@ img {
   }
 }
 
-/* ===== Toast ===== */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: var(--color-dark);
-  color: var(--color-bg);
-  padding: 14px 24px;
-  border-radius: var(--radius);
-  font-size: 0.95rem;
-  box-shadow: 0 4px 20px rgba(26, 47, 61, 0.2);
-  opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
-  z-index: 200;
-  max-width: 500px;
-  text-align: center;
-}
-
-.toast-visible {
-  opacity: 1;
-  transform: translateX(-50%) translateY(0);
-}
-
 /* ===== Hero (Landing Page) ===== */
 .hero {
   flex: 1;
@@ -444,13 +420,6 @@ img {
   flex: 1;
 }
 
-.project-note {
-  font-size: 0.8rem;
-  font-weight: normal;
-  font-style: italic;
-  color: var(--color-mid);
-}
-
 .project-tags {
   display: flex;
   flex-wrap: wrap;
@@ -560,6 +529,13 @@ img {
 .timeline-content p:last-child {
   font-size: 0.95rem;
   line-height: 1.6;
+}
+
+.timeline-summary {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-mid);
+  margin: 0 0 8px;
 }
 
 .timeline-bullets {
