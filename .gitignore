@@ -2,3 +2,6 @@
 .DS_Store
 Thumbs.db
 *.swp
+
+# Hydra is a separate repository
+hydra/

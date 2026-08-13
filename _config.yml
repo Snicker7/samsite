@@ -1,0 +1,15 @@
+# GitHub Pages (Jekyll) config for samnichols.dev.
+#
+# Pages publishes every tracked file by default. The Habit Builder dashboard
+# (habits/{index.html, css/, js/}) is meant to be served; the rest of habits/ is
+# *source* — Apps Script backend, unit tests, design docs — and must not be.
+# Without these excludes, backend/Code.gs would be readable at
+# samnichols.dev/habits/backend/Code.gs and README.md (which names both
+# allowlisted email addresses) at samnichols.dev/habits/README.md.
+#
+# Anything else added under habits/ IS served. Put non-public files in
+# habits/backend/ or habits/docs/, or add them here.
+exclude:
+  - habits/backend
+  - habits/docs
+  - habits/README.md

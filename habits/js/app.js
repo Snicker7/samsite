@@ -80,35 +80,8 @@ function jsonp(params) {
 }
 const api = (action, extra) => jsonp(Object.assign({ action, token: getToken() }, extra || {}));
 
-/* ── dates ────────────────────────────────────────────────────────────────── */
-function isoDate(d) {
-  return (
-    d.getFullYear() +
-    '-' +
-    String(d.getMonth() + 1).padStart(2, '0') +
-    '-' +
-    String(d.getDate()).padStart(2, '0')
-  );
-}
-function yesterdayIso() {
-  return isoDate(new Date(Date.now() - 24 * 3600 * 1000));
-}
-function isoWeekClient(d) {
-  const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-  const day = dt.getUTCDay() || 7;
-  dt.setUTCDate(dt.getUTCDate() + 4 - day);
-  const yearStart = new Date(Date.UTC(dt.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil(((dt - yearStart) / 86400000 + 1) / 7);
-  return dt.getUTCFullYear() + '-W' + ('0' + weekNo).slice(-2);
-}
-// Cadence per category id, cached from the last render so recordCat can pick day vs week.
-let CAT_CADENCE = {};
 // Last-rendered category list, so the admin form can guard against duplicate ids.
 let CAT_LIST = [];
-function lastPeriodKey(categoryId) {
-  const d = new Date(Date.now() - 24 * 3600 * 1000); // yesterday
-  return CAT_CADENCE[categoryId] === 'weekly' ? isoWeekClient(d) : isoDate(d);
-}
 
 /* ── rendering ──────────────────────────────────────────────────────────────*/
 function render(r) {
@@ -136,7 +109,6 @@ function renderCatCards(cats) {
     return;
   }
   cats.forEach((c) => {
-    CAT_CADENCE[c.id] = c.cadence;
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML =
@@ -150,7 +122,8 @@ function renderCatCards(cats) {
       '<button class="ok" data-cat="' + c.id + '" data-result="on_time">✅ Did it</button>' +
       '<button class="danger" data-cat="' + c.id + '" data-result="missed">❌ Missed</button>' +
       '</div>' +
-      '<p class="muted">' + (c.cadence === 'weekly' ? 'Weekly' : 'Daily') + ' • last: ' + (c.lastRecordedKey || '—') + '</p>';
+      '<p class="muted">' + (c.cadence === 'weekly' ? 'Weekly' : 'Daily') +
+      ' • records ' + (c.nextPeriodKey || '—') + ' • last: ' + (c.lastRecordedKey || '—') + '</p>';
     wrap.appendChild(card);
   });
   wrap.querySelectorAll('button[data-cat]').forEach((b) => {
@@ -204,6 +177,7 @@ async function deleteEntry(id) {
   try {
     const r = await api('deleteEntry', { id });
     if (!r.ok) { banner(r.error || 'Could not remove', true); return; }
+    if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
     banner('Entry removed.', false);
     showDashboard();
   } catch (err) { banner(err.message, true); }
@@ -232,11 +206,16 @@ async function showDashboard() {
 }
 
 async function recordCat(categoryId, result, label) {
+  if (result === 'missed' &&
+      !window.confirm('Record a miss for "' + (label || 'this habit') + '"? ' +
+        'A freeze is used automatically if you have one; otherwise your streak takes the hit.')) {
+    return;
+  }
   banner('Saving…', false);
   try {
-    // Record the just-closed period: yesterday for daily, last ISO week for weekly.
-    const r = await api('record', { categoryId, periodKey: lastPeriodKey(categoryId), result });
+    const r = await api('record', { categoryId, result });
     if (!r.ok) { banner(r.error || 'Could not save', true); return; }
+    if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
     const e = r.event;
     if (e.result === 'on_time') banner('🎉 ' + (label || 'Done') + ' — earned ' + money(e.amount) + '.', false);
     else if (e.freezeUsed) banner('❄️ Freeze used — streak protected.', false);
@@ -303,14 +282,18 @@ function renderCatList(cats) {
     tr.innerHTML =
       '<td>' + c.name + (c.active ? '' : ' (archived)') + '</td>' +
       '<td>' + c.cadence + '</td>' +
-      '<td><button class="link-btn" data-edit="' + c.id + '">edit</button>' +
-      (c.active ? ' <button class="link-btn" data-arch="' + c.id + '">archive</button>' : '') + '</td>';
+      '<td><button class="link-btn" data-edit="' + c.id + '">edit</button> ' +
+      (c.active
+        ? '<button class="link-btn" data-arch="' + c.id + '">archive</button>'
+        : '<button class="link-btn" data-unarch="' + c.id + '">unarchive</button>') + '</td>';
     body.appendChild(tr);
   });
   body.querySelectorAll('button[data-edit]').forEach((b) =>
     b.addEventListener('click', () => editCat(cats.find((x) => x.id === b.getAttribute('data-edit')))));
   body.querySelectorAll('button[data-arch]').forEach((b) =>
-    b.addEventListener('click', () => archiveCat(b.getAttribute('data-arch'))));
+    b.addEventListener('click', () => setCatActive(b.getAttribute('data-arch'), 'archiveCategory')));
+  body.querySelectorAll('button[data-unarch]').forEach((b) =>
+    b.addEventListener('click', () => setCatActive(b.getAttribute('data-unarch'), 'unarchiveCategory')));
 }
 
 function editCat(c) {
@@ -333,10 +316,10 @@ function resetCatForm() {
   $('catFormMsg').hidden = true;
 }
 
-async function archiveCat(id) {
+async function setCatActive(id, action) { // 'archiveCategory' | 'unarchiveCategory'
   try {
-    const r = await api('archiveCategory', { categoryId: id });
-    if (!r.ok) { banner(r.error || 'Could not archive', true); return; }
+    const r = await api(action, { categoryId: id });
+    if (!r.ok) { banner(r.error || 'Could not update', true); return; }
     if (!Array.isArray(r.categories)) { banner(STALE_BACKEND_MSG, true); return; }
     renderCatList(r.categories);
   } catch (err) { banner(err.message, true); }
@@ -371,6 +354,7 @@ function wire() {
     try {
       const r = await api('spend', { amount, note });
       if (!r.ok) { banner(r.error || 'Could not save', true); return; }
+      if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
       $('spendAmount').value = ''; $('spendNote').value = '';
       banner('Spent ' + money(amount) + '.', false);
       showDashboard();
@@ -384,6 +368,7 @@ function wire() {
     try {
       const r = await api('deposit', { amount, note });
       if (!r.ok) { banner(r.error || 'Could not add', true); return; }
+      if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
       $('addAmount').value = ''; $('addNote').value = '';
       banner('Added ' + money(amount) + ' to both wallets.', false);
       showDashboard();

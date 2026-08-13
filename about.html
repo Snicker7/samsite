@@ -5,6 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About — Sam Nichols</title>
   <meta name="description" content="Learn about Sam Nichols — software engineer, bioinformatician, and freelance web designer.">
+  <link rel="canonical" href="https://samnichols.dev/about.html">
+  <meta name="theme-color" content="#1a2f3d">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Sam Nichols">
+  <meta property="og:url" content="https://samnichols.dev/about.html">
+  <meta property="og:title" content="About — Sam Nichols">
+  <meta property="og:description" content="Learn about Sam Nichols — software engineer, bioinformatician, and freelance web designer.">
+  <meta property="og:image" content="https://samnichols.dev/assets/og-image.png">
+  <meta property="og:image:alt" content="Sam Nichols — building tools for science, building sites for business">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -12,10 +25,10 @@
   <nav class="nav">
     <div class="nav-inner">
       <a href="index.html" class="nav-logo">Sam Nichols</a>
-      <button class="nav-hamburger" aria-label="Toggle menu">
+      <button class="nav-hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
         <span></span><span></span><span></span>
       </button>
-      <ul class="nav-links">
+      <ul class="nav-links" id="nav-links">
         <li><a href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="resume.html">Resume</a></li>
