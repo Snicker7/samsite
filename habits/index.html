@@ -109,7 +109,11 @@
 
           <div class="field">
             <label class="field-label" for="catName">Name</label>
-            <input id="catName" type="text" placeholder="Exercise, Chores, Sleep…" required />
+            <div class="inline-field name-field">
+              <input id="catEmoji" class="emoji" type="text" maxlength="16" placeholder="🌙" aria-label="Emoji (optional)" />
+              <input id="catName" class="grow" type="text" placeholder="Exercise, Chores, Sleep…" required />
+            </div>
+            <p class="hint">The emoji is optional — it heads the habit's card and its emails.</p>
           </div>
 
           <div class="field">

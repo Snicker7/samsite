@@ -3,6 +3,11 @@
 /* ── tiny helpers ───────────────────────────────────────────────────────── */
 const $ = (id) => document.getElementById(id);
 const money = (n) => '$' + Number(n || 0).toFixed(2);
+// Every innerHTML below interpolates values the two of you typed — category
+// names (which render in each other's dashboard) and ledger notes.
+const esc = (v) =>
+  String(v == null ? '' : v).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Mirrors the backend's slugify so the UI can detect duplicate category ids.
 const slugify = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 const getToken = () => localStorage.getItem('ss_token') || '';
@@ -112,18 +117,18 @@ function renderCatCards(cats) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML =
-      '<h2>' + c.name + '</h2>' +
+      '<h2>' + (c.emoji ? esc(c.emoji) + ' ' : '') + esc(c.name) + '</h2>' +
       '<div class="prow">' +
       '<div><span class="label">Streak</span><span class="pval">' + c.streak + '</span></div>' +
       '<div><span class="label">If you do it</span><span class="pval">' + money(c.potential) + '</span></div>' +
       '<div><span class="label">Freezes</span><span class="pval">' + c.freezeAvailable + '</span></div>' +
       '</div>' +
       '<div class="row" style="margin-top:8px">' +
-      '<button class="ok" data-cat="' + c.id + '" data-result="on_time">✅ Did it</button>' +
-      '<button class="danger" data-cat="' + c.id + '" data-result="missed">❌ Missed</button>' +
+      '<button class="ok" data-cat="' + esc(c.id) + '" data-result="on_time">✅ Did it</button>' +
+      '<button class="danger" data-cat="' + esc(c.id) + '" data-result="missed">❌ Missed</button>' +
       '</div>' +
       '<p class="muted">' + (c.cadence === 'weekly' ? 'Weekly' : 'Daily') +
-      ' • records ' + (c.nextPeriodKey || '—') + ' • last: ' + (c.lastRecordedKey || '—') + '</p>';
+      ' • records ' + esc(c.nextPeriodKey || '—') + ' • last: ' + esc(c.lastRecordedKey || '—') + '</p>';
     wrap.appendChild(card);
   });
   wrap.querySelectorAll('button[data-cat]').forEach((b) => {
@@ -132,11 +137,12 @@ function renderCatCards(cats) {
 }
 
 function describe(e) {
-  if (e.type === 'spend') return '🛒 ' + (e.note || 'Spent');
-  if (e.type === 'deposit') return '💵 ' + (e.note || 'Added money');
-  if (e.type === 'bonus') return '🎁 ' + (e.note || 'Bonus') + ' (' + (e.category || '') + ')';
+  if (e.type === 'spend') return '🛒 ' + esc(e.note || 'Spent');
+  if (e.type === 'deposit') return '💵 ' + esc(e.note || 'Added money');
+  const cat = e.categoryName || e.category;
+  if (e.type === 'bonus') return '🎁 ' + esc(e.note || 'Bonus') + ' (' + esc(cat) + ')';
   if (e.type === 'entry') {
-    const tag = e.category ? ' (' + e.category + ')' : '';
+    const tag = cat ? ' (' + esc(cat) + ')' : '';
     if (e.result === 'on_time') return '✅ On time' + tag;
     if (e.freezeUsed) return '❄️ Freeze used' + tag;
     return '❌ Missed' + tag;
@@ -155,12 +161,16 @@ function renderLedger(rows) {
   rows.forEach((e) => {
     const tr = document.createElement('tr');
     const when = (e.periodKey || (e.timestamp || '').slice(0, 10) || '').toString();
-    const canDelete = e.type === 'spend' || e.type === 'deposit';
+    const canDelete = e.canDelete !== undefined
+      ? e.canDelete
+      : (e.type === 'spend' || e.type === 'deposit');
+    const label = e.type === 'entry' ? 'Undo this entry' : 'Remove this entry';
     const del = canDelete && e.id
-      ? '<button class="link-btn del" data-del="' + e.id + '" title="Remove this entry" aria-label="Remove this entry">✕</button>'
+      ? '<button class="link-btn del" data-del="' + esc(e.id) + '" data-type="' + esc(e.type) +
+        '" title="' + label + '" aria-label="' + label + '">✕</button>'
       : '';
     tr.innerHTML =
-      '<td>' + when + '</td>' +
+      '<td>' + esc(when) + '</td>' +
       '<td>' + describe(e) + '</td>' +
       '<td class="amt">' + amountCell(e) + '</td>' +
       '<td class="bal">' + money(e.balanceAfter) + '</td>' +
@@ -168,25 +178,29 @@ function renderLedger(rows) {
     body.appendChild(tr);
   });
   body.querySelectorAll('button[data-del]').forEach((b) =>
-    b.addEventListener('click', () => deleteEntry(b.getAttribute('data-del'))));
+    b.addEventListener('click', () => deleteEntry(b.getAttribute('data-del'), b.getAttribute('data-type'))));
 }
 
-async function deleteEntry(id) {
-  if (!window.confirm('Remove this entry? This updates your wallet total.')) return;
-  banner('Removing…', false);
+async function deleteEntry(id, type) {
+  const isEntry = type === 'entry';
+  const ask = isEntry
+    ? 'Undo this entry? Your streak and freezes go back to what they were, and the payout is taken back.'
+    : 'Remove this entry? This updates your wallet total.';
+  if (!window.confirm(ask)) return;
+  banner(isEntry ? 'Undoing…' : 'Removing…', false);
   try {
     const r = await api('deleteEntry', { id });
     if (!r.ok) { banner(r.error || 'Could not remove', true); return; }
     if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
-    banner('Entry removed.', false);
-    showDashboard();
+    banner(isEntry ? 'Entry undone.' : 'Entry removed.', false);
+    showDashboard(true);
   } catch (err) { banner(err.message, true); }
 }
 
 /* ── flows ──────────────────────────────────────────────────────────────────*/
-async function showDashboard() {
+async function showDashboard(keepBanner) {
   setView('dash');
-  banner('', false);
+  if (!keepBanner) banner('', false);
   try {
     const r = await api('state');
     if (!r.ok) {
@@ -200,6 +214,10 @@ async function showDashboard() {
       return;
     }
     render(r);
+    // The admin views already flag an old deployment; the dashboard used to show
+    // a friendly "No categories yet" instead. An empty list is a real [] — only
+    // a missing one means the backend is older than this page.
+    if (!Array.isArray(r.cats)) banner(STALE_BACKEND_MSG, true);
   } catch (err) {
     banner(err.message, true);
   }
@@ -220,7 +238,7 @@ async function recordCat(categoryId, result, label) {
     if (e.result === 'on_time') banner('🎉 ' + (label || 'Done') + ' — earned ' + money(e.amount) + '.', false);
     else if (e.freezeUsed) banner('❄️ Freeze used — streak protected.', false);
     else banner('Streak reset. Fresh start 💪', false);
-    showDashboard();
+    showDashboard(true);
   } catch (err) { banner(err.message, true); }
 }
 
@@ -265,6 +283,7 @@ async function showAdmin() {
   setView('admin');
   fillHourOptions($('catReminder'));
   fillHourOptions($('catCheckup'));
+  resetCatForm();
   try {
     const r = await api('listCategories');
     if (!r.ok) { banner(r.error || 'Could not load categories', true); return; }
@@ -280,12 +299,13 @@ function renderCatList(cats) {
   cats.forEach((c) => {
     const tr = document.createElement('tr');
     tr.innerHTML =
-      '<td>' + c.name + (c.active ? '' : ' (archived)') + '</td>' +
-      '<td>' + c.cadence + '</td>' +
-      '<td><button class="link-btn" data-edit="' + c.id + '">edit</button> ' +
+      '<td>' + (c.emoji ? esc(c.emoji) + ' ' : '') + esc(c.name) +
+        (c.active ? '' : ' (archived)') + '</td>' +
+      '<td>' + esc(c.cadence) + '</td>' +
+      '<td><button class="link-btn" data-edit="' + esc(c.id) + '">edit</button> ' +
       (c.active
-        ? '<button class="link-btn" data-arch="' + c.id + '">archive</button>'
-        : '<button class="link-btn" data-unarch="' + c.id + '">unarchive</button>') + '</td>';
+        ? '<button class="link-btn" data-arch="' + esc(c.id) + '">archive</button>'
+        : '<button class="link-btn" data-unarch="' + esc(c.id) + '">unarchive</button>') + '</td>';
     body.appendChild(tr);
   });
   body.querySelectorAll('button[data-edit]').forEach((b) =>
@@ -297,13 +317,14 @@ function renderCatList(cats) {
 }
 
 function editCat(c) {
-  $('catId').value = c.id; $('catName').value = c.name;
+  $('catId').value = c.id; $('catName').value = c.name; $('catEmoji').value = c.emoji || '';
   $('catCadence').value = c.cadence; $('catRefresh').value = c.freezeRefresh;
   $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
   $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
   $('catMinPayout').value = c.minPayout || '';
   $('catMissPenalty').value = c.missPenaltyPercent == null ? '' : c.missPenaltyPercent;
   $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
+  $('catFormMsg').hidden = true;
   $('catFormTitle').textContent = 'Editing: ' + c.name;
   $('cancelEditBtn').hidden = false;
   $('catForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -358,8 +379,13 @@ function wire() {
       if (!r.ok) { banner(r.error || 'Could not save', true); return; }
       if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
       $('spendAmount').value = ''; $('spendNote').value = '';
-      banner('Spent ' + money(amount) + '.', false);
-      showDashboard();
+      // The backend floors a spend at the wallet balance, so report what
+      // actually left rather than what was typed.
+      const spent = r.event && typeof r.event.amount === 'number' ? r.event.amount : Number(amount);
+      banner(spent < Number(amount)
+        ? 'Spent ' + money(spent) + ' — that was everything in the wallet.'
+        : 'Spent ' + money(spent) + '.', false);
+      showDashboard(true);
     } catch (err) { banner(err.message, true); }
   });
 
@@ -373,7 +399,7 @@ function wire() {
       if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
       $('addAmount').value = ''; $('addNote').value = '';
       banner('Added ' + money(amount) + ' to both wallets.', false);
-      showDashboard();
+      showDashboard(true);
     } catch (err) { banner(err.message, true); }
   });
 
@@ -383,20 +409,21 @@ function wire() {
   });
 
   $('manageBtn').addEventListener('click', showAdmin);
-  $('backToDashBtn').addEventListener('click', showDashboard);
+  $('backToDashBtn').addEventListener('click', () => showDashboard());
   $('cancelEditBtn').addEventListener('click', resetCatForm);
 
   $('catForm').addEventListener('submit', async (ev) => {
     ev.preventDefault();
     const category = {
       id: $('catId').value || undefined,
-      name: $('catName').value,
+      name: $('catName').value, emoji: $('catEmoji').value,
       cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
       rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
       freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
       minPayout: $('catMinPayout').value, missPenaltyPercent: $('catMissPenalty').value,
       reminderTime: $('catReminder').value, checkupTime: $('catCheckup').value,
-      active: true,
+      // `active` is deliberately absent: archive/unarchive owns that flag, and
+      // sending it here un-archived every category you edited.
     };
     $('catFormMsg').hidden = true;
     // Adding (no id) but a category with this name already exists → would silently

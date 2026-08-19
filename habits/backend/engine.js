@@ -48,6 +48,21 @@ function shiftDays(dateStr, n) {
 }
 
 /**
+ * The ISO Monday of the week containing `dateStr`, as "YYYY-MM-DD".
+ *
+ * Takes the day-of-week as an argument rather than subtracting 24-hour
+ * multiples from a timestamp: an hour of DST shift is enough to push that
+ * arithmetic onto the wrong calendar day, which silently starts a new freeze
+ * period (and pays a second unused-freeze bonus).
+ *
+ * @param dateStr  "YYYY-MM-DD" in the app timezone
+ * @param dow      ISO day-of-week for dateStr, 1=Mon..7=Sun
+ */
+function mondayOf(dateStr, dow) {
+  return shiftDays(dateStr, -(dow - 1));
+}
+
+/**
  * The most recently *closed* period — the one a record button may write.
  * Daily: yesterday. Weekly: the ISO week of the last Sunday.
  *
@@ -82,10 +97,83 @@ function initialCatState(cat, periodStart) {
   return {
     streak: 0,
     periodStart: periodStart || null,
-    freezeAvailable: cat.freezesPerPeriod,
-    freezeUsedThisPeriod: false,
+    // The cadence `periodStart` was computed under. Without it, editing the
+    // freeze-refresh dropdown looks exactly like a period ending.
+    freezeRefresh: cat.freezeRefresh,
+    freezesUsedThisPeriod: 0,
     lastRecordedKey: null,
   };
+}
+
+/**
+ * What this category's freeze period needs on this tick.
+ *
+ *   'none'    — still inside the same period
+ *   'refresh' — the period ended: reset freezes, pay any unused-freeze bonus
+ *   'rebase'  — the freeze-refresh *cadence* was edited, so the stored period
+ *               start describes a rule that no longer applies. Move to the new
+ *               one without paying: no time passed. Scoring this as a period
+ *               ending let anyone mint the bonus by toggling week ⇄ month.
+ */
+function refreshAction(state, cat, newPeriodStart) {
+  var was = state.freezeRefresh;
+  if (was != null && was !== cat.freezeRefresh) return 'rebase';
+  return state.periodStart === newPeriodStart ? 'none' : 'refresh';
+}
+
+/** Adopt the new cadence's period. Freezes already spent stay spent. */
+function applyRebase(state, cat, newPeriodStart) {
+  var s = Object.assign({}, state);
+  s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
+  return s;
+}
+
+/**
+ * Begin a fresh freeze period without settling the one before it: full
+ * allowance back, no unused-freeze bonus. For a category resuming after a
+ * dormant stretch — the periods it sat out archived earned nothing, and
+ * scoring the gap as one long period paid a bonus for weeks it wasn't running.
+ * Streak and last-recorded key are history and are kept.
+ */
+function applyRestart(state, cat, newPeriodStart) {
+  var s = Object.assign({}, state);
+  s.freezesUsedThisPeriod = 0;
+  s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
+  return s;
+}
+
+/**
+ * Freezes still available this period.
+ *
+ * Derived rather than stored: state records how many freezes were *spent*,
+ * which is a fact about what happened, while the allowance lives on the
+ * category and can be edited at any time. Storing the remainder instead made
+ * an edit to `freezesPerPeriod` invisible until the next period rollover.
+ */
+function freezesLeft(cat, state) {
+  var spent = Number(state.freezesUsedThisPeriod) || 0;
+  return Math.max(0, (Number(cat.freezesPerPeriod) || 0) - spent);
+}
+
+/**
+ * Bring a state blob written before freezes were derived up to the new shape.
+ * The spent count is recovered from the stored remainder; exact unless the
+ * category's allowance was edited during the period being migrated.
+ */
+function migrateCatState(cat, state) {
+  if (state && state.freezesUsedThisPeriod != null && state.freezeRefresh != null) return state;
+  var s = Object.assign({}, state);
+  if (s.freezeRefresh == null) s.freezeRefresh = cat.freezeRefresh;
+  if (s.freezesUsedThisPeriod != null) return s;
+  var left = Number(s.freezeAvailable);
+  s.freezesUsedThisPeriod = isNaN(left)
+    ? 0
+    : Math.max(0, (Number(cat.freezesPerPeriod) || 0) - left);
+  delete s.freezeAvailable;
+  delete s.freezeUsedThisPeriod;
+  return s;
 }
 
 /**
@@ -110,9 +198,8 @@ function applyEntry(state, balance, cat, input) {
     s.streak = state.streak + 1;
     amount = payout(cat, s.streak);
     balance = round2(balance + amount);
-  } else if (state.freezeAvailable > 0) {
-    s.freezeAvailable = state.freezeAvailable - 1;
-    s.freezeUsedThisPeriod = true;
+  } else if (freezesLeft(cat, state) > 0) {
+    s.freezesUsedThisPeriod = (Number(state.freezesUsedThisPeriod) || 0) + 1;
     freezeUsed = true;
   } else {
     // No freeze left: the penalty decides how much of the streak survives.
@@ -141,7 +228,7 @@ function applyEntry(state, balance, cat, input) {
 function applyRefresh(state, balance, cat, newPeriodStart) {
   var s = Object.assign({}, state);
   var event = null;
-  if (cat.unusedFreezeBonus > 0 && !state.freezeUsedThisPeriod) {
+  if (cat.unusedFreezeBonus > 0 && !(Number(state.freezesUsedThisPeriod) || 0)) {
     balance = round2(balance + cat.unusedFreezeBonus);
     event = {
       type: 'bonus',
@@ -152,9 +239,9 @@ function applyRefresh(state, balance, cat, newPeriodStart) {
       balanceAfter: balance,
     };
   }
-  s.freezeAvailable = cat.freezesPerPeriod;
-  s.freezeUsedThisPeriod = false;
+  s.freezesUsedThisPeriod = 0;
   s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
   return { state: s, balance: balance, event: event };
 }
 
@@ -188,6 +275,27 @@ function applyDeposit(balance, input) {
 }
 
 /**
+ * Has this actor already recorded this category's period?
+ *
+ * Answered from the ledger, which holds every entry ever written. State's
+ * `lastRecordedKey` remembers only the most recent period, so a signed
+ * check-up link for an older one sailed past it and credited a period that had
+ * already been superseded. Deleting an entry row reopens its period, which is
+ * what makes undo work.
+ */
+function isPeriodRecorded(rows, actor, categoryId, periodKey) {
+  var a = String(actor || '').toLowerCase();
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.type !== 'entry') continue;
+    if (String(r.actor || '').toLowerCase() !== a) continue;
+    if (String(r.category) !== String(categoryId)) continue;
+    if (String(r.periodKey) === String(periodKey)) return true;
+  }
+  return false;
+}
+
+/**
  * Replay a single actor's ledger rows (in order), flooring spends at $0, and
  * attach the running balance to each. Non-spend rows add their amount.
  * @returns {Array} the actor's rows, each with a numeric balanceAfter.
@@ -212,6 +320,13 @@ function runningBalanceRows(rows, actor) {
 function deriveWallet(rows, actor) {
   var rb = runningBalanceRows(rows, actor);
   return rb.length ? rb[rb.length - 1].balanceAfter : 0;
+}
+
+/** Neutralise markup for anything interpolated into an HTML email body. */
+function escapeHtml(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
 }
 
 // Task 4 helpers (not exported)
@@ -252,8 +367,13 @@ function normalizeCategory(raw) {
   };
 }
 
+// Long enough for a ZWJ sequence like 👩‍👩‍👧 (11 code units), short enough that
+// it can't take over an email subject line.
+var MAX_EMOJI_LENGTH = 16;
+
 function validateCategory(cat) {
   var errs = [];
+  if (cat.emoji.length > MAX_EMOJI_LENGTH) errs.push('Emoji must be a single symbol.');
   if (!cat.id) errs.push('A name is required (used to build the id).');
   if (!cat.name) errs.push('Name is required.');
   if (cat.cadence !== 'daily' && cat.cadence !== 'weekly') errs.push('Cadence must be daily or weekly.');
@@ -278,14 +398,22 @@ if (typeof module !== 'undefined' && module.exports) {
     periodKeyFor: periodKeyFor,
     shiftDays: shiftDays,
     lastClosedPeriodKey: lastClosedPeriodKey,
+    mondayOf: mondayOf,
     shouldSendReminder: shouldSendReminder,
     shouldSendCheckup: shouldSendCheckup,
     initialCatState: initialCatState,
+    refreshAction: refreshAction,
+    applyRebase: applyRebase,
+    applyRestart: applyRestart,
+    escapeHtml: escapeHtml,
+    freezesLeft: freezesLeft,
+    migrateCatState: migrateCatState,
     applyEntry: applyEntry,
     applyRefresh: applyRefresh,
     applySpend: applySpend,
     applyDeposit: applyDeposit,
     deriveWallet: deriveWallet,
+    isPeriodRecorded: isPeriodRecorded,
     runningBalanceRows: runningBalanceRows,
     normalizeCategory: normalizeCategory,
     validateCategory: validateCategory,

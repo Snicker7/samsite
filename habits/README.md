@@ -11,6 +11,7 @@ per category.** You each record your own entries.
 
 Each category defines:
 
+- **name** and an optional **emoji** — both head the habit's card and its emails
 - **streak** — consecutive on-time entries
 - **freeze count** — how many misses you can absorb before your streak breaks
 - **reward increment** — what each streak step adds to the payout
@@ -32,13 +33,31 @@ How entries work:
   full reset to 0.
 - At freeze-refresh, freezes reset; if no freeze was used and the bonus is > 0,
   the bonus is paid.
+- Each period can be recorded **once**, checked against the ledger — so a
+  check-up email that's still sitting in your inbox can't be tapped twice.
+- Freezes remaining are derived from the category, not stored: state records how
+  many you have *spent* this period. Raising or lowering **freeze count** in the
+  Categories admin UI therefore takes effect on the next miss, not at the next
+  refresh.
 
 **Shared wallet:** all categories pay into your single personal wallet. **Spend**
 debits it. **Add money** credits **both** people's wallets by the **full amount
 each** — useful for mad-money / personal spending you want to record symmetrically.
 
+**Undo:** the ✕ in *Recent activity* takes back the most recent entry for a
+habit — the streak and freezes go back to what they were and the payout is
+reversed, which is the way out of a misclicked ❌. Only the newest entry per
+habit is undoable, and only your own. Undoing the one freeze a period spent
+pays that period's unused-freeze bonus, even if the period has since closed.
+
 **Full transparency:** the dashboard shows a read-only panel with your partner's
 wallet balance (you can't spend or record for them).
+
+**Wallets are always derived from the ledger**, never stored — a balance can't
+drift from the entries that produced it, and correcting the sheet corrects the
+wallet. The cost is one sheet read per dashboard load, which grows with your
+history (~2,000 rows a year for two people on a daily habit). If it ever gets
+slow, the answer is a periodic checkpoint row, not a cached balance.
 
 > Tip: set the optional `NAMES` map in `Code.gs` (email → name) so the dashboard
 > shows "Sam" / "Alex" instead of the email prefix.
@@ -49,7 +68,12 @@ Tap **Categories** on the dashboard to add, edit, or archive categories live.
 Settings are stored in Apps Script Properties — no redeploy needed. Either
 allowlisted person can manage them.
 
-Archived categories keep their history but stop prompting and emailing.
+Archived categories keep their history but stop prompting and emailing — and
+stop accepting entries, including from check-up links already in your inbox.
+Unarchiving resumes in the current period with a full freeze allowance — the
+stretch spent archived earns no unused-freeze bonus. Changing the
+**freeze-refresh cadence** settles any period that had already ended, then
+re-bases, so an edit neither pays a bonus nor loses one you were owed.
 
 ## How it's built
 
@@ -102,7 +126,10 @@ Do these in order. Budget ~15 minutes.
 The ledger gained a `category` column and state moved to `{balance, cats}`.
 After deploying the new `Code.gs`:
 
-1. Clear the `ledgerId` Script Property (or delete the old ledger sheet).
+1. Clear the `ledgerId` Script Property. (Deleting the spreadsheet is *not*
+   enough — a configured-but-unreadable ledger is treated as an outage and
+   reported, not silently replaced. Clearing the property is what says
+   "start a new one on purpose".)
 2. Re-run `setup()` — this recreates the ledger with the new columns and installs
    the hourly trigger (replacing the old three fixed triggers).
 
@@ -139,7 +166,9 @@ GitHub Pages serves every file publicly; it **cannot** gate a path by email on
 its own. Two layers handle privacy:
 
 1. **App-level (already in place):** the page shows only a login box, and login
-   works **only** for the two allowlisted emails. No one else can see balances or
+   works **only** for the two allowlisted emails, at most one login email per
+   address every five minutes (otherwise anyone with the `/exec` URL could loop
+   the endpoint and drain the daily Gmail send quota). No one else can see balances or
    streaks or record/spend anything. The page also has `noindex,nofollow` so it
    won't show up in search, and it isn't linked from your site nav.
 
@@ -213,7 +242,7 @@ express what you want.
 
    ```bash
    cd habits/backend
-   node --test .      # expect: pass 31 (or more, if you added tests)
+   node --test .      # expect: pass 53 (or more, if you added tests)
    node build.js      # regenerates Code.gs from main.gs + engine.js
    ```
 
@@ -262,6 +291,14 @@ Version →** pick the previous one **→ Deploy**. The `/exec` URL is unchanged
 the frontend needs no edit. Roll the frontend back with a normal `git revert` and
 push. Data is never affected by either — it lives in Script Properties and the
 Ledger sheet.
+
+### If the app says the ledger can't be opened
+
+Every wallet balance is replayed from the Ledger sheet, so the app refuses to
+run rather than carry on against an empty one. Nothing is lost and nothing is
+written while it's in that state. Either restore the spreadsheet from Drive's
+trash, or set the `ledgerId` Script Property to the right spreadsheet id — the
+balances come back on the next load.
 
 ## Project layout
 

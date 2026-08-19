@@ -244,6 +244,15 @@ select {
   width: auto;
   flex: 0 0 auto;
 }
+/* emoji + name share one line: one glyph wide, then the rest */
+.name-field .emoji {
+  width: 64px;
+  text-align: center;
+}
+.name-field .grow {
+  width: auto;
+  flex: 1 1 160px;
+}
 .inline-field .txt {
   color: var(--ink);
   font-size: 0.95rem;

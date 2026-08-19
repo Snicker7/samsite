@@ -50,9 +50,7 @@ function currentDow() {
   return parseInt(Utilities.formatDate(new Date(), TZ, 'u'), 10);
 }
 function currentMondayStr() {
-  var now = new Date();
-  var monday = new Date(now.getTime() - (currentDow() - 1) * 24 * 3600 * 1000);
-  return tzDate(monday);
+  return mondayOf(todayStr(), currentDow());
 }
 // The period a record button writes right now — see lastClosedPeriodKey.
 function recordablePeriodKey(cat) {
@@ -84,11 +82,17 @@ function catStateOf(email, catId, cat) {
   var m = statesAll();
   if (!m[email]) m[email] = { cats: {} };
   if (!m[email].cats) m[email].cats = {};
-  if (!m[email].cats[catId]) {
-    m[email].cats[catId] = initialCatState(cat, currentPeriodStart(cat));
-    saveStatesAll(m);
+  var s = m[email].cats[catId];
+  if (s) {
+    var migrated = migrateCatState(cat, s);
+    if (migrated === s) return s;
+    s = migrated;
+  } else {
+    s = initialCatState(cat, currentPeriodStart(cat));
   }
-  return m[email].cats[catId];
+  m[email].cats[catId] = s;
+  saveStatesAll(m);
+  return s;
 }
 function saveCatState(email, catId, s) {
   var m = statesAll();
@@ -113,6 +117,13 @@ function categoryById(id) {
 function activeCategories() {
   return categoriesAll().filter(function (c) { return c.active; });
 }
+// id -> display name, so history reads "Bedtime" after a rename instead of the
+// slug it was first created under.
+function categoryNames() {
+  var m = {};
+  categoriesAll().forEach(function (c) { m[c.id] = c.name; });
+  return m;
+}
 // Period start for the category's freezeRefresh cadence (a "YYYY-MM-DD").
 function currentPeriodStart(cat) {
   if (cat.freezeRefresh === 'daily') return todayStr();
@@ -122,32 +133,51 @@ function currentPeriodStart(cat) {
 
 function ledgerSheet() {
   var id = props().getProperty('ledgerId');
-  var ss = null;
-  if (id) {
-    try {
-      ss = SpreadsheetApp.openById(id);
-    } catch (e) {
-      ss = null;
-    }
-  }
-  if (!ss) {
-    ss = SpreadsheetApp.create('Habit Builder Ledger');
-    var first = ss.getSheets()[0];
-    first.setName('Ledger');
-    first.appendRow([
-      'id', 'timestamp', 'type', 'category', 'periodKey', 'result',
-      'freezeUsed', 'amount', 'balanceAfter', 'actor', 'note',
-    ]);
-    props().setProperty('ledgerId', ss.getId());
-  }
+  // No ledger configured yet -> first run, create one. A ledger that IS
+  // configured but won't open is an outage, not a first run: creating a
+  // replacement would overwrite ledgerId and strand every entry ever written.
+  // Wallets are derived from the ledger, so both balances would silently read
+  // $0 and would not come back when the spreadsheet did. Fail loudly instead.
+  var ss = id ? openLedgerOrThrow(id) : createLedgerSpreadsheet();
   return ss.getSheetByName('Ledger') || ss.getSheets()[0];
 }
+function openLedgerOrThrow(id) {
+  var ss = null;
+  var why = '';
+  try {
+    ss = SpreadsheetApp.openById(id);
+  } catch (e) {
+    why = ' (' + ((e && e.message) || e) + ')';
+  }
+  if (!ss) {
+    throw new Error(
+      'The ledger spreadsheet could not be opened' + why + '. Nothing was changed. ' +
+      'Restore it from Drive\'s trash, or point the ledgerId Script Property at the ' +
+      'right spreadsheet. To deliberately start a new, empty ledger, clear ledgerId ' +
+      'and re-run setup().'
+    );
+  }
+  return ss;
+}
+function createLedgerSpreadsheet() {
+  var ss = SpreadsheetApp.create('Habit Builder Ledger');
+  var first = ss.getSheets()[0];
+  first.setName('Ledger');
+  first.appendRow([
+    'id', 'timestamp', 'type', 'category', 'periodKey', 'result',
+    'freezeUsed', 'amount', 'balanceAfter', 'actor', 'note',
+  ]);
+  props().setProperty('ledgerId', ss.getId());
+  return ss;
+}
 function appendLedger(ev) {
+  var id = Utilities.getUuid();
   ledgerSheet().appendRow([
-    Utilities.getUuid(), new Date(), ev.type, ev.category || '', ev.periodKey || '',
+    id, new Date(), ev.type, ev.category || '', ev.periodKey || '',
     ev.result || '', ev.freezeUsed === true, ev.amount || 0,
     ev.balanceAfter, ev.actor || '', ev.note || '',
   ]);
+  return id;
 }
 // All ledger rows as objects (post-migration 11-column schema).
 function readLedgerRows() {
@@ -167,14 +197,25 @@ function readLedgerRows() {
   }
   return out;
 }
-function recentLedgerFromRows(rows, email, n) {
-  var mine = runningBalanceRows(rows, email); // each carries correct balanceAfter
+// `mine` is one actor's rows from runningBalanceRows — already carrying the
+// correct balanceAfter. Taking them pre-scanned keeps stateResponse to a single
+// pass for the wallet and the panel together.
+function recentLedger(mine, email, n) {
   mine = mine.slice(Math.max(0, mine.length - n));
+  var cats = (statesAll()[email] || {}).cats || {};
+  var names = categoryNames();
+  var undoable = {};
+  Object.keys(cats).forEach(function (k) {
+    if (cats[k] && cats[k].undo && cats[k].undo.id) undoable[String(cats[k].undo.id)] = true;
+  });
   return mine.reverse().map(function (r) {
     return {
       id: r.id,
+      canDelete: r.type === 'spend' || r.type === 'deposit' || undoable[String(r.id)] === true,
       timestamp: r.timestamp ? Utilities.formatDate(new Date(r.timestamp), TZ, 'yyyy-MM-dd HH:mm') : '',
-      type: r.type, category: r.category, periodKey: r.periodKey, result: r.result,
+      type: r.type, category: r.category,
+      categoryName: names[r.category] || r.category,
+      periodKey: r.periodKey, result: r.result,
       freezeUsed: r.freezeUsed, amount: r.amount, balanceAfter: r.balanceAfter,
       actor: r.actor, note: r.note,
     };
@@ -215,9 +256,27 @@ function verifyActionSig(person, categoryId, periodKey, result, sig) {
 function newToken() {
   return (Utilities.getUuid() + Utilities.getUuid()).replace(/-/g, '');
 }
+// Anyone who knows the /exec URL can call requestLogin. Without a throttle a
+// loop over it drains the account's daily MailApp quota (~100 messages on a
+// consumer account), which silently blocks the real login emails.
+var LOGIN_COOLDOWN_MS = 5 * 60 * 1000;
+
+function loginAllowed(email) {
+  return withLock(function () {
+    var key = 'login:' + email;
+    var last = Number(props().getProperty(key) || 0);
+    if (Date.now() - last < LOGIN_COOLDOWN_MS) return false;
+    props().setProperty(key, String(Date.now()));
+    return true;
+  });
+}
+
 function requestLogin(email) {
   email = (email || '').trim().toLowerCase();
   if (ALLOWLIST.indexOf(email) === -1) return { ok: true }; // don't reveal allowlist
+  // Same answer either way, so a caller can't probe the cooldown any more than
+  // they can probe the allowlist.
+  if (!loginAllowed(email)) return { ok: true };
   var token = newToken();
   props().setProperty(
     'token:' + token,
@@ -340,19 +399,39 @@ function partnerOf(email) {
 function ensureCatStates(m, email, cats) {
   if (!m[email]) m[email] = { cats: {} };
   if (!m[email].cats) m[email].cats = {};
-  var added = false;
+  var changed = false;
   cats.forEach(function (cat) {
-    if (!m[email].cats[cat.id]) {
+    var s = m[email].cats[cat.id];
+    if (!s) {
       m[email].cats[cat.id] = initialCatState(cat, currentPeriodStart(cat));
-      added = true;
+      changed = true;
+      return;
+    }
+    var migrated = migrateCatState(cat, s);
+    if (migrated !== s) {
+      m[email].cats[cat.id] = migrated;
+      changed = true;
     }
   });
-  return added;
+  return changed;
+}
+
+// True when this user has a category whose period has rolled over, whose state
+// is missing, or whose state predates the derived-freeze shape — i.e. when
+// stateResponse must take the lock and write.
+function refreshNeeded(email, cats) {
+  var m = statesAll();
+  for (var i = 0; i < cats.length; i++) {
+    var s = m[email] && m[email].cats && m[email].cats[cats[i].id];
+    if (!s || s.freezesUsedThisPeriod == null || s.freezeRefresh == null) return true;
+    if (refreshAction(s, cats[i], currentPeriodStart(cats[i])) !== 'none') return true;
+  }
+  return false;
 }
 function catPublicFromState(cat, s) {
   return {
     id: cat.id, name: cat.name, emoji: cat.emoji, cadence: cat.cadence,
-    streak: s.streak, freezeAvailable: s.freezeAvailable,
+    streak: s.streak, freezeAvailable: freezesLeft(cat, s),
     lastRecordedKey: s.lastRecordedKey,
     potential: payout(cat, s.streak + 1),
     nextPeriodKey: recordablePeriodKey(cat),
@@ -362,23 +441,30 @@ function catPublic(email, cat) {
   return catPublicFromState(cat, catStateOf(email, cat.id, cat));
 }
 function stateResponse(email) {
-  var rows = readLedgerRows(); // ONE sheet read serves both wallets + the ledger panel
   var active = activeCategories();
-  var m = statesAll();
-  if (ensureCatStates(m, email, active)) {
-    // Rare path (first sight of a new category): re-read under the lock so a
-    // concurrent mutation isn't clobbered by this save.
+  // Freezes refresh at each category's period rollover. The hourly trigger is
+  // not the only thing allowed to do it: between a boundary and the next
+  // trigger run the dashboard would otherwise report — and a miss would spend —
+  // the previous period's leftovers.
+  if (refreshNeeded(email, active)) {
+    // Re-read under the lock so a concurrent mutation isn't clobbered.
     withLock(function () {
-      m = statesAll();
-      ensureCatStates(m, email, active);
-      saveStatesAll(m);
+      active.forEach(maybeRefresh);
+      var mm = statesAll();
+      if (ensureCatStates(mm, email, active)) saveStatesAll(mm);
     });
   }
-  var cats = active.map(function (c) { return catPublicFromState(c, m[email].cats[c.id]); });
+  var rows = readLedgerRows(); // ONE sheet read serves both wallets + the ledger panel
+  var myRows = runningBalanceRows(rows, email); // ...and ONE pass serves both of mine
+  var myState = (statesAll()[email] || {}).cats || {};
+  var cats = active.map(function (c) {
+    return catPublicFromState(c, myState[c.id] || initialCatState(c, currentPeriodStart(c)));
+  });
   var resp = {
     ok: true, user: email, name: displayName(email),
-    wallet: deriveWallet(rows, email), cats: cats,
-    ledger: recentLedgerFromRows(rows, email, 20),
+    wallet: myRows.length ? myRows[myRows.length - 1].balanceAfter : 0,
+    cats: cats,
+    ledger: recentLedger(myRows, email, 20),
   };
   var pe = partnerOf(email);
   if (pe) resp.partner = { name: displayName(pe), wallet: deriveWallet(rows, pe) };
@@ -389,6 +475,9 @@ function doRecord(p) {
   var result = p.result;
   var cat = categoryById(categoryId);
   if (!cat) return { ok: false, error: 'unknown category' };
+  // Archiving stops the prompting and the emails; a link sent before it was
+  // archived must not still pay into the wallet.
+  if (!cat.active) return { ok: false, error: 'that habit is archived' };
   var person, periodKey;
   var loginEmail = verifyToken(p.token);
   if (loginEmail) {
@@ -405,10 +494,26 @@ function doRecord(p) {
     }
   }
   if (ALLOWLIST.indexOf(person) === -1) return { ok: false, error: 'unknown person' };
+  maybeRefresh(cat); // a miss must spend this period's freezes, not last one's
+  var rows = readLedgerRows(); // read after the refresh, so any bonus row is in it
+  // The ledger, not state's most-recent key, decides whether this period is
+  // already spoken for — otherwise an old signed check-up link credits a period
+  // that a later entry has already superseded.
+  if (isPeriodRecorded(rows, person, categoryId, periodKey)) {
+    return { ok: false, error: 'period ' + periodKey + ' already recorded' };
+  }
   var s = catStateOf(person, categoryId, cat);
-  var out = applyEntry(s, walletOf(person), cat, { periodKey: periodKey, result: result, actor: person });
+  var out = applyEntry(s, deriveWallet(rows, person), cat, { periodKey: periodKey, result: result, actor: person });
+  // Snapshot what this entry changed, so it can be taken back. Only the newest
+  // entry per category is undoable — this snapshot is the whole of the history.
+  out.state.undo = {
+    id: appendLedger(out.event),
+    streak: s.streak,
+    freezesUsedThisPeriod: Number(s.freezesUsedThisPeriod) || 0,
+    lastRecordedKey: s.lastRecordedKey,
+    periodStart: s.periodStart,
+  };
   saveCatState(person, categoryId, out.state);
-  appendLedger(out.event);
   return { ok: true, user: person, wallet: out.balance, cat: catPublic(person, cat), event: out.event };
 }
 function doSpend(p) {
@@ -445,11 +550,58 @@ function doDeleteEntry(p) {
   if (String(match.actor).toLowerCase() !== String(email).toLowerCase()) {
     return { ok: false, error: 'you can only remove your own entries' };
   }
+  if (match.type === 'entry') return undoEntry(email, match, rows);
   if (match.type !== 'spend' && match.type !== 'deposit') {
-    return { ok: false, error: 'only spends and adds can be removed here' };
+    return { ok: false, error: 'that row can\'t be removed here' };
   }
   ledgerSheet().deleteRow(match.rowNumber);
-  return { ok: true, wallet: walletOf(email) };
+  return { ok: true, wallet: walletWithout(rows, email, match.id) };
+}
+// The wallet as it stands once `id` is gone, computed from the rows we already
+// read. Wallets stay derived from the ledger — never cached — so the only thing
+// worth avoiding is reading the same sheet twice in one request.
+function walletWithout(rows, email, id) {
+  return deriveWallet(rows.filter(function (r) { return String(r.id) !== String(id); }), email);
+}
+// Take back a recorded entry: drop its ledger row — which reverses the payout,
+// since wallets are derived from the ledger, and reopens the period for
+// re-recording — then restore the streak and freezes it consumed.
+function undoEntry(email, row, rows) {
+  var cat = categoryById(row.category);
+  if (!cat) return { ok: false, error: 'unknown category' };
+  var s = catStateOf(email, cat.id, cat);
+  var u = s.undo;
+  if (!u || String(u.id) !== String(row.id)) {
+    return { ok: false, error: 'only the most recent entry for a habit can be undone' };
+  }
+  var restored = {
+    streak: u.streak,
+    periodStart: s.periodStart,
+    // Freezes belong to a period. If that one has since rolled over they have
+    // already been refreshed, so there is nothing left to give back.
+    freezesUsedThisPeriod: s.periodStart === u.periodStart
+      ? u.freezesUsedThisPeriod
+      : s.freezesUsedThisPeriod,
+    lastRecordedKey: u.lastRecordedKey,
+  };
+  ledgerSheet().deleteRow(row.rowNumber);
+  saveCatState(email, cat.id, restored); // no `undo` — one step back, not a stack
+  var wallet = walletWithout(rows, email, row.id);
+  // The bonus for that period was declined because a freeze had been used. If
+  // this was that freeze, and its period has since closed, the period earned
+  // the bonus after all. Nothing later in it can have spent another freeze —
+  // only the newest entry is undoable, so a later one would hold this slot.
+  if (String(row.freezeUsed).toLowerCase() === 'true' &&
+      s.periodStart !== u.periodStart &&
+      Number(u.freezesUsedThisPeriod) === 0 &&
+      cat.unusedFreezeBonus > 0) {
+    wallet = round2(wallet + cat.unusedFreezeBonus);
+    appendLedger({
+      type: 'bonus', category: cat.id, amount: cat.unusedFreezeBonus,
+      note: 'Unused freeze bonus (freeze undone)', actor: email, balanceAfter: wallet,
+    });
+  }
+  return { ok: true, wallet: wallet, cat: catPublic(email, cat) };
 }
 function doListCategories(p) {
   requireUser(p);
@@ -465,6 +617,17 @@ function doSaveCategory(p) {
   var idx = -1;
   for (var i = 0; i < list.length; i++) if (list[i].id === cat.id) idx = i;
   if (idx >= 0) {
+    // The admin form carries only the fields it renders. Anything it omits
+    // keeps its stored value — otherwise every edit wiped the emoji and
+    // un-archived an archived category.
+    if (raw.emoji == null) cat.emoji = list[idx].emoji || '';
+    if (raw.active == null) cat.active = list[idx].active !== false;
+    // A period that has already ended must be settled under the cadence that
+    // was in force when it ended. Without this the rebase below — which is
+    // right to refuse payment for an *edit* — also swallows the real rollover.
+    if (list[idx].active && cat.freezeRefresh !== list[idx].freezeRefresh) {
+      maybeRefresh(list[idx]);
+    }
     list[idx] = cat;
   } else {
     list.push(cat);
@@ -484,9 +647,27 @@ function doUnarchiveCategory(p) {
   requireUser(p);
   var id = p.categoryId;
   var list = categoriesAll();
-  for (var i = 0; i < list.length; i++) if (list[i].id === id) list[i].active = true;
+  var cat = null;
+  for (var i = 0; i < list.length; i++) {
+    if (list[i].id === id) { list[i].active = true; cat = list[i]; }
+  }
   saveCategories(list);
+  // Archived categories are skipped by maybeRefresh, so the stored period start
+  // is however old the archive is. Left alone, the next refresh reads that gap
+  // as one period ending and pays an unused-freeze bonus for weeks the habit
+  // wasn't running. Resume in the current period instead, unpaid.
+  if (cat) restartPeriod(cat);
   return { ok: true, categories: list };
+}
+// Move everyone's state for this category into the current period without
+// settling the previous one. Caller holds the lock.
+function restartPeriod(cat) {
+  var newStart = currentPeriodStart(cat);
+  ALLOWLIST.forEach(function (email) {
+    var s = catStateOf(email, cat.id, cat);
+    if (s.periodStart === newStart && s.freezeRefresh === cat.freezeRefresh) return;
+    saveCatState(email, cat.id, applyRestart(s, cat, newStart));
+  });
 }
 
 // ─────────────────────────────────────────────────────────────────────────
@@ -523,11 +704,15 @@ function maybeRefresh(cat) {
   var newStart = currentPeriodStart(cat);
   ALLOWLIST.forEach(function (email) {
     var s = catStateOf(email, cat.id, cat);
-    if (s.periodStart !== newStart) {
-      var out = applyRefresh(s, walletOf(email), cat, newStart);
-      saveCatState(email, cat.id, out.state);
-      if (out.event) { out.event.actor = email; appendLedger(out.event); }
+    var act = refreshAction(s, cat, newStart);
+    if (act === 'none') return;
+    if (act === 'rebase') {
+      saveCatState(email, cat.id, applyRebase(s, cat, newStart));
+      return;
     }
+    var out = applyRefresh(s, walletOf(email), cat, newStart);
+    saveCatState(email, cat.id, out.state);
+    if (out.event) { out.event.actor = email; appendLedger(out.event); }
   });
 }
 
@@ -536,12 +721,13 @@ function sendReminder(cat) {
     var s = catStateOf(to, cat.id, cat);
     var potential = payout(cat, s.streak + 1);
     var subject = (cat.emoji || '🔥') + ' ' + cat.name + ' — ' + money(potential) + ' on the line';
+    var heading = escapeHtml(cat.emoji || '🔥') + ' ' + escapeHtml(cat.name);
     var html =
       '<div style="font-family:system-ui,Arial,sans-serif;max-width:480px">' +
-      '<h2>' + (cat.emoji || '🔥') + ' ' + cat.name + '</h2>' +
+      '<h2>' + heading + '</h2>' +
       '<p>Doing it earns <b>you</b> <b>' + money(potential) + '</b>.</p>' +
       '<ul><li>Streak: <b>' + s.streak + '</b></li>' +
-      '<li>Freezes left: <b>' + s.freezeAvailable + '</b></li></ul></div>';
+      '<li>Freezes left: <b>' + freezesLeft(cat, s) + '</b></li></ul></div>';
     MailApp.sendEmail({ to: to, subject: subject, htmlBody: html });
   });
 }
@@ -551,9 +737,9 @@ function sendCheckup(cat) {
   // write, so a check-up answer and a dashboard tap can't land on different keys.
   var periodKey = recordablePeriodKey(cat);
   var btn = 'display:inline-block;padding:14px 22px;margin:6px 0;border-radius:10px;font-size:18px;text-decoration:none;color:#fff';
+  var rows = readLedgerRows();
   ALLOWLIST.forEach(function (to) {
-    var s = catStateOf(to, cat.id, cat);
-    if (s.lastRecordedKey === periodKey) return; // already recorded — no nag
+    if (isPeriodRecorded(rows, to, cat.id, periodKey)) return; // already recorded — no nag
     var base = DASHBOARD_URL + '?person=' + encodeURIComponent(to) +
       '&categoryId=' + encodeURIComponent(cat.id) + '&periodKey=' + encodeURIComponent(periodKey);
     var yesUrl = base + '&result=on_time&sig=' + actionSig(to, cat.id, periodKey, 'on_time');
@@ -561,7 +747,8 @@ function sendCheckup(cat) {
     var subject = 'Did you do ' + cat.name + '? ' + (cat.emoji || '');
     var html =
       '<div style="font-family:system-ui,Arial,sans-serif;max-width:480px">' +
-      '<h2>' + (cat.emoji || '☀️') + ' ' + cat.name + ' — ' + periodKey + '</h2>' +
+      '<h2>' + escapeHtml(cat.emoji || '☀️') + ' ' + escapeHtml(cat.name) +
+      ' — ' + escapeHtml(periodKey) + '</h2>' +
       '<p><a href="' + yesUrl + '" style="' + btn + ';background:#2e7d32">✅ Yes</a></p>' +
       '<p><a href="' + noUrl + '" style="' + btn + ';background:#b00020">❌ No</a></p>' +
       '<p style="color:#666;font-size:13px">If you miss and still have a freeze, it\'s used automatically.</p></div>';
@@ -631,7 +818,7 @@ function runTests() {
   var floored = { rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 1.0 };
   eq(payout(floored, 1), 1.0, 'payout floor start');
   eq(payout(floored, 3), 1.5, 'payout floor growth');
-  var missState = { streak: 10, periodStart: 'P', freezeAvailable: 0, freezeUsedThisPeriod: false, lastRecordedKey: null };
+  var missState = { streak: 10, periodStart: 'P', freezesUsedThisPeriod: 1, lastRecordedKey: null };
   eq(applyEntry(missState, 0, cat, { periodKey: 'K', result: 'missed' }).state.streak, 0, 'miss default resets');
   eq(applyEntry(missState, 0, { id: 'sleep', rewardIncrement: 0.25, maxPerInstance: 5.0, freezesPerPeriod: 1, missPenaltyPercent: 50 },
     { periodKey: 'K', result: 'missed' }).state.streak, 5, 'miss penalty halves');
@@ -640,8 +827,20 @@ function runTests() {
   eq(lastClosedPeriodKey('weekly', '2026-06-25', 4), '2026-W25', 'weekly records last week');
   var r = applyEntry(initialCatState(cat, 'P'), 0, cat, { periodKey: '2026-06-15', result: 'on_time' });
   eq(r.state.streak, 1, 'streak inc'); eq(r.balance, 0.25, 'pay d1');
-  r = applyRefresh({ streak: 3, periodStart: 'P', freezeAvailable: 1, freezeUsedThisPeriod: false, lastRecordedKey: null }, 10, cat, 'P2');
+  r = applyRefresh({ streak: 3, periodStart: 'P', freezesUsedThisPeriod: 0, lastRecordedKey: null }, 10, cat, 'P2');
   eq(r.balance, 13.5, 'bonus added');
+  eq(r.state.freezesUsedThisPeriod, 0, 'refresh clears spent freezes');
+  // Freezes track the category, so editing freezesPerPeriod takes effect now.
+  var spentOne = { streak: 4, periodStart: 'P', freezesUsedThisPeriod: 1, lastRecordedKey: null };
+  eq(freezesLeft({ freezesPerPeriod: 1 }, spentOne), 0, 'freezesLeft at the old allowance');
+  eq(freezesLeft({ freezesPerPeriod: 3 }, spentOne), 2, 'freezesLeft after raising the allowance');
+  eq(migrateCatState({ freezesPerPeriod: 2 },
+    { streak: 4, freezeAvailable: 1, freezeUsedThisPeriod: true }).freezesUsedThisPeriod, 1, 'legacy state migrates');
+  eq(mondayOf('2026-11-01', 7), '2026-10-26', 'mondayOf across the DST fallback');
+  var led = [{ type: 'entry', actor: 'a@x', category: 'sleep', periodKey: 'P1' }];
+  eq(isPeriodRecorded(led, 'a@x', 'sleep', 'P1'), true, 'ledger sees a recorded period');
+  eq(isPeriodRecorded(led, 'a@x', 'sleep', 'P0'), false, 'ledger clears an unrecorded period');
+  eq(isPeriodRecorded([], 'a@x', 'sleep', 'P1'), false, 'removing the row reopens the period');
   eq(applySpend(3, { amount: 5 }).balance, 0, 'spend floors');
   eq(applyDeposit(10, { amount: 20 }).balance, 30, 'deposit adds');
   var L = [
@@ -707,6 +906,21 @@ function shiftDays(dateStr, n) {
 }
 
 /**
+ * The ISO Monday of the week containing `dateStr`, as "YYYY-MM-DD".
+ *
+ * Takes the day-of-week as an argument rather than subtracting 24-hour
+ * multiples from a timestamp: an hour of DST shift is enough to push that
+ * arithmetic onto the wrong calendar day, which silently starts a new freeze
+ * period (and pays a second unused-freeze bonus).
+ *
+ * @param dateStr  "YYYY-MM-DD" in the app timezone
+ * @param dow      ISO day-of-week for dateStr, 1=Mon..7=Sun
+ */
+function mondayOf(dateStr, dow) {
+  return shiftDays(dateStr, -(dow - 1));
+}
+
+/**
  * The most recently *closed* period — the one a record button may write.
  * Daily: yesterday. Weekly: the ISO week of the last Sunday.
  *
@@ -741,10 +955,83 @@ function initialCatState(cat, periodStart) {
   return {
     streak: 0,
     periodStart: periodStart || null,
-    freezeAvailable: cat.freezesPerPeriod,
-    freezeUsedThisPeriod: false,
+    // The cadence `periodStart` was computed under. Without it, editing the
+    // freeze-refresh dropdown looks exactly like a period ending.
+    freezeRefresh: cat.freezeRefresh,
+    freezesUsedThisPeriod: 0,
     lastRecordedKey: null,
   };
+}
+
+/**
+ * What this category's freeze period needs on this tick.
+ *
+ *   'none'    — still inside the same period
+ *   'refresh' — the period ended: reset freezes, pay any unused-freeze bonus
+ *   'rebase'  — the freeze-refresh *cadence* was edited, so the stored period
+ *               start describes a rule that no longer applies. Move to the new
+ *               one without paying: no time passed. Scoring this as a period
+ *               ending let anyone mint the bonus by toggling week ⇄ month.
+ */
+function refreshAction(state, cat, newPeriodStart) {
+  var was = state.freezeRefresh;
+  if (was != null && was !== cat.freezeRefresh) return 'rebase';
+  return state.periodStart === newPeriodStart ? 'none' : 'refresh';
+}
+
+/** Adopt the new cadence's period. Freezes already spent stay spent. */
+function applyRebase(state, cat, newPeriodStart) {
+  var s = Object.assign({}, state);
+  s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
+  return s;
+}
+
+/**
+ * Begin a fresh freeze period without settling the one before it: full
+ * allowance back, no unused-freeze bonus. For a category resuming after a
+ * dormant stretch — the periods it sat out archived earned nothing, and
+ * scoring the gap as one long period paid a bonus for weeks it wasn't running.
+ * Streak and last-recorded key are history and are kept.
+ */
+function applyRestart(state, cat, newPeriodStart) {
+  var s = Object.assign({}, state);
+  s.freezesUsedThisPeriod = 0;
+  s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
+  return s;
+}
+
+/**
+ * Freezes still available this period.
+ *
+ * Derived rather than stored: state records how many freezes were *spent*,
+ * which is a fact about what happened, while the allowance lives on the
+ * category and can be edited at any time. Storing the remainder instead made
+ * an edit to `freezesPerPeriod` invisible until the next period rollover.
+ */
+function freezesLeft(cat, state) {
+  var spent = Number(state.freezesUsedThisPeriod) || 0;
+  return Math.max(0, (Number(cat.freezesPerPeriod) || 0) - spent);
+}
+
+/**
+ * Bring a state blob written before freezes were derived up to the new shape.
+ * The spent count is recovered from the stored remainder; exact unless the
+ * category's allowance was edited during the period being migrated.
+ */
+function migrateCatState(cat, state) {
+  if (state && state.freezesUsedThisPeriod != null && state.freezeRefresh != null) return state;
+  var s = Object.assign({}, state);
+  if (s.freezeRefresh == null) s.freezeRefresh = cat.freezeRefresh;
+  if (s.freezesUsedThisPeriod != null) return s;
+  var left = Number(s.freezeAvailable);
+  s.freezesUsedThisPeriod = isNaN(left)
+    ? 0
+    : Math.max(0, (Number(cat.freezesPerPeriod) || 0) - left);
+  delete s.freezeAvailable;
+  delete s.freezeUsedThisPeriod;
+  return s;
 }
 
 /**
@@ -769,9 +1056,8 @@ function applyEntry(state, balance, cat, input) {
     s.streak = state.streak + 1;
     amount = payout(cat, s.streak);
     balance = round2(balance + amount);
-  } else if (state.freezeAvailable > 0) {
-    s.freezeAvailable = state.freezeAvailable - 1;
-    s.freezeUsedThisPeriod = true;
+  } else if (freezesLeft(cat, state) > 0) {
+    s.freezesUsedThisPeriod = (Number(state.freezesUsedThisPeriod) || 0) + 1;
     freezeUsed = true;
   } else {
     // No freeze left: the penalty decides how much of the streak survives.
@@ -800,7 +1086,7 @@ function applyEntry(state, balance, cat, input) {
 function applyRefresh(state, balance, cat, newPeriodStart) {
   var s = Object.assign({}, state);
   var event = null;
-  if (cat.unusedFreezeBonus > 0 && !state.freezeUsedThisPeriod) {
+  if (cat.unusedFreezeBonus > 0 && !(Number(state.freezesUsedThisPeriod) || 0)) {
     balance = round2(balance + cat.unusedFreezeBonus);
     event = {
       type: 'bonus',
@@ -811,9 +1097,9 @@ function applyRefresh(state, balance, cat, newPeriodStart) {
       balanceAfter: balance,
     };
   }
-  s.freezeAvailable = cat.freezesPerPeriod;
-  s.freezeUsedThisPeriod = false;
+  s.freezesUsedThisPeriod = 0;
   s.periodStart = newPeriodStart;
+  s.freezeRefresh = cat.freezeRefresh;
   return { state: s, balance: balance, event: event };
 }
 
@@ -847,6 +1133,27 @@ function applyDeposit(balance, input) {
 }
 
 /**
+ * Has this actor already recorded this category's period?
+ *
+ * Answered from the ledger, which holds every entry ever written. State's
+ * `lastRecordedKey` remembers only the most recent period, so a signed
+ * check-up link for an older one sailed past it and credited a period that had
+ * already been superseded. Deleting an entry row reopens its period, which is
+ * what makes undo work.
+ */
+function isPeriodRecorded(rows, actor, categoryId, periodKey) {
+  var a = String(actor || '').toLowerCase();
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.type !== 'entry') continue;
+    if (String(r.actor || '').toLowerCase() !== a) continue;
+    if (String(r.category) !== String(categoryId)) continue;
+    if (String(r.periodKey) === String(periodKey)) return true;
+  }
+  return false;
+}
+
+/**
  * Replay a single actor's ledger rows (in order), flooring spends at $0, and
  * attach the running balance to each. Non-spend rows add their amount.
  * @returns {Array} the actor's rows, each with a numeric balanceAfter.
@@ -871,6 +1178,13 @@ function runningBalanceRows(rows, actor) {
 function deriveWallet(rows, actor) {
   var rb = runningBalanceRows(rows, actor);
   return rb.length ? rb[rb.length - 1].balanceAfter : 0;
+}
+
+/** Neutralise markup for anything interpolated into an HTML email body. */
+function escapeHtml(v) {
+  return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) {
+    return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+  });
 }
 
 // Task 4 helpers (not exported)
@@ -911,8 +1225,13 @@ function normalizeCategory(raw) {
   };
 }
 
+// Long enough for a ZWJ sequence like 👩‍👩‍👧 (11 code units), short enough that
+// it can't take over an email subject line.
+var MAX_EMOJI_LENGTH = 16;
+
 function validateCategory(cat) {
   var errs = [];
+  if (cat.emoji.length > MAX_EMOJI_LENGTH) errs.push('Emoji must be a single symbol.');
   if (!cat.id) errs.push('A name is required (used to build the id).');
   if (!cat.name) errs.push('Name is required.');
   if (cat.cadence !== 'daily' && cat.cadence !== 'weekly') errs.push('Cadence must be daily or weekly.');
@@ -937,14 +1256,22 @@ if (typeof module !== 'undefined' && module.exports) {
     periodKeyFor: periodKeyFor,
     shiftDays: shiftDays,
     lastClosedPeriodKey: lastClosedPeriodKey,
+    mondayOf: mondayOf,
     shouldSendReminder: shouldSendReminder,
     shouldSendCheckup: shouldSendCheckup,
     initialCatState: initialCatState,
+    refreshAction: refreshAction,
+    applyRebase: applyRebase,
+    applyRestart: applyRestart,
+    escapeHtml: escapeHtml,
+    freezesLeft: freezesLeft,
+    migrateCatState: migrateCatState,
     applyEntry: applyEntry,
     applyRefresh: applyRefresh,
     applySpend: applySpend,
     applyDeposit: applyDeposit,
     deriveWallet: deriveWallet,
+    isPeriodRecorded: isPeriodRecorded,
     runningBalanceRows: runningBalanceRows,
     normalizeCategory: normalizeCategory,
     validateCategory: validateCategory,
