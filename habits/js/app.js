@@ -10,6 +10,29 @@ const esc = (v) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 // Mirrors the backend's slugify so the UI can detect duplicate category ids.
 const slugify = (s) => String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+/* Mirrors of backend period helpers (engine.js) — keep in sync. */
+const shiftDays = (dateStr, n) => {
+  const p = dateStr.split('-');
+  const d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+};
+const isoWeek = (dateStr) => {
+  const p = dateStr.split('-');
+  const d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+  const day = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - day);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
+  return d.getUTCFullYear() + '-W' + ('0' + weekNo).slice(-2);
+};
+const weekKeyMonday = (weekKey) => {
+  const m = /^(\d{4})-W(\d{2})$/.exec(weekKey);
+  if (!m) return weekKey;
+  const jan4 = m[1] + '-01-04';
+  const dow = new Date(jan4 + 'T00:00:00Z').getUTCDay() || 7;
+  return shiftDays(shiftDays(jan4, -(dow - 1)), (Number(m[2]) - 1) * 7);
+};
 const getToken = () => localStorage.getItem('ss_token') || '';
 const setToken = (t) => localStorage.setItem('ss_token', t);
 const clearToken = () => localStorage.removeItem('ss_token');
@@ -22,6 +45,14 @@ const configured = () =>
 // of the frontend talking to an old/wrong Apps Script deployment.
 const STALE_BACKEND_MSG =
   '⚠️ The backend didn\'t return category data — the app may be pointed at an old deployment. Check WEB_APP_URL in js/config.js and redeploy.';
+
+// A second tap while a save is in flight double-records the period, or surfaces
+// the backend's raw "already recorded" error over a save that actually worked.
+let inFlight = false;
+const setBusy = (busy) => {
+  inFlight = busy;
+  document.querySelectorAll('#catCards button, #choreCards button, #ledger button').forEach((b) => { b.disabled = busy; });
+};
 
 function banner(msg, isError) {
   const b = $('banner');
@@ -95,6 +126,7 @@ function render(r) {
   $('manageBtn').hidden = false;
   renderPartner(r.partner);
   renderCatCards(r.cats || []);
+  renderChoreCards(r.chores || []);
   renderLedger(r.ledger || []);
 }
 
@@ -123,16 +155,79 @@ function renderCatCards(cats) {
       '<div><span class="label">If you do it</span><span class="pval">' + money(c.potential) + '</span></div>' +
       '<div><span class="label">Freezes</span><span class="pval">' + c.freezeAvailable + '</span></div>' +
       '</div>' +
-      '<div class="row" style="margin-top:8px">' +
-      '<button class="ok" data-cat="' + esc(c.id) + '" data-result="on_time">✅ Did it</button>' +
-      '<button class="danger" data-cat="' + esc(c.id) + '" data-result="missed">❌ Missed</button>' +
+      '<div class="row main-actions" style="margin-top:8px">' +
+      '<button class="ok" data-result="on_time">✅ Did it</button>' +
+      '<button class="danger" data-result="missed">❌ Missed</button>' +
       '</div>' +
       '<p class="muted">' + (c.cadence === 'weekly' ? 'Weekly' : 'Daily') +
-      ' • records ' + esc(c.nextPeriodKey || '—') + ' • last: ' + esc(c.lastRecordedKey || '—') + '</p>';
+      ' • records ' + esc(c.nextPeriodKey || '—') + ' • last: ' + esc(c.lastRecordedKey || '—') + '</p>' +
+      '<details class="fix-past">' +
+      '<summary>✏️ Fix a past ' + (c.cadence === 'weekly' ? 'week' : 'day') + '</summary>' +
+      '<div class="row fix-row">' +
+      (c.cadence === 'weekly'
+        ? '<select class="fix-picker"></select>'
+        : '<input class="fix-picker" type="date" value="' + esc(c.nextPeriodKey || '') +
+          '" max="' + esc(c.nextPeriodKey || '') + '" />') +
+      '<button class="ok" data-fix="on_time">✅ Did it</button>' +
+      '<button class="danger" data-fix="missed">❌ Missed</button>' +
+      '</div>' +
+      '<p class="muted fix-current"></p>' +
+      '</details>';
     wrap.appendChild(card);
+    const label = (c.emoji ? c.emoji + ' ' : '') + c.name;
+    card.querySelectorAll('.main-actions button[data-result]').forEach((b) =>
+      b.addEventListener('click', () => onRecordClick(c, b.getAttribute('data-result'), label)));
+    wireFixPast(card, c, label);
   });
-  wrap.querySelectorAll('button[data-cat]').forEach((b) => {
-    b.addEventListener('click', () => recordCat(b.getAttribute('data-cat'), b.getAttribute('data-result'), b.closest('.card').querySelector('h2').textContent));
+}
+
+function renderChoreCards(chores) {
+  const wrap = $('choreCards');
+  wrap.innerHTML = '';
+  chores.forEach((c) => {
+    const label = (c.emoji ? c.emoji + ' ' : '') + c.name;
+    const who = c.assignee ? esc(c.assigneeName) : 'either of you';
+    const cadence = { daily: 'Daily', weekly: 'Weekly', monthly: 'Monthly', once: 'One-time' }[c.cadence] || c.cadence;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<h2>' + (c.emoji ? esc(c.emoji) + ' ' : '🧹 ') + esc(c.name) + '</h2>' +
+      '<div class="prow">' +
+      '<div><span class="label">Worth</span><span class="pval">' + money(c.value) + '</span></div>' +
+      '<div><span class="label">Who</span><span class="pval">' + who + '</span></div>' +
+      (c.dueDate ? '<div><span class="label">Due</span><span class="pval">' + esc(c.dueDate) + '</span></div>' : '') +
+      '</div>' +
+      (c.claimedBy
+        ? '<p class="chore-done">✓ ' + esc(c.claimedBy) + (c.cadence === 'daily' ? ', today' : '') + '</p>'
+        : '<div class="row" style="margin-top:8px"><button class="ok" data-claim>✋ I did it</button></div>') +
+      '<p class="muted">' + cadence + (c.cadence === 'once' ? '' : ' • this period: ' + esc(c.claimablePeriodKey)) + '</p>' +
+      (c.outstanding.length
+        ? '<details class="catch-up"><summary>💰 Catch up — ' + c.outstanding.length +
+          ' missed, ' + money(c.outstanding.reduce((s, o) => s + o.pot, 0)) + ' in the pot</summary>' +
+          c.outstanding.map((o) =>
+            '<div class="row catch-row"><span class="muted">' + esc(o.periodKey) + '</span>' +
+            '<button class="ok" data-claim-past="' + esc(o.periodKey) + '">Claim ' +
+            money(c.assignee ? c.value : c.value + o.pot) + '</button></div>').join('') +
+          '</details>'
+        : '');
+    wrap.appendChild(card);
+    const claim = async (periodKey) => {
+      if (inFlight) return;
+      setBusy(true);
+      banner('Saving…', false);
+      try {
+        const r = await api('claim', periodKey ? { categoryId: c.id, periodKey } : { categoryId: c.id });
+        if (!r.ok) { banner(r.error || 'Could not claim', true); return; }
+        if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
+        banner('🧹 ' + label + ' — +' + money(r.event.amount) +
+          (r.event.pot > 0 ? ' (includes the ' + money(r.event.pot) + ' pot)' : '') + '.', false);
+        await showDashboard(true);
+      } catch (err) { banner(err.message, true); } finally { setBusy(false); }
+    };
+    const btn = card.querySelector('button[data-claim]');
+    if (btn) btn.addEventListener('click', () => claim(null));
+    card.querySelectorAll('button[data-claim-past]').forEach((b) =>
+      b.addEventListener('click', () => claim(b.getAttribute('data-claim-past'))));
   });
 }
 
@@ -141,6 +236,8 @@ function describe(e) {
   if (e.type === 'deposit') return '💵 ' + esc(e.note || 'Added money');
   const cat = e.categoryName || e.category;
   if (e.type === 'bonus') return '🎁 ' + esc(e.note || 'Bonus') + ' (' + esc(cat) + ')';
+  if (e.type === 'claim') return '🧹 Did it: ' + esc(e.categoryName || e.category);
+  if (e.type === 'penalty') return '⚠️ ' + esc(e.note || ('Unclaimed: ' + (e.categoryName || e.category)));
   if (e.type === 'entry') {
     const tag = cat ? ' (' + esc(cat) + ')' : '';
     if (e.result === 'on_time') return '✅ On time' + tag;
@@ -151,6 +248,7 @@ function describe(e) {
 }
 function amountCell(e) {
   if (e.type === 'spend') return '−' + money(e.amount);
+  if (e.amount < 0) return '−' + money(-e.amount);
   if (e.amount > 0) return '+' + money(e.amount);
   return '';
 }
@@ -164,7 +262,7 @@ function renderLedger(rows) {
     const canDelete = e.canDelete !== undefined
       ? e.canDelete
       : (e.type === 'spend' || e.type === 'deposit');
-    const label = e.type === 'entry' ? 'Undo this entry' : 'Remove this entry';
+    const label = e.type === 'entry' ? 'Remove this answer' : 'Remove this entry';
     const del = canDelete && e.id
       ? '<button class="link-btn del" data-del="' + esc(e.id) + '" data-type="' + esc(e.type) +
         '" title="' + label + '" aria-label="' + label + '">✕</button>'
@@ -182,19 +280,25 @@ function renderLedger(rows) {
 }
 
 async function deleteEntry(id, type) {
+  if (inFlight) return;
   const isEntry = type === 'entry';
   const ask = isEntry
-    ? 'Undo this entry? Your streak and freezes go back to what they were, and the payout is taken back.'
+    ? 'Remove this answer? The period reopens, and your streak, freezes, and payouts are recomputed from the corrected history.'
     : 'Remove this entry? This updates your wallet total.';
   if (!window.confirm(ask)) return;
-  banner(isEntry ? 'Undoing…' : 'Removing…', false);
+  setBusy(true);
+  banner('Removing…', false);
   try {
     const r = await api('deleteEntry', { id });
     if (!r.ok) { banner(r.error || 'Could not remove', true); return; }
     if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
-    banner(isEntry ? 'Entry undone.' : 'Entry removed.', false);
-    showDashboard(true);
-  } catch (err) { banner(err.message, true); }
+    banner('Entry removed.', false);
+    // Awaited inside the try so the in-flight lock outlives the re-render: the
+    // buttons must not re-enable against stale card data.
+    await showDashboard(true);
+  } catch (err) {
+    banner(err.message, true);
+  } finally { setBusy(false); }
 }
 
 /* ── flows ──────────────────────────────────────────────────────────────────*/
@@ -224,11 +328,13 @@ async function showDashboard(keepBanner) {
 }
 
 async function recordCat(categoryId, result, label) {
+  if (inFlight) return;
   if (result === 'missed' &&
       !window.confirm('Record a miss for "' + (label || 'this habit') + '"? ' +
         'A freeze is used automatically if you have one; otherwise your streak takes the hit.')) {
     return;
   }
+  setBusy(true);
   banner('Saving…', false);
   try {
     const r = await api('record', { categoryId, result });
@@ -238,8 +344,115 @@ async function recordCat(categoryId, result, label) {
     if (e.result === 'on_time') banner('🎉 ' + (label || 'Done') + ' — earned ' + money(e.amount) + '.', false);
     else if (e.freezeUsed) banner('❄️ Freeze used — streak protected.', false);
     else banner('Streak reset. Fresh start 💪', false);
-    showDashboard(true);
-  } catch (err) { banner(err.message, true); }
+    // Awaited inside the try so the in-flight lock outlives the re-render:
+    // otherwise a double-tap hits the backend's "already recorded" rejection.
+    await showDashboard(true);
+  } catch (err) {
+    banner(err.message, true);
+  } finally { setBusy(false); }
+}
+
+const prettyResult = (r) => (r === 'on_time' ? '✅ Did it' : '❌ Missed');
+
+async function amend(categoryId, periodKey, result) {
+  if (inFlight) return;
+  setBusy(true);
+  banner('Saving…', false);
+  try {
+    const r = await api('amend', { categoryId, periodKey, result });
+    if (!r.ok) { banner(r.error || 'Could not save', true); return; }
+    if (r.unchanged) { banner('Already recorded — nothing changed.', false); return; }
+    if (typeof r.wallet === 'number') $('wallet').textContent = money(r.wallet);
+    const n = (r.ripple && r.ripple.entriesChanged) || 0;
+    banner('Changed ' + periodKey + ' to ' + (result === 'on_time' ? '✅' : '❌') +
+      (n ? ' — ' + n + ' later ' + (n === 1 ? 'entry' : 'entries') + ' adjusted.' : '.'), false);
+    // Awaited inside the try so the in-flight lock outlives the re-render: the
+    // buttons must not re-enable against stale card data.
+    await showDashboard(true);
+  } catch (err) {
+    banner(err.message, true);
+  } finally { setBusy(false); }
+}
+
+function onRecordClick(c, result, label) {
+  if (!c.recordedResult) { recordCat(c.id, result, label); return; }
+  const period = c.cadence === 'weekly' ? 'last week' : 'last night';
+  if (c.recordedResult === result) {
+    banner('You already recorded ' + prettyResult(result) + ' for ' + period + ' — nothing to change.', false);
+    return;
+  }
+  if (!window.confirm('You recorded ' + prettyResult(c.recordedResult) + ' for ' + period +
+      ' (' + (c.nextPeriodKey || '') + '). Change it to ' + prettyResult(result) +
+      '? Later entries adjust automatically.')) return;
+  amend(c.id, c.nextPeriodKey, result);
+}
+
+function wireFixPast(card, c, label) {
+  const det = card.querySelector('details.fix-past');
+  const picker = det.querySelector('.fix-picker');
+  const cur = det.querySelector('.fix-current');
+  let history = null; // periodKey -> 'on_time' | 'missed'; null until first open
+
+  if (c.cadence === 'weekly' && c.nextPeriodKey) {
+    // "2026-W33" alone is unreadable; pair it with the dates it covers.
+    const md = (dateStr) =>
+      new Date(dateStr + 'T00:00:00Z').toLocaleDateString('en-US',
+        { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    let monday = weekKeyMonday(c.nextPeriodKey);
+    for (let i = 0; i < 12; i++) {
+      const key = isoWeek(monday);
+      const sunday = shiftDays(monday, 6);
+      // Drop the repeated month only when the week stays inside one.
+      const span = md(monday) + '–' +
+        (monday.slice(0, 7) === sunday.slice(0, 7) ? String(Number(sunday.slice(8, 10))) : md(sunday));
+      picker.innerHTML +=
+        '<option value="' + esc(key) + '">' + esc(key) + ' · ' + esc(span) + '</option>';
+      monday = shiftDays(monday, -7);
+    }
+  }
+
+  const refreshCurrent = () => {
+    const k = picker.value;
+    if (!k || history === null) { cur.textContent = ''; return; }
+    const r = history[k];
+    cur.textContent = r
+      ? 'Currently recorded: ' + prettyResult(r)
+      : 'Not recorded yet.';
+  };
+
+  det.addEventListener('toggle', async () => {
+    if (!det.open || history !== null) return;
+    try {
+      const r = await api('catHistory', { categoryId: c.id });
+      if (!r.ok) { banner(r.error || 'Could not load history', true); return; }
+      history = {};
+      (r.entries || []).forEach((e) => { history[e.periodKey] = e.result; });
+      refreshCurrent();
+    } catch (err) { banner(err.message, true); }
+  });
+  picker.addEventListener('change', refreshCurrent);
+
+  det.querySelectorAll('button[data-fix]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const key = picker.value;
+      const result = b.getAttribute('data-fix');
+      if (!key) {
+        banner('Pick a ' + (c.cadence === 'weekly' ? 'week' : 'date') + ' first.', true);
+        return;
+      }
+      const existing = history && history[key];
+      if (existing === result) {
+        banner(key + ' is already recorded as ' + prettyResult(result) + '.', false);
+        return;
+      }
+      if (existing &&
+          !window.confirm('You recorded ' + prettyResult(existing) + ' for ' + key +
+            '. Change it to ' + prettyResult(result) + '? Later entries adjust automatically.')) return;
+      if (!existing && result === 'missed' &&
+          !window.confirm('Record a miss for "' + label + '" on ' + key + '? ' +
+            'A freeze is used automatically if one was available; otherwise your streak takes the hit.')) return;
+      amend(c.id, key, result);
+    }));
 }
 
 async function checkinFlow(person, categoryId, periodKey, result, sig) {
@@ -289,6 +502,11 @@ async function showAdmin() {
     if (!r.ok) { banner(r.error || 'Could not load categories', true); return; }
     if (!Array.isArray(r.categories)) { banner(STALE_BACKEND_MSG, true); return; }
     renderCatList(r.categories);
+    const asel = $('catAssignee');
+    asel.innerHTML = '<option value="">Either of you</option>';
+    (r.people || []).forEach((p) => {
+      asel.innerHTML += '<option value="' + esc(p.email) + '">' + esc(p.name) + '</option>';
+    });
   } catch (err) { banner(err.message, true); }
 }
 
@@ -318,16 +536,38 @@ function renderCatList(cats) {
 
 function editCat(c) {
   $('catId').value = c.id; $('catName').value = c.name; $('catEmoji').value = c.emoji || '';
-  $('catCadence').value = c.cadence; $('catRefresh').value = c.freezeRefresh;
-  $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
-  $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
-  $('catMinPayout').value = c.minPayout || '';
-  $('catMissPenalty').value = c.missPenaltyPercent == null ? '' : c.missPenaltyPercent;
-  $('catReminder').value = c.reminderTime || ''; $('catCheckup').value = c.checkupTime || '';
+  $('catKind').value = c.kind === 'chore' ? 'chore' : 'habit';
+  applyKindToForm($('catKind').value);
+  $('catCadence').value = c.cadence;
+  if (c.kind !== 'chore') {
+    $('catRefresh').value = c.freezeRefresh;
+    $('catIncrement').value = c.rewardIncrement; $('catMax').value = c.maxPerInstance;
+    $('catFreezes').value = c.freezesPerPeriod; $('catBonus').value = c.unusedFreezeBonus;
+    $('catMinPayout').value = c.minPayout || '';
+    $('catMissPenalty').value = c.missPenaltyPercent == null ? '' : c.missPenaltyPercent;
+    $('catCheckup').value = c.checkupTime || '';
+  } else {
+    $('catValue').value = c.value; $('catAssignee').value = c.assignee || '';
+    $('catDueDate').value = c.dueDate || '';
+  }
+  $('catReminder').value = c.reminderTime || '';
   $('catFormMsg').hidden = true;
   $('catFormTitle').textContent = 'Editing: ' + c.name;
   $('cancelEditBtn').hidden = false;
   $('catForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Toggle habit/chore field groups so submit only validates the fields the
+// picked kind actually uses; hidden habit inputs must not block a chore submit.
+function applyKindToForm(kind) {
+  const chore = kind === 'chore';
+  $('habitFields').hidden = chore;
+  $('choreFields').hidden = !chore;
+  document.querySelectorAll('#catCadence option.chore-cadence').forEach((o) => { o.hidden = !chore; });
+  if (!chore && ($('catCadence').value === 'monthly' || $('catCadence').value === 'once')) {
+    $('catCadence').value = 'daily';
+  }
+  document.querySelectorAll('#habitFields input').forEach((i) => { i.required = !chore && i.dataset.req === '1'; });
 }
 
 // Return the form to "add a new category" mode.
@@ -337,6 +577,7 @@ function resetCatForm() {
   $('catFormTitle').textContent = 'Add a category';
   $('cancelEditBtn').hidden = true;
   $('catFormMsg').hidden = true;
+  applyKindToForm($('catKind').value = 'habit');
 }
 
 async function setCatActive(id, action) { // 'archiveCategory' | 'unarchiveCategory'
@@ -412,19 +653,33 @@ function wire() {
   $('backToDashBtn').addEventListener('click', () => showDashboard());
   $('cancelEditBtn').addEventListener('click', resetCatForm);
 
+  // Remember which habit inputs are required today so applyKindToForm can
+  // restore that state after a chore selection clears it.
+  document.querySelectorAll('#habitFields input[required]').forEach((i) => { i.dataset.req = '1'; });
+  $('catKind').addEventListener('change', () => applyKindToForm($('catKind').value));
+
   $('catForm').addEventListener('submit', async (ev) => {
     ev.preventDefault();
-    const category = {
-      id: $('catId').value || undefined,
-      name: $('catName').value, emoji: $('catEmoji').value,
-      cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
-      rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
-      freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
-      minPayout: $('catMinPayout').value, missPenaltyPercent: $('catMissPenalty').value,
-      reminderTime: $('catReminder').value, checkupTime: $('catCheckup').value,
-      // `active` is deliberately absent: archive/unarchive owns that flag, and
-      // sending it here un-archived every category you edited.
-    };
+    const kind = $('catKind').value;
+    const category = kind === 'chore'
+      ? {
+          id: $('catId').value || undefined, kind: 'chore',
+          name: $('catName').value, emoji: $('catEmoji').value,
+          cadence: $('catCadence').value, value: $('catValue').value,
+          assignee: $('catAssignee').value, dueDate: $('catDueDate').value,
+          reminderTime: $('catReminder').value,
+        }
+      : {
+          id: $('catId').value || undefined,
+          name: $('catName').value, emoji: $('catEmoji').value,
+          cadence: $('catCadence').value, freezeRefresh: $('catRefresh').value,
+          rewardIncrement: $('catIncrement').value, maxPerInstance: $('catMax').value,
+          freezesPerPeriod: $('catFreezes').value, unusedFreezeBonus: $('catBonus').value,
+          minPayout: $('catMinPayout').value, missPenaltyPercent: $('catMissPenalty').value,
+          reminderTime: $('catReminder').value, checkupTime: $('catCheckup').value,
+          // `active` is deliberately absent: archive/unarchive owns that flag, and
+          // sending it here un-archived every category you edited.
+        };
     $('catFormMsg').hidden = true;
     // Adding (no id) but a category with this name already exists → would silently
     // overwrite it. Stop and tell the user to edit it instead.

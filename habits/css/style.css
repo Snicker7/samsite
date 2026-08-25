@@ -406,3 +406,37 @@ button.danger {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235b639a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   }
 }
+
+.fix-past {
+  margin-top: 10px;
+}
+.fix-past summary {
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.75;
+}
+.fix-past .fix-row {
+  margin-top: 8px;
+}
+.fix-past input[type='date'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.chore-done {
+  margin: 8px 0 0;
+  font-weight: 600;
+}
+.catch-up {
+  margin-top: 10px;
+}
+.catch-up summary {
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.8;
+}
+.catch-up .catch-row {
+  margin-top: 8px;
+  justify-content: space-between;
+  align-items: center;
+}

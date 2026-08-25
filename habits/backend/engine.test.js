@@ -80,7 +80,7 @@ test('double-recording the same period is rejected', () => {
 
 test('refresh awards bonus when no freeze used and resets freezes', () => {
   const s = { streak: 3, periodStart: 'P1', freezesUsedThisPeriod: 0, lastRecordedKey: 'k' };
-  const r = E.applyRefresh(s, 10, CAT, 'P2');
+  const r = E.applyRefresh(s, 10, CAT, 'P2', true);
   assert.strictEqual(r.balance, 13.5);
   assert.strictEqual(r.event.type, 'bonus');
   assert.strictEqual(E.freezesLeft(CAT, r.state), 1);
@@ -89,7 +89,7 @@ test('refresh awards bonus when no freeze used and resets freezes', () => {
 
 test('refresh gives no bonus (and no event) when a freeze was used', () => {
   const s = { streak: 3, periodStart: 'P1', freezesUsedThisPeriod: 1, lastRecordedKey: 'k' };
-  const r = E.applyRefresh(s, 10, CAT, 'P2');
+  const r = E.applyRefresh(s, 10, CAT, 'P2', true);
   assert.strictEqual(r.balance, 10);
   assert.strictEqual(r.event, null);
 });
@@ -97,9 +97,19 @@ test('refresh gives no bonus (and no event) when a freeze was used', () => {
 test('refresh gives no bonus when unusedFreezeBonus is 0', () => {
   const catNoBonus = Object.assign({}, CAT, { unusedFreezeBonus: 0 });
   const s = { streak: 3, periodStart: 'P1', freezesUsedThisPeriod: 0, lastRecordedKey: 'k' };
-  const r = E.applyRefresh(s, 10, catNoBonus, 'P2');
+  const r = E.applyRefresh(s, 10, catNoBonus, 'P2', true);
   assert.strictEqual(r.balance, 10);
   assert.strictEqual(r.event, null);
+});
+
+test('refresh pays nothing for a period with no entries, but still resets freezes', () => {
+  const s = { streak: 3, periodStart: 'P1', freezesUsedThisPeriod: 0, lastRecordedKey: 'k' };
+  const r = E.applyRefresh(s, 10, CAT, 'P2', false);
+  assert.strictEqual(r.balance, 10);
+  assert.strictEqual(r.event, null);
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 0);
+  assert.strictEqual(E.freezesLeft(CAT, r.state), 1);
+  assert.strictEqual(r.state.periodStart, 'P2');
 });
 
 test('spend subtracts from the wallet and floors at 0', () => {
@@ -395,7 +405,7 @@ test('applyEntry counts freezes spent and applyRefresh clears the count', () => 
   assert.strictEqual(s.freezesUsedThisPeriod, 1);
   s = E.applyEntry(s, 0, cat2, { periodKey: 'k2', result: 'missed' }).state;
   assert.strictEqual(s.freezesUsedThisPeriod, 2);
-  const r = E.applyRefresh(s, 10, cat2, 'P2');
+  const r = E.applyRefresh(s, 10, cat2, 'P2', true);
   assert.strictEqual(r.state.freezesUsedThisPeriod, 0);
   assert.strictEqual(r.event, null); // a freeze was used — no bonus
 });
@@ -501,7 +511,7 @@ test('applyRebase moves the period without refreshing freezes or paying a bonus'
 test('initialCatState, applyRefresh and migrateCatState all stamp the cadence', () => {
   const weekly = Object.assign({}, CAT, { freezeRefresh: 'weekly' });
   assert.strictEqual(E.initialCatState(weekly, 'P').freezeRefresh, 'weekly');
-  assert.strictEqual(E.applyRefresh(E.initialCatState(weekly, 'P'), 0, weekly, 'P2').state.freezeRefresh, 'weekly');
+  assert.strictEqual(E.applyRefresh(E.initialCatState(weekly, 'P'), 0, weekly, 'P2', true).state.freezeRefresh, 'weekly');
   assert.strictEqual(E.migrateCatState(weekly, { streak: 1, freezeAvailable: 1 }).freezeRefresh, 'weekly');
 });
 
@@ -532,6 +542,14 @@ test('applyRestart gives a full allowance without paying the bonus', () => {
   assert.strictEqual(r.event, undefined);
 });
 
+test('applyRestart advances since to the restart period', () => {
+  const cat = Object.assign({}, CAT, { freezesPerPeriod: 2, freezeRefresh: 'weekly' });
+  const s = { streak: 12, periodStart: '2026-08-17', freezesUsedThisPeriod: 2,
+    freezeRefresh: 'weekly', lastRecordedKey: '2026-08-18', since: '2026-01-05' };
+  // The archived stretch was never settled, so re-settlement must not reach it.
+  assert.strictEqual(E.applyRestart(s, cat, '2026-12-01').since, '2026-12-01');
+});
+
 test('applyRestart and applyRebase differ on the spent count', () => {
   const weekly = Object.assign({}, CAT, { freezesPerPeriod: 2, freezeRefresh: 'weekly' });
   const monthly = Object.assign({}, weekly, { freezeRefresh: 'monthly' });
@@ -540,4 +558,358 @@ test('applyRestart and applyRebase differ on the spent count', () => {
   assert.strictEqual(E.applyRebase(s, monthly, '2026-08-01').freezesUsedThisPeriod, 1);
   // Resuming after a dormant stretch: a genuinely new period.
   assert.strictEqual(E.applyRestart(s, weekly, '2026-12-01').freezesUsedThisPeriod, 0);
+});
+
+// Amend-past-answers: period/key helpers
+
+test('periodKeyDate maps weekly keys to their ISO Monday and passes dates through', () => {
+  assert.strictEqual(E.periodKeyDate('2026-06-22'), '2026-06-22');
+  // 2026-06-22 is the Monday of ISO week 26 (see periodKeyFor test above)
+  assert.strictEqual(E.periodKeyDate('2026-W26'), '2026-06-22');
+  // ISO week 1 of 2026 starts in December 2025
+  assert.strictEqual(E.periodKeyDate('2026-W01'), '2025-12-29');
+});
+
+test('periodKeyDate maps a monthly key to its first day', () => {
+  assert.strictEqual(E.periodKeyDate('2026-08'), '2026-08-01');
+});
+
+test('periodKeyDate round-trips with isoWeek', () => {
+  assert.strictEqual(E.isoWeek(E.periodKeyDate('2026-W26')), '2026-W26');
+  assert.strictEqual(E.isoWeek(E.periodKeyDate('2026-W01')), '2026-W01');
+});
+
+test('freezePeriodStart buckets a date by refresh cadence', () => {
+  assert.strictEqual(E.freezePeriodStart('daily', '2026-06-24'), '2026-06-24');
+  assert.strictEqual(E.freezePeriodStart('weekly', '2026-06-24'), '2026-06-22'); // Wed -> Mon
+  assert.strictEqual(E.freezePeriodStart('weekly', '2026-06-22'), '2026-06-22'); // Mon -> itself
+  assert.strictEqual(E.freezePeriodStart('monthly', '2026-06-24'), '2026-06-01');
+});
+
+test('validPeriodKey accepts real keys and rejects malformed or impossible ones', () => {
+  assert.strictEqual(E.validPeriodKey('daily', '2026-02-28'), true);
+  assert.strictEqual(E.validPeriodKey('daily', '2026-02-31'), false); // not a real date
+  assert.strictEqual(E.validPeriodKey('daily', '2026-W10'), false);   // wrong shape for cadence
+  assert.strictEqual(E.validPeriodKey('weekly', '2026-W26'), true);
+  assert.strictEqual(E.validPeriodKey('weekly', '2026-06-22'), false);
+  assert.strictEqual(E.validPeriodKey('weekly', '2026-W53'), true);   // 2026 has 53 ISO weeks
+  assert.strictEqual(E.validPeriodKey('weekly', '2025-W53'), false);  // 2025 has 52
+});
+
+test('isTrueFlag survives the sheet round-trip of booleans', () => {
+  assert.strictEqual(E.isTrueFlag(true), true);
+  assert.strictEqual(E.isTrueFlag('TRUE'), true);
+  assert.strictEqual(E.isTrueFlag('true'), true);
+  assert.strictEqual(E.isTrueFlag(false), false);
+  assert.strictEqual(E.isTrueFlag(''), false);
+  assert.strictEqual(E.isTrueFlag(undefined), false);
+});
+
+// Amend-past-answers: replayCategory
+
+// Daily habit, weekly freeze refresh, 1 freeze, full miss penalty.
+const RCAT = {
+  id: 'sleep', cadence: 'daily', freezeRefresh: 'weekly',
+  rewardIncrement: 0.25, maxPerInstance: 5.0, minPayout: 0,
+  freezesPerPeriod: 1, unusedFreezeBonus: 3.5, missPenaltyPercent: 100,
+};
+const entry = (periodKey, result) => ({ id: 'id-' + periodKey, periodKey, result });
+
+test('replayCategory rebuilds a straight streak with growing payouts', () => {
+  // Mon..Wed of ISO week 26
+  const r = E.replayCategory(RCAT,
+    [entry('2026-06-22', 'on_time'), entry('2026-06-23', 'on_time'), entry('2026-06-24', 'on_time')],
+    '2026-06-22');
+  assert.deepStrictEqual(r.entries.map((e) => e.amount), [0.25, 0.5, 0.75]);
+  assert.strictEqual(r.state.streak, 3);
+  assert.strictEqual(r.state.lastRecordedKey, '2026-06-24');
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 0);
+});
+
+test('replayCategory spends one freeze then penalizes the second miss', () => {
+  const r = E.replayCategory(RCAT, [
+    entry('2026-06-22', 'on_time'),
+    entry('2026-06-23', 'missed'),
+    entry('2026-06-24', 'missed'),
+    entry('2026-06-25', 'on_time'),
+  ], '2026-06-22');
+  assert.deepStrictEqual(r.entries.map((e) => e.freezeUsed), [false, true, false, false]);
+  assert.deepStrictEqual(r.entries.map((e) => e.amount), [0.25, 0, 0, 0.25]);
+  assert.strictEqual(r.state.streak, 1);
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 1);
+});
+
+test('replayCategory: flipping one answer cascades freezes and payouts', () => {
+  // Same history as above but Tuesday corrected to on_time: Wednesday's miss
+  // now gets the freeze, so Thursday continues the streak at step 3.
+  const r = E.replayCategory(RCAT, [
+    entry('2026-06-22', 'on_time'),
+    entry('2026-06-23', 'on_time'),
+    entry('2026-06-24', 'missed'),
+    entry('2026-06-25', 'on_time'),
+  ], '2026-06-22');
+  assert.deepStrictEqual(r.entries.map((e) => e.freezeUsed), [false, false, true, false]);
+  assert.deepStrictEqual(r.entries.map((e) => e.amount), [0.25, 0.5, 0, 0.75]);
+  assert.strictEqual(r.state.streak, 3);
+});
+
+test('replayCategory sorts input and slots a gap-fill into place', () => {
+  const r = E.replayCategory(RCAT,
+    [entry('2026-06-24', 'on_time'), entry('2026-06-22', 'on_time'), entry('2026-06-23', 'on_time')],
+    '2026-06-22');
+  assert.deepStrictEqual(r.entries.map((e) => e.periodKey),
+    ['2026-06-22', '2026-06-23', '2026-06-24']);
+  assert.deepStrictEqual(r.entries.map((e) => e.amount), [0.25, 0.5, 0.75]);
+});
+
+test('replayCategory refreshes freezes at each freeze-period boundary', () => {
+  // A miss in week 25 and a miss in week 26 each get their own freeze.
+  const r = E.replayCategory(RCAT, [
+    entry('2026-06-18', 'missed'),  // Thu, week 25
+    entry('2026-06-23', 'missed'),  // Tue, week 26
+  ], '2026-06-22');
+  assert.deepStrictEqual(r.entries.map((e) => e.freezeUsed), [true, true]);
+  assert.strictEqual(r.state.streak, 0);
+  // Only the current period's spend is live state.
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 1);
+});
+
+test('replayCategory counts no live freezes when the last entries are in a closed period', () => {
+  const r = E.replayCategory(RCAT, [entry('2026-06-18', 'missed')], '2026-06-22');
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 0);
+});
+
+test('replayCategory orders mixed weekly and daily keys on one calendar', () => {
+  const r = E.replayCategory(RCAT,
+    [entry('2026-06-22', 'on_time'), entry('2026-W25', 'on_time')],
+    '2026-06-22');
+  // Week 25's Monday (June 15) sorts before June 22.
+  assert.deepStrictEqual(r.entries.map((e) => e.periodKey), ['2026-W25', '2026-06-22']);
+  assert.strictEqual(r.state.streak, 2);
+});
+
+test('replayCategory applies missPenaltyPercent and preserves extra fields', () => {
+  const half = Object.assign({}, RCAT, { missPenaltyPercent: 50, freezesPerPeriod: 0 });
+  const rows = [
+    { id: 'a', rowNumber: 7, periodKey: '2026-06-22', result: 'on_time' },
+    { id: 'b', rowNumber: 8, periodKey: '2026-06-23', result: 'on_time' },
+    { id: 'c', rowNumber: 9, periodKey: '2026-06-24', result: 'missed' },
+  ];
+  const r = E.replayCategory(half, rows, '2026-06-22');
+  assert.strictEqual(r.state.streak, 1); // round(2 * 0.5)
+  assert.strictEqual(r.entries[2].id, 'c');
+  assert.strictEqual(r.entries[2].rowNumber, 9);
+});
+
+test('replayCategory of no entries is an empty state', () => {
+  const r = E.replayCategory(RCAT, [], '2026-06-22');
+  assert.deepStrictEqual(r.entries, []);
+  assert.strictEqual(r.state.streak, 0);
+  assert.strictEqual(r.state.lastRecordedKey, null);
+  assert.strictEqual(r.state.freezesUsedThisPeriod, 0);
+});
+
+// Amend-past-answers: bonus re-settlement
+
+const fentry = (periodKey, result, freezeUsed) => ({ periodKey, result, freezeUsed });
+
+test('bonusDelta pays back a bonus when a corrected answer frees the freeze', () => {
+  const before = [fentry('2026-06-18', 'missed', true)];
+  const after = [fentry('2026-06-18', 'on_time', false)];
+  assert.strictEqual(E.bonusDelta(RCAT, before, after, '2026-06-22'), 3.5);
+});
+
+test('bonusDelta claws back a bonus when a correction spends a freeze', () => {
+  const before = [fentry('2026-06-18', 'on_time', false)];
+  const after = [fentry('2026-06-18', 'missed', true)];
+  assert.strictEqual(E.bonusDelta(RCAT, before, after, '2026-06-22'), -3.5);
+});
+
+test('bonusDelta claws back nothing when a frozen miss gap-fills a previously empty period', () => {
+  // Week 25 was empty, so it earned nothing at rollover — a filled miss that
+  // spends its freeze leaves it unearned either way. Nothing to claw.
+  assert.strictEqual(E.bonusDelta(RCAT, [], [fentry('2026-06-18', 'missed', true)], '2026-06-22'), 0);
+});
+
+test('bonusDelta pays when an on-time answer gap-fills a previously empty closed period', () => {
+  // Empty week 25 earned nothing; a filled on-time answer earns the bonus now.
+  assert.strictEqual(E.bonusDelta(RCAT, [], [fentry('2026-06-18', 'on_time', false)], '2026-06-22'), 3.5);
+});
+
+test('bonusDelta claws back when the only answer in an earning period is deleted', () => {
+  // The mirror image: the period earned the bonus, and now holds nothing.
+  assert.strictEqual(E.bonusDelta(RCAT, [fentry('2026-06-18', 'on_time', false)], [], '2026-06-22'), -3.5);
+});
+
+test('periodHasEntries sees only entries inside the given freeze period', () => {
+  const entries = [fentry('2026-06-18', 'on_time', false), fentry('2026-06-23', 'missed', true)];
+  assert.strictEqual(E.periodHasEntries(RCAT, entries, '2026-06-15'), true);
+  assert.strictEqual(E.periodHasEntries(RCAT, entries, '2026-06-22'), true);
+  assert.strictEqual(E.periodHasEntries(RCAT, entries, '2026-06-08'), false);
+  assert.strictEqual(E.periodHasEntries(RCAT, [], '2026-06-15'), false);
+});
+
+test('periodHasEntries buckets weekly keys and honours a monthly freeze cadence', () => {
+  assert.strictEqual(E.periodHasEntries(RCAT, [fentry('2026-W25', 'on_time', false)], '2026-06-15'), true);
+  const monthly = Object.assign({}, RCAT, { freezeRefresh: 'monthly' });
+  assert.strictEqual(E.periodHasEntries(monthly, [fentry('2026-06-18', 'on_time', false)], '2026-06-01'), true);
+  assert.strictEqual(E.periodHasEntries(monthly, [fentry('2026-06-18', 'on_time', false)], '2026-07-01'), false);
+});
+
+test('freezeEarnedPeriods needs an entry and an unspent freeze, skipping the live period', () => {
+  const m = E.freezeEarnedPeriods(RCAT, [
+    fentry('2026-06-08', 'on_time', false),  // week 2026-06-08 — earns
+    fentry('2026-06-18', 'missed', true),    // week 2026-06-15 — freeze spent
+    fentry('2026-06-23', 'on_time', false),  // current period — ignored
+  ], '2026-06-22');
+  assert.deepStrictEqual(m, { '2026-06-08': true });
+});
+
+test('bonusDelta is zero for changes inside the current period, unchanged flags, or no bonus', () => {
+  const cur = [fentry('2026-06-23', 'missed', true)];
+  assert.strictEqual(E.bonusDelta(RCAT, [], cur, '2026-06-22'), 0);
+  const same = [fentry('2026-06-18', 'missed', true)];
+  assert.strictEqual(E.bonusDelta(RCAT, same, same, '2026-06-22'), 0);
+  const noBonus = Object.assign({}, RCAT, { unusedFreezeBonus: 0 });
+  assert.strictEqual(E.bonusDelta(noBonus, same, [fentry('2026-06-18', 'on_time', false)], '2026-06-22'), 0);
+});
+
+// Amend-past-answers: `since` exemption for periods predating per-user state
+
+test('initialCatState carries since as the periodStart it was created with', () => {
+  const s = E.initialCatState(CAT, '2026-06-22');
+  assert.strictEqual(s.since, '2026-06-22');
+});
+
+test('migrateCatState backfills since from periodStart on an old-shape state, and leaves an existing since alone', () => {
+  const cat2 = Object.assign({}, CAT, { freezesPerPeriod: 2 });
+  const legacy = { streak: 3, periodStart: '2026-06-22', freezeAvailable: 1 };
+  const s = E.migrateCatState(cat2, legacy);
+  assert.strictEqual(s.since, '2026-06-22');
+
+  const withSince = { streak: 3, periodStart: '2026-06-22', freezeAvailable: 1, since: '2026-01-05' };
+  assert.strictEqual(E.migrateCatState(cat2, withSince).since, '2026-01-05');
+});
+
+test('bonusDelta is zero for a pre-since period in both directions, but still fires for a post-since closed week', () => {
+  const bonusCat = Object.assign({}, RCAT, { unusedFreezeBonus: 3.5, freezeRefresh: 'weekly' });
+  const since = '2026-06-22';
+  const cur = '2026-06-29';
+
+  // Pre-since: before-miss -> after-on_time (would otherwise mint a never-paid bonus).
+  const preBefore = [fentry('2026-06-18', 'missed', true)];
+  const preAfter = [fentry('2026-06-18', 'on_time', false)];
+  assert.strictEqual(E.bonusDelta(bonusCat, preBefore, preAfter, cur, since), 0);
+
+  // Pre-since: before-on_time -> after-missed (would otherwise claw back a never-paid bonus).
+  const preBefore2 = [fentry('2026-06-18', 'on_time', false)];
+  const preAfter2 = [fentry('2026-06-18', 'missed', true)];
+  assert.strictEqual(E.bonusDelta(bonusCat, preBefore2, preAfter2, cur, since), 0);
+
+  // Post-since closed week (2026-06-22): same shape of change still settles normally.
+  const postBefore = [fentry('2026-06-25', 'missed', true)];
+  const postAfter = [fentry('2026-06-25', 'on_time', false)];
+  assert.strictEqual(E.bonusDelta(bonusCat, postBefore, postAfter, cur, since), 3.5);
+
+  const postBefore2 = [fentry('2026-06-25', 'on_time', false)];
+  const postAfter2 = [fentry('2026-06-25', 'missed', true)];
+  assert.strictEqual(E.bonusDelta(bonusCat, postBefore2, postAfter2, cur, since), -3.5);
+});
+
+// House chores: cadences and category model
+
+test('periodKeyFor handles monthly and once', () => {
+  assert.strictEqual(E.periodKeyFor('monthly', '2026-08-25'), '2026-08');
+  assert.strictEqual(E.periodKeyFor('once', '2026-08-25'), 'once');
+});
+
+test('validPeriodKey handles monthly and once', () => {
+  assert.strictEqual(E.validPeriodKey('monthly', '2026-08'), true);
+  assert.strictEqual(E.validPeriodKey('monthly', '2026-13'), false);
+  assert.strictEqual(E.validPeriodKey('monthly', '2026-08-25'), false);
+  assert.strictEqual(E.validPeriodKey('once', 'once'), true);
+  assert.strictEqual(E.validPeriodKey('once', '2026-08-25'), false);
+});
+
+test('claimablePeriodKey is the CURRENT period per cadence', () => {
+  assert.strictEqual(E.claimablePeriodKey({ cadence: 'daily' }, '2026-08-25'), '2026-08-25');
+  assert.strictEqual(E.claimablePeriodKey({ cadence: 'weekly' }, '2026-06-24'), '2026-W26');
+  assert.strictEqual(E.claimablePeriodKey({ cadence: 'monthly' }, '2026-08-25'), '2026-08');
+  assert.strictEqual(E.claimablePeriodKey({ cadence: 'once' }, '2026-08-25'), 'once');
+});
+
+test('normalizeCategory builds a chore shape and defaults habits to kind habit', () => {
+  const chore = E.normalizeCategory({
+    kind: 'chore', name: 'Dishes', emoji: '🧹', cadence: 'daily',
+    value: '2', assignee: 'SNIC9004@GMAIL.COM', dueDate: '',
+    reminderTime: '19:00',
+  });
+  assert.strictEqual(chore.kind, 'chore');
+  assert.strictEqual(chore.id, 'dishes');
+  assert.strictEqual(chore.value, 2);
+  assert.strictEqual(chore.assignee, 'snic9004@gmail.com');
+  assert.strictEqual(chore.dueDate, '');
+  assert.strictEqual(chore.active, true);
+  assert.strictEqual(chore.rewardIncrement, undefined);
+
+  const habit = E.normalizeCategory({ name: 'Sleep', cadence: 'daily', rewardIncrement: 0.25, maxPerInstance: 5, freezesPerPeriod: 1 });
+  assert.strictEqual(habit.kind, 'habit');
+  assert.strictEqual(habit.rewardIncrement, 0.25);
+});
+
+test('validateCategory: chore rules', () => {
+  const base = { id: 'shed', name: 'Shed', emoji: '', kind: 'chore', cadence: 'once', value: 5, assignee: '', dueDate: '2026-09-30', reminderTime: '' };
+  assert.deepStrictEqual(E.validateCategory(base), []);
+  assert.ok(E.validateCategory(Object.assign({}, base, { value: 0 })).some((e) => /value/i.test(e)));
+  assert.ok(E.validateCategory(Object.assign({}, base, { cadence: 'yearly' })).some((e) => /cadence/i.test(e)));
+  assert.ok(E.validateCategory(Object.assign({}, base, { dueDate: '2026-02-31' })).some((e) => /due date/i.test(e)));
+  // A due date only makes sense for once-cadence
+  assert.ok(E.validateCategory(Object.assign({}, base, { cadence: 'daily', dueDate: '2026-09-30' })).some((e) => /due date/i.test(e)));
+  assert.ok(E.validateCategory(Object.assign({}, base, { assignee: 'not-an-email' })).some((e) => /assignee/i.test(e)));
+  // Habit validation unchanged
+  assert.ok(E.validateCategory(E.normalizeCategory({ name: 'x', cadence: 'daily' })).some((e) => /increment/i.test(e)));
+});
+
+// House chores: claim/pot/sweep helpers
+
+const CHORE = { id: 'dishes', name: 'Dishes', kind: 'chore', cadence: 'daily', value: 2, assignee: '', dueDate: '', active: true };
+const ACHORE = Object.assign({}, CHORE, { id: 'trash', assignee: 'a@x.com' });
+const crow = (type, periodKey, actor, amount) => ({ type, category: 'dishes', periodKey, actor, amount });
+
+test('isChoreClaimed sees any actor and only claim rows', () => {
+  const rows = [crow('claim', '2026-08-24', 'b@x.com', 2), crow('penalty', '2026-08-23', 'a@x.com', -1)];
+  assert.strictEqual(E.isChoreClaimed(rows, 'dishes', '2026-08-24'), true);
+  assert.strictEqual(E.isChoreClaimed(rows, 'dishes', '2026-08-23'), false);
+  assert.strictEqual(E.isChoreClaimed(rows, 'other', '2026-08-24'), false);
+});
+
+test('chorePotFor sums penalties, outstandingChorePeriods lists unclaimed penalized periods', () => {
+  const rows = [
+    crow('penalty', '2026-08-22', 'a@x.com', -1), crow('penalty', '2026-08-22', 'b@x.com', -1),
+    crow('penalty', '2026-08-23', 'a@x.com', -1), crow('penalty', '2026-08-23', 'b@x.com', -1),
+    crow('claim', '2026-08-23', 'b@x.com', 4),
+  ];
+  assert.strictEqual(E.chorePotFor(rows, 'dishes', '2026-08-22'), 2);
+  assert.strictEqual(E.chorePotFor(rows, 'dishes', '2026-08-21'), 0);
+  assert.deepStrictEqual(E.outstandingChorePeriods(rows, 'dishes'), [{ periodKey: '2026-08-22', pot: 2 }]);
+});
+
+test('nextChorePeriodKey steps each cadence', () => {
+  assert.strictEqual(E.nextChorePeriodKey('daily', '2026-08-31'), '2026-09-01');
+  assert.strictEqual(E.nextChorePeriodKey('weekly', '2026-W26'), '2026-W27');
+  assert.strictEqual(E.nextChorePeriodKey('weekly', '2026-W53'), '2027-W01');
+  assert.strictEqual(E.nextChorePeriodKey('monthly', '2026-12'), '2027-01');
+});
+
+test('chorePenaltyAmounts: shared halves, assigned full', () => {
+  assert.deepStrictEqual(E.chorePenaltyAmounts(CHORE, ['a@x.com', 'b@x.com']),
+    [{ actor: 'a@x.com', amount: -1 }, { actor: 'b@x.com', amount: -1 }]);
+  assert.deepStrictEqual(E.chorePenaltyAmounts(ACHORE, ['a@x.com', 'b@x.com']),
+    [{ actor: 'a@x.com', amount: -2 }]);
+});
+
+test('chorePayout: shared collects the pot, assigned only the value', () => {
+  assert.strictEqual(E.chorePayout(CHORE, 2), 4);
+  assert.strictEqual(E.chorePayout(CHORE, 0), 2);
+  assert.strictEqual(E.chorePayout(ACHORE, 2), 2);
 });

@@ -36,7 +36,10 @@ function isoWeek(dateStr) {
 
 /** Record-cadence key used to dedupe entries within a period. */
 function periodKeyFor(cadence, dateStr) {
-  return cadence === 'weekly' ? isoWeek(dateStr) : dateStr;
+  if (cadence === 'weekly') return isoWeek(dateStr);
+  if (cadence === 'monthly') return String(dateStr).slice(0, 7);
+  if (cadence === 'once') return 'once';
+  return dateStr;
 }
 
 /** "YYYY-MM-DD" shifted by n days (UTC math, so DST can't skew it). */
@@ -60,6 +63,135 @@ function shiftDays(dateStr, n) {
  */
 function mondayOf(dateStr, dow) {
   return shiftDays(dateStr, -(dow - 1));
+}
+
+/** ISO day-of-week, 1=Mon..7=Sun, for "YYYY-MM-DD" (UTC math, DST-proof). */
+function isoDow(dateStr) {
+  var p = dateStr.split('-');
+  return new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay() || 7;
+}
+
+/**
+ * Calendar date a period key sits on: a daily key is itself, a weekly key is
+ * its ISO week's Monday. Gives replay a single axis to sort and bucket mixed
+ * keys (a habit whose cadence was edited can hold both forms).
+ */
+function periodKeyDate(periodKey) {
+  // A monthly chore key ("YYYY-MM") needs a calendar date too, so it sorts and
+  // buckets on the same axis as daily/weekly keys instead of falling through
+  // to the "return as-is" case below.
+  if (/^\d{4}-(0[1-9]|1[0-2])$/.test(String(periodKey))) return periodKey + '-01';
+  var m = /^(\d{4})-W(\d{2})$/.exec(String(periodKey));
+  if (!m) return String(periodKey);
+  // ISO week 1 is the week containing Jan 4.
+  var jan4 = m[1] + '-01-04';
+  var week1Monday = shiftDays(jan4, -(isoDow(jan4) - 1));
+  return shiftDays(week1Monday, (Number(m[2]) - 1) * 7);
+}
+
+/** First day of the freeze period containing `dateStr`. */
+function freezePeriodStart(freezeRefresh, dateStr) {
+  if (freezeRefresh === 'daily') return dateStr;
+  if (freezeRefresh === 'monthly') return dateStr.slice(0, 8) + '01';
+  return mondayOf(dateStr, isoDow(dateStr));
+}
+
+/** Is `key` a real period key for this cadence? (Rejects 2026-02-31 and W53 in a 52-week year.) */
+function validPeriodKey(cadence, key) {
+  key = String(key || '');
+  if (cadence === 'weekly') {
+    if (!/^\d{4}-W\d{2}$/.test(key)) return false;
+    return isoWeek(periodKeyDate(key)) === key;
+  }
+  if (cadence === 'monthly') {
+    return /^\d{4}-(0[1-9]|1[0-2])$/.test(key);
+  }
+  if (cadence === 'once') return key === 'once';
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(key)) return false;
+  var p = key.split('-');
+  var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+  return d.toISOString().slice(0, 10) === key;
+}
+
+/**
+ * The period a chore claim targets RIGHT NOW. Chores are logged the day
+ * they're done, so this is the current period — unlike habits, which record
+ * the last closed one.
+ */
+function claimablePeriodKey(cat, dateStr) {
+  return periodKeyFor(cat.cadence, dateStr);
+}
+
+/* ── house chores ──────────────────────────────────────────────────────── */
+
+/** One claim per period per CHORE, whoever made it. */
+function isChoreClaimed(rows, categoryId, periodKey) {
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.type === 'claim' && String(r.category) === String(categoryId) &&
+        String(r.periodKey) === String(periodKey)) return true;
+  }
+  return false;
+}
+
+/** What an unclaimed period has drained so far — the amount a late claim collects. */
+function chorePotFor(rows, categoryId, periodKey) {
+  var pot = 0;
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.type === 'penalty' && String(r.category) === String(categoryId) &&
+        String(r.periodKey) === String(periodKey)) pot -= Number(r.amount) || 0;
+  }
+  return round2(pot);
+}
+
+/** Penalized periods still waiting for a doer, oldest first. */
+function outstandingChorePeriods(rows, categoryId) {
+  var seen = {};
+  var keys = [];
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    if (r.type !== 'penalty' || String(r.category) !== String(categoryId)) continue;
+    var k = String(r.periodKey);
+    if (!seen[k]) { seen[k] = true; keys.push(k); }
+  }
+  var out = [];
+  keys.sort();
+  for (var j = 0; j < keys.length; j++) {
+    if (!isChoreClaimed(rows, categoryId, keys[j])) {
+      out.push({ periodKey: keys[j], pot: chorePotFor(rows, categoryId, keys[j]) });
+    }
+  }
+  return out;
+}
+
+/** The period after `key` — lets the sweep walk closed periods in order. */
+function nextChorePeriodKey(cadence, key) {
+  if (cadence === 'weekly') return isoWeek(shiftDays(periodKeyDate(key), 7));
+  if (cadence === 'monthly') {
+    var y = Number(key.slice(0, 4));
+    var m = Number(key.slice(5, 7)) + 1;
+    if (m > 12) { m = 1; y++; }
+    return y + '-' + ('0' + m).slice(-2);
+  }
+  return shiftDays(key, 1);
+}
+
+/** The drain one unclaimed period costs: half each when shared, all on the assignee. */
+function chorePenaltyAmounts(cat, allowlist) {
+  if (cat.assignee) return [{ actor: cat.assignee, amount: -round2(cat.value) }];
+  var half = -round2(cat.value / 2);
+  return allowlist.map(function (a) { return { actor: a, amount: half }; });
+}
+
+/** A claim's worth: shared chores recover the pot, assigned ones never do. */
+function chorePayout(cat, pot) {
+  return cat.assignee ? round2(cat.value) : round2(cat.value + pot);
+}
+
+/** Sheet cells round-trip booleans as true/'TRUE'/'true' depending on path. */
+function isTrueFlag(v) {
+  return v === true || String(v).toLowerCase() === 'true';
 }
 
 /**
@@ -102,6 +234,9 @@ function initialCatState(cat, periodStart) {
     freezeRefresh: cat.freezeRefresh,
     freezesUsedThisPeriod: 0,
     lastRecordedKey: null,
+    // Settlement began with this state; periods before it were never
+    // settled, so bonus re-settlement must skip them.
+    since: periodStart || null,
   };
 }
 
@@ -141,6 +276,9 @@ function applyRestart(state, cat, newPeriodStart) {
   s.freezesUsedThisPeriod = 0;
   s.periodStart = newPeriodStart;
   s.freezeRefresh = cat.freezeRefresh;
+  // The pre-archive periods were never fully settled, so bonus re-settlement
+  // must not reach back past the restart and pay for them now.
+  s.since = newPeriodStart;
   return s;
 }
 
@@ -163,9 +301,13 @@ function freezesLeft(cat, state) {
  * category's allowance was edited during the period being migrated.
  */
 function migrateCatState(cat, state) {
-  if (state && state.freezesUsedThisPeriod != null && state.freezeRefresh != null) return state;
+  if (state && state.freezesUsedThisPeriod != null && state.freezeRefresh != null && state.since != null) return state;
   var s = Object.assign({}, state);
   if (s.freezeRefresh == null) s.freezeRefresh = cat.freezeRefresh;
+  // One-time amnesty for pre-existing habits: everything before the
+  // migration-time period is exempt from re-settlement. A rare legitimately-
+  // settled clawback/payback is forgone, but that's the safe direction.
+  if (s.since == null) s.since = s.periodStart || null;
   if (s.freezesUsedThisPeriod != null) return s;
   var left = Number(s.freezeAvailable);
   s.freezesUsedThisPeriod = isNaN(left)
@@ -223,12 +365,17 @@ function applyEntry(state, balance, cat, input) {
 /**
  * Period rollover: award the unused-freeze bonus (if configured and earned),
  * then refresh freezes for the new period.
+ *
+ * `hadEntries` gates the bonus: a period nobody recorded shouldn't pay for
+ * "not needing" a freeze — otherwise ignoring a habit for a month earns more
+ * than doing it, and the bonus becomes an idleness allowance.
+ *
  * @returns {{state:object, balance:number, event:(object|null)}}
  */
-function applyRefresh(state, balance, cat, newPeriodStart) {
+function applyRefresh(state, balance, cat, newPeriodStart, hadEntries) {
   var s = Object.assign({}, state);
   var event = null;
-  if (cat.unusedFreezeBonus > 0 && !(Number(state.freezesUsedThisPeriod) || 0)) {
+  if (cat.unusedFreezeBonus > 0 && hadEntries && !(Number(state.freezesUsedThisPeriod) || 0)) {
     balance = round2(balance + cat.unusedFreezeBonus);
     event = {
       type: 'bonus',
@@ -281,7 +428,7 @@ function applyDeposit(balance, input) {
  * `lastRecordedKey` remembers only the most recent period, so a signed
  * check-up link for an older one sailed past it and credited a period that had
  * already been superseded. Deleting an entry row reopens its period, which is
- * what makes undo work.
+ * what lets an answer be cleared and re-recorded.
  */
 function isPeriodRecorded(rows, actor, categoryId, periodKey) {
   var a = String(actor || '').toLowerCase();
@@ -293,6 +440,115 @@ function isPeriodRecorded(rows, actor, categoryId, periodKey) {
     if (String(r.periodKey) === String(periodKey)) return true;
   }
   return false;
+}
+
+/**
+ * Rebuild one actor's history for one category from its ledger entry rows,
+ * as if every answer had always been what the rows now say.
+ *
+ * Runs the same rules as applyEntry from streak 0 under the category's
+ * CURRENT settings, re-deciding freeze usage from calendar freeze periods.
+ * Unrecorded periods contribute nothing, matching live behavior. The freeze
+ * period starting `currentPeriodStart` is still open — its spent count goes
+ * into state for the live machinery; every earlier period is history.
+ *
+ * @param entries  one actor's entry rows for this category, any order; extra
+ *                 fields (id, rowNumber, …) are preserved on the output copies
+ * @returns {{entries: Array, state: {streak, freezesUsedThisPeriod, lastRecordedKey}}}
+ */
+function replayCategory(cat, entries, currentPeriodStart) {
+  var sorted = entries.slice().sort(function (a, b) {
+    var da = periodKeyDate(a.periodKey);
+    var db = periodKeyDate(b.periodKey);
+    return da < db ? -1 : da > db ? 1 : 0;
+  });
+  var streak = 0;
+  var curStart = null;
+  var used = 0;
+  var out = [];
+  for (var i = 0; i < sorted.length; i++) {
+    var e = sorted[i];
+    var fps = freezePeriodStart(cat.freezeRefresh, periodKeyDate(e.periodKey));
+    if (fps !== curStart) { curStart = fps; used = 0; }
+    var freezeUsed = false;
+    var amount = 0;
+    if (e.result === 'on_time') {
+      streak += 1;
+      amount = payout(cat, streak);
+    } else if (used < (Number(cat.freezesPerPeriod) || 0)) {
+      used += 1;
+      freezeUsed = true;
+    } else {
+      var pct = cat.missPenaltyPercent == null ? 100 : cat.missPenaltyPercent;
+      streak = Math.max(0, Math.round(streak * (1 - pct / 100)));
+    }
+    out.push(Object.assign({}, e, { freezeUsed: freezeUsed, amount: amount }));
+  }
+  return {
+    entries: out,
+    state: {
+      streak: streak,
+      freezesUsedThisPeriod: curStart === currentPeriodStart ? used : 0,
+      lastRecordedKey: sorted.length ? String(sorted[sorted.length - 1].periodKey) : null,
+    },
+  };
+}
+
+/** Does any entry fall inside the freeze period starting `periodStart`? */
+function periodHasEntries(cat, entries, periodStart) {
+  for (var i = 0; i < entries.length; i++) {
+    if (freezePeriodStart(cat.freezeRefresh, periodKeyDate(entries[i].periodKey)) === periodStart) return true;
+  }
+  return false;
+}
+
+/**
+ * Closed freeze periods that earned the unused-freeze bonus: at least one
+ * entry, and no freeze spent. Mirrors what applyRefresh pays at rollover, so
+ * comparing two of these maps says exactly what re-settlement owes.
+ *
+ * @param since  optional "YYYY-MM-DD"; periods before it predate the state
+ *               and were never settled, so they're excluded either way.
+ */
+function freezeEarnedPeriods(cat, entries, currentPeriodStart, since) {
+  var has = {};
+  var spent = {};
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var fps = freezePeriodStart(cat.freezeRefresh, periodKeyDate(e.periodKey));
+    if (fps === currentPeriodStart) continue;
+    if (since && fps < since) continue;
+    has[fps] = true;
+    if (isTrueFlag(e.freezeUsed)) spent[fps] = true;
+  }
+  var out = {};
+  Object.keys(has).forEach(function (p) {
+    if (!spent[p]) out[p] = true;
+  });
+  return out;
+}
+
+/**
+ * Net unused-freeze-bonus correction implied by a history change. Uses the
+ * category's CURRENT bonus value — old bonus rows carry no period key, so they
+ * are compensated in aggregate, never edited (see the design doc's caveat).
+ * Earning a period requires at least one entry in it as well as an unspent
+ * freeze, so gap-filling an answer into a period that was empty (and therefore
+ * paid nothing) never claws anything back. Periods predating the state's
+ * `since` were never settled, so they are exempt in both directions.
+ */
+function bonusDelta(cat, beforeEntries, afterEntries, currentPeriodStart, since) {
+  if (!(cat.unusedFreezeBonus > 0)) return 0;
+  var before = freezeEarnedPeriods(cat, beforeEntries, currentPeriodStart, since);
+  var after = freezeEarnedPeriods(cat, afterEntries, currentPeriodStart, since);
+  var delta = 0;
+  Object.keys(after).forEach(function (p) {
+    if (!before[p]) delta += cat.unusedFreezeBonus; // earned now, never paid
+  });
+  Object.keys(before).forEach(function (p) {
+    if (!after[p]) delta -= cat.unusedFreezeBonus; // paid then, not earned now
+  });
+  return round2(delta);
 }
 
 /**
@@ -349,10 +605,27 @@ function isWholeHour(t) {
 
 function normalizeCategory(raw) {
   raw = raw || {};
+  if (raw.kind === 'chore') {
+    var cadence = raw.cadence === 'weekly' || raw.cadence === 'monthly' || raw.cadence === 'once'
+      ? raw.cadence : (raw.cadence === 'daily' ? 'daily' : String(raw.cadence || ''));
+    return {
+      id: raw.id ? slugify(raw.id) : slugify(raw.name),
+      name: String(raw.name || '').trim(),
+      emoji: String(raw.emoji || '').trim(),
+      kind: 'chore',
+      cadence: cadence,
+      value: num(raw.value, NaN),
+      assignee: String(raw.assignee || '').trim().toLowerCase(),
+      dueDate: String(raw.dueDate || '').trim(),
+      reminderTime: String(raw.reminderTime || '').trim(),
+      active: raw.active !== false,
+    };
+  }
   return {
     id: raw.id ? slugify(raw.id) : slugify(raw.name),
     name: String(raw.name || '').trim(),
     emoji: String(raw.emoji || '').trim(),
+    kind: 'habit',
     cadence: raw.cadence === 'weekly' ? 'weekly' : (raw.cadence === 'daily' ? 'daily' : String(raw.cadence || '')),
     rewardIncrement: num(raw.rewardIncrement, NaN),
     maxPerInstance: num(raw.maxPerInstance, NaN),
@@ -376,6 +649,19 @@ function validateCategory(cat) {
   if (cat.emoji.length > MAX_EMOJI_LENGTH) errs.push('Emoji must be a single symbol.');
   if (!cat.id) errs.push('A name is required (used to build the id).');
   if (!cat.name) errs.push('Name is required.');
+  if (cat.kind === 'chore') {
+    if (cat.cadence !== 'daily' && cat.cadence !== 'weekly' && cat.cadence !== 'monthly' && cat.cadence !== 'once') {
+      errs.push('Chore cadence must be daily, weekly, monthly, or once.');
+    }
+    if (!(cat.value > 0)) errs.push('Chore value must be a positive number.');
+    if (cat.assignee && !/^[^@\s]+@[^@\s]+$/.test(cat.assignee)) errs.push('Assignee must be an email address, or blank for either of you.');
+    if (cat.dueDate) {
+      if (cat.cadence !== 'once') errs.push('A due date only applies to one-time chores.');
+      else if (!validPeriodKey('daily', cat.dueDate)) errs.push('Due date must be a real date like 2026-09-30.');
+    }
+    if (!isWholeHour(cat.reminderTime)) errs.push('Reminder time must be a whole hour like 21:00, or blank.');
+    return errs;
+  }
   if (cat.cadence !== 'daily' && cat.cadence !== 'weekly') errs.push('Cadence must be daily or weekly.');
   if (!(cat.rewardIncrement > 0)) errs.push('Reward increment must be a positive number.');
   if (!(cat.maxPerInstance > 0)) errs.push('Max per instance must be a positive number.');
@@ -399,6 +685,18 @@ if (typeof module !== 'undefined' && module.exports) {
     shiftDays: shiftDays,
     lastClosedPeriodKey: lastClosedPeriodKey,
     mondayOf: mondayOf,
+    isoDow: isoDow,
+    periodKeyDate: periodKeyDate,
+    freezePeriodStart: freezePeriodStart,
+    validPeriodKey: validPeriodKey,
+    claimablePeriodKey: claimablePeriodKey,
+    isChoreClaimed: isChoreClaimed,
+    chorePotFor: chorePotFor,
+    outstandingChorePeriods: outstandingChorePeriods,
+    nextChorePeriodKey: nextChorePeriodKey,
+    chorePenaltyAmounts: chorePenaltyAmounts,
+    chorePayout: chorePayout,
+    isTrueFlag: isTrueFlag,
     shouldSendReminder: shouldSendReminder,
     shouldSendCheckup: shouldSendCheckup,
     initialCatState: initialCatState,
@@ -414,6 +712,10 @@ if (typeof module !== 'undefined' && module.exports) {
     applyDeposit: applyDeposit,
     deriveWallet: deriveWallet,
     isPeriodRecorded: isPeriodRecorded,
+    replayCategory: replayCategory,
+    periodHasEntries: periodHasEntries,
+    freezeEarnedPeriods: freezeEarnedPeriods,
+    bonusDelta: bonusDelta,
     runningBalanceRows: runningBalanceRows,
     normalizeCategory: normalizeCategory,
     validateCategory: validateCategory,
